@@ -1,0 +1,2421 @@
+"use strict";
+
+const STORAGE_KEY = "shellys-rte-command-centre-v7";
+const SOURCE_DB = "shellys-rte-source-vault-v1";
+
+const seedState = {
+  version: 1,
+  metadata: {
+    projectName: "Shelly’s Bistro — RTE Project Command Centre",
+    seededFrom: "Master build prompt supplied in this build session",
+    importedAt: "2026-08-11",
+    note: "The supplied prompt ended after the first row of the twelve-activity budget table. No missing values were inferred.",
+  },
+  sources: [
+    {
+      id: "proposal",
+      name: "shelly general proposal.docx",
+      type: "Proposal",
+      declaredDate: "August 2026",
+      state: "Missing",
+      detail: "Named as authoritative for project scope, financing, readiness, governance and program positions. Original file was not attached to this workspace.",
+      reference: "Awaiting immutable original",
+    },
+    {
+      id: "menu",
+      name: "Shellys School Nutrition Menu.pdf",
+      type: "Menu",
+      declaredDate: "Not supplied",
+      state: "Missing",
+      detail: "Expected six-page menu with 45 food items and a declared allergen/icon legend. Original file was not attached.",
+      reference: "Awaiting immutable original",
+    },
+    {
+      id: "logistics",
+      name: "PRODUCTION LOGISTICS BREAKDOWN.docx",
+      type: "Logistics analysis",
+      declaredDate: "August 11, 2026",
+      state: "Available",
+      detail: "Production capacity analysis for the one-million-meal/day concept, including chilling limits, hot/cold parallel flows, logistics footprint and supplemental chilled-equipment pricing.",
+      reference: "Imported August 12, 2026 · SHA-256 B485D36BAEA3B2C7AB8EDB2BA3B0B4FF843D24F576D7CA8165B24AA2704AB87A",
+      relativePath: "sources/PRODUCTION LOGISTICS BREAKDOWN.docx",
+      sha256: "B485D36BAEA3B2C7AB8EDB2BA3B0B4FF843D24F576D7CA8165B24AA2704AB87A",
+    },
+    {
+      id: "equipment",
+      name: "Equipment_Report_v2.docx",
+      type: "Equipment report",
+      declaredDate: "July 20, 2026 · Revision 2",
+      state: "Available",
+      detail: "China-direct multi-unit equipment plan covering 22 categories, 64 machines, supplier pricing, landed-cost planning, compliance and staged procurement.",
+      reference: "Imported August 12, 2026 · SHA-256 B9279450191C930C2CCEF5AEB57E1D7EF4DAD2E10BD4046433F39F4737B19038",
+      relativePath: "sources/Equipment_Report_v2.docx",
+      sha256: "B9279450191C930C2CCEF5AEB57E1D7EF4DAD2E10BD4046433F39F4737B19038",
+    },
+    {
+      id: "workplan-sheet",
+      name: "Richard Project Management Google Sheet",
+      type: "Live workplan",
+      declaredDate: "Snapshot imported August 12, 2026",
+      state: "Connected",
+      detail: "Read-only import of the General assignment register and Richard Workplan tabs. The project hub reflects the current Google Sheet snapshot and links back to the live source for changes after the import time.",
+      reference: "docs.google.com/spreadsheets/d/1gqojEjzs8s99tcJHS9bwhLfvhzeSxCaXauj2-oFf1E8 · General gid 613747079 · Richard Workplan gid 1493963392",
+    },
+    {
+      id: "mailbox",
+      name: "richardc@shellysbistro.com project mailbox",
+      type: "Email evidence",
+      declaredDate: "Ongoing",
+      state: "Connected",
+      detail: "Secure Gmail OAuth connection verified August 12, 2026. A full matching project scan covered 410 messages across 184 threads from March 19 to August 11, 2026. Selected funding evidence and follow-up metadata were imported; no mailbox password or bulk message body archive is stored in this application.",
+      reference: "Gmail OAuth profile · account ID 110400205241251263409",
+    },
+    {
+      id: "calendar",
+      name: "Richard Chimebele primary Google Calendar",
+      type: "Meeting schedule",
+      declaredDate: "Snapshot imported August 12, 2026",
+      state: "Connected",
+      detail: "Read-only schedule snapshot from the connected primary calendar. The connected calendar account is richardc@yensbooks.com, which differs from the Shelly’s Bistro Gmail account; likely work meetings are marked for confirmation before being treated as project meetings.",
+      reference: "Google Calendar OAuth profile · account ID 107228696880710450688",
+    },
+    {
+      id: "contractor-tracker",
+      name: "41_Paquin_Contractor_Tracker.xlsx",
+      type: "Contractor due-diligence tracker",
+      declaredDate: "Report as of July 20, 2026",
+      state: "Available",
+      detail: "Two-sheet workbook containing 11 unique contractor engagements. The detailed tracker records quoted ranges, contact activity, proposed dates, source statuses and flags. Extracted records remain pending review.",
+      reference: "Contractor Tracker!A1:L21 and Sheet1!A1:C23 · imported August 12, 2026 · SHA-256 6395F01FA0FD4B636F4E2D8CF608051FF4F3D9E11E4098B50E28F3171C845A9F",
+      relativePath: "sources/41_Paquin_Contractor_Tracker.xlsx",
+      sha256: "6395F01FA0FD4B636F4E2D8CF608051FF4F3D9E11E4098B50E28F3171C845A9F",
+    },
+    {
+      id: "manual",
+      name: "Manual project records",
+      type: "Manual evidence",
+      declaredDate: "Ongoing",
+      state: "Available",
+      detail: "Draft call notes, meeting notes, quotes and other records can be entered locally. They require evidence review before approval.",
+      reference: "Local browser storage",
+    },
+    {
+      id: "build-prompt",
+      name: "Master build prompt",
+      type: "Build brief",
+      declaredDate: "Imported August 11, 2026",
+      state: "Available",
+      detail: "Used to seed this preliminary workspace. It is not a substitute for the named authoritative originals.",
+      reference: "Attached pasted-text.txt · lines 1–96; content ends mid-budget table",
+    },
+  ],
+  records: [
+    {
+      id: "claim-indigenous-owned",
+      title: "100% Indigenous-owned Manitoba food producer",
+      type: "Evidence",
+      status: "Verified current fact",
+      owner: "Unassigned",
+      sourceId: "proposal",
+      sourceName: "shelly general proposal.docx",
+      locator: "Project identity section · exact page pending",
+      sourceDate: "August 2026",
+      notes: "The supplied brief says the proposal describes Shelly’s Indigenous Bistro as 100% Indigenous-owned and First Nations-owned.",
+      verification: "Pending source attachment",
+      confidence: "Medium",
+      official: false,
+      importedAt: "2026-08-11",
+      nextAction: "Attach the proposal and verify the exact wording and page.",
+    },
+    {
+      id: "claim-current-operation",
+      title: "Current Winnipeg kitchen and production scale",
+      type: "Evidence",
+      status: "Verified current fact",
+      owner: "Unassigned",
+      sourceId: "proposal",
+      sourceName: "shelly general proposal.docx",
+      locator: "Current operation section · exact page pending",
+      sourceDate: "August 2026",
+      notes: "Brief describes a roughly 4,000 sq. ft. commercial kitchen, more than 1.2 million meals annually for paying institutional clients, and support for more than 50 micro-cafés.",
+      verification: "Pending source attachment",
+      confidence: "Medium",
+      official: false,
+      importedAt: "2026-08-11",
+      nextAction: "Verify each operating metric independently against the proposal.",
+    },
+    {
+      id: "claim-expansion",
+      title: "Proposed 40,000+ sq. ft. RTE facility at 41 Paquin Road",
+      type: "Evidence",
+      status: "Proposed",
+      owner: "Unassigned",
+      sourceId: "proposal",
+      sourceName: "shelly general proposal.docx",
+      locator: "Expansion scope section · exact page pending",
+      sourceDate: "August 2026",
+      notes: "Proposed facility concept includes one-way food-safe flow, allergen-separated zones, test-kitchen capability, cold storage and an ordering/nutrition/dispatch platform.",
+      verification: "Pending source attachment",
+      confidence: "Medium",
+      official: false,
+      importedAt: "2026-08-11",
+      nextAction: "Confirm address, area and design features in the approved proposal and concept plans.",
+    },
+    {
+      id: "task-site",
+      title: "Site identified and conditional bid placed",
+      type: "Task",
+      status: "In progress",
+      owner: "Unassigned",
+      sourceId: "proposal",
+      sourceName: "shelly general proposal.docx",
+      locator: "Readiness snapshot · exact page pending",
+      sourceDate: "August 2026",
+      notes: "A conditional bid is not possession or completed acquisition.",
+      verification: "Pending source attachment",
+      confidence: "Medium",
+      official: false,
+      importedAt: "2026-08-11",
+      nextAction: "Verify conditions, expiry dates, deposit evidence and closing dependencies.",
+    },
+    {
+      id: "task-concept",
+      title: "Concept design",
+      type: "Task",
+      status: "In progress",
+      owner: "Unassigned",
+      sourceId: "proposal",
+      sourceName: "shelly general proposal.docx",
+      locator: "Readiness snapshot · exact page pending",
+      sourceDate: "August 2026",
+      notes: "The brief labels concept design as in progress. No completion percentage was supplied.",
+      verification: "Pending source attachment",
+      confidence: "Medium",
+      official: false,
+      importedAt: "2026-08-11",
+      nextAction: "Attach dated concept drawings and confirm accountable design lead.",
+    },
+    {
+      id: "task-equipment",
+      title: "Equipment packages selected or researched",
+      type: "Task",
+      status: "Identified",
+      owner: "Unassigned",
+      sourceId: "equipment",
+      sourceName: "Equipment_Report_v2.docx",
+      locator: "Equipment categories and sourcing assumptions · section pending",
+      sourceDate: "July 20, 2026",
+      notes: "Equipment is described as researched/selected, not ordered. Firm quotations are pending.",
+      verification: "Pending source attachment",
+      confidence: "Medium",
+      official: false,
+      importedAt: "2026-08-11",
+      nextAction: "Attach the report; reconcile machine counts, specifications, vendors and quote status.",
+    },
+    {
+      id: "task-tech",
+      title: "Ordering, nutrition and dispatch platform",
+      type: "Evidence",
+      status: "Verified current fact",
+      owner: "Unassigned",
+      sourceId: "proposal",
+      sourceName: "shelly general proposal.docx",
+      locator: "Technology platform section · exact page pending",
+      sourceDate: "August 2026",
+      notes: "The proposal is described as saying the platform is designed and in use with current customers. This does not prove readiness for the proposed expansion.",
+      verification: "Pending source attachment",
+      confidence: "Medium",
+      official: false,
+      importedAt: "2026-08-11",
+      nextAction: "Validate current production use, expansion requirements, integrations and capacity.",
+    },
+    {
+      id: "task-procurement-registration",
+      title: "Manitoba Indigenous Procurement Initiative registration",
+      type: "Task",
+      status: "Completed",
+      owner: "Unassigned",
+      sourceId: "proposal",
+      sourceName: "shelly general proposal.docx",
+      locator: "Readiness section · exact page pending",
+      sourceDate: "August 2026",
+      notes: "The supplied brief says the proposal describes registration as complete. Completion remains unverified until the original evidence is approved.",
+      verification: "Pending source attachment",
+      confidence: "Medium",
+      official: false,
+      importedAt: "2026-08-11",
+      nextAction: "Attach registration confirmation and verify current status.",
+    },
+    {
+      id: "task-construction",
+      title: "Facility construction and conversion",
+      type: "Task",
+      status: "Not started",
+      owner: "Unassigned",
+      sourceId: "proposal",
+      sourceName: "shelly general proposal.docx",
+      locator: "Readiness and dependencies · exact page pending",
+      sourceDate: "August 2026",
+      notes: "Not complete; dependent on financing/funding and later gates.",
+      verification: "Pending source attachment",
+      confidence: "Medium",
+      official: false,
+      importedAt: "2026-08-11",
+      nextAction: "Define scope, contracting strategy, prerequisites and evidence-based start gate.",
+    },
+    {
+      id: "task-engineering",
+      title: "Conversion engineering",
+      type: "Task",
+      status: "Not started",
+      owner: "Unassigned",
+      sourceId: "proposal",
+      sourceName: "shelly general proposal.docx",
+      locator: "Readiness and dependencies · exact page pending",
+      sourceDate: "August 2026",
+      notes: "Not documented as complete and expected to depend on financing/funding or later gates.",
+      verification: "Pending source attachment",
+      confidence: "Medium",
+      official: false,
+      importedAt: "2026-08-11",
+      nextAction: "Identify engineering disciplines, procurement route and approval dependencies.",
+    },
+    {
+      id: "task-permits",
+      title: "Permits and approvals for the new facility",
+      type: "Task",
+      status: "Not started",
+      owner: "Unassigned",
+      sourceId: "proposal",
+      sourceName: "shelly general proposal.docx",
+      locator: "Readiness and dependencies · exact page pending",
+      sourceDate: "August 2026",
+      notes: "No permit is treated as issued. The brief identifies permits as not complete.",
+      verification: "Pending source attachment",
+      confidence: "Medium",
+      official: false,
+      importedAt: "2026-08-11",
+      nextAction: "Build a permit register with authority, submission date, status and supporting document.",
+    },
+    {
+      id: "task-licensing",
+      title: "New-plant licensing and certification",
+      type: "Task",
+      status: "Not started",
+      owner: "Unassigned",
+      sourceId: "proposal",
+      sourceName: "shelly general proposal.docx",
+      locator: "Readiness and dependencies · exact page pending",
+      sourceDate: "August 2026",
+      notes: "No new-plant licence or certification is documented as secured.",
+      verification: "Pending source attachment",
+      confidence: "Medium",
+      official: false,
+      importedAt: "2026-08-11",
+      nextAction: "Confirm applicable regulators, requirements, lead times and dependencies.",
+    },
+    {
+      id: "task-staffing",
+      title: "Staffing waves for expanded operations",
+      type: "Task",
+      status: "Proposed",
+      owner: "Unassigned",
+      sourceId: "proposal",
+      sourceName: "shelly general proposal.docx",
+      locator: "Staffing plan · exact page pending",
+      sourceDate: "August 2026",
+      notes: "Staffing waves are planned and not complete.",
+      verification: "Pending source attachment",
+      confidence: "Medium",
+      official: false,
+      importedAt: "2026-08-11",
+      nextAction: "Validate roles, wave timing, costs, training and responsible owner.",
+    },
+    {
+      id: "task-commissioning",
+      title: "Equipment installation and commissioning",
+      type: "Task",
+      status: "Not started",
+      owner: "Unassigned",
+      sourceId: "equipment",
+      sourceName: "Equipment_Report_v2.docx",
+      locator: "Procurement sequence · exact section pending",
+      sourceDate: "July 20, 2026",
+      notes: "Equipment is not documented as ordered; commissioning therefore remains a future gate.",
+      verification: "Pending source attachment",
+      confidence: "Medium",
+      official: false,
+      importedAt: "2026-08-11",
+      nextAction: "Establish approved purchase, delivery, utility, FAT/SAT and acceptance prerequisites.",
+    },
+    {
+      id: "task-possession",
+      title: "Possession of proposed facility",
+      type: "Milestone",
+      status: "Not started",
+      owner: "Unassigned",
+      sourceId: "proposal",
+      sourceName: "shelly general proposal.docx",
+      locator: "Facility acquisition section · exact page pending",
+      sourceDate: "August 2026",
+      notes: "A conditional bid and deposit do not establish possession. No possession date is claimed.",
+      verification: "Pending source attachment",
+      confidence: "Medium",
+      official: false,
+      importedAt: "2026-08-11",
+      nextAction: "Confirm agreement conditions, closing requirements and possession evidence.",
+    },
+    {
+      id: "fund-owner-equity",
+      title: "Owner equity financing layer",
+      type: "Funding",
+      status: "Verified current fact",
+      owner: "Vince Bignell",
+      sourceId: "manual",
+      sourceName: "Approved user correction",
+      locator: "Direct project-owner correction in Codex task",
+      sourceDate: "August 12, 2026",
+      notes: "Owner equity is CA$1.0M in total, not CA$6.25M. The project brief separately describes this CA$1.0M as the facility deposit already deployed; deposit evidence still requires attachment.",
+      verification: "Approved",
+      confidence: "High",
+      official: true,
+      importedAt: "2026-08-12",
+      nextAction: "Attach proof of the CA$1.0M facility deposit and reconcile the user-directed grant/contribution allocation against the approved financing plan.",
+    },
+    {
+      id: "fund-debt",
+      title: "Debt financing layer",
+      type: "Funding",
+      status: "In discussion",
+      owner: "Unassigned",
+      sourceId: "mailbox",
+      sourceName: "FCC Follow Up-Financial Statements/IC Canada",
+      locator: "Gmail message 19fd7a48b9f888cf · August 6–11, 2026 thread",
+      sourceDate: "August 11, 2026",
+      notes: "CA$8.75M / 35% remains the proposed debt layer. FCC is evaluating the opportunity and may partner with another financial institution, but requires accountant-prepared statements and revenue-support documentation before serious financing consideration. No term sheet or credit approval is documented.",
+      verification: "Email evidence reviewed",
+      confidence: "High",
+      official: false,
+      importedAt: "2026-08-12",
+      nextAction: "Vince to provide accountant-prepared statements; add signed LOIs or MOUs as they are obtained. Keep the layer labelled in discussion until a lender issues approval.",
+    },
+    {
+      id: "fund-grants",
+      title: "Grant or contribution financing layer",
+      type: "Funding",
+      status: "Proposed",
+      owner: "Unassigned",
+      sourceId: "manual",
+      sourceName: "Approved user correction",
+      locator: "Direct project-owner correction in Codex task",
+      sourceDate: "August 12, 2026",
+      notes: "CA$15.25M / 61% is now allocated to the proposed grant/contribution layer. This is a financing-plan allocation, not an award. The separate SRF Food Security application is under review and does not establish approval of this amount.",
+      verification: "Approved allocation · program awards unverified",
+      confidence: "High",
+      official: false,
+      importedAt: "2026-08-12",
+      nextAction: "Map the CA$15.25M allocation to specific programs and amounts; preserve application, review and approval states separately.",
+    },
+    {
+      id: "contractor-transcona",
+      title: "Transcona Roofing",
+      type: "Contractor",
+      status: "Conflicting information",
+      sourceStatus: "Invoiced Dispute Resolved",
+      scope: "Commercial roof inspection",
+      contact: "Jackelynn Payne",
+      contactDetail: "204-806-1517",
+      quoteLow: 795,
+      quoteHigh: 795,
+      totalLow: 834.75,
+      totalHigh: 834.75,
+      proposedDate: "Jul 14 (completed) — DISPUTED",
+      owner: "Unassigned",
+      sourceId: "contractor-tracker",
+      sourceName: "41_Paquin_Contractor_Tracker.xlsx",
+      locator: "Contractor Tracker!A5:L5",
+      sourceDate: "Report as of July 20, 2026",
+      notes: "The row says the inspection was completed and labels the invoice dispute resolved, but its note says authorization was disputed and payment should be held until resolved. Current resolution cannot be inferred.",
+      verification: "Pending source review",
+      confidence: "High",
+      official: false,
+      importedAt: "2026-08-12",
+      nextAction: "Resolve the authorization/payment contradiction and approve current invoice status before payment.",
+    },
+    {
+      id: "contractor-mcw",
+      title: "MCW Consultants",
+      type: "Contractor",
+      status: "In discussion",
+      sourceStatus: "Range Given — Final Fee Pending",
+      scope: "Mechanical/electrical engineering review",
+      contact: "Elliott Garfinkel / Cam Dahl",
+      contactDetail: "ext. 237",
+      quoteLow: 6800,
+      quoteHigh: 10000,
+      totalLow: 7140,
+      totalHigh: 10500,
+      proposedDate: "TBD (availability ≈ 2 weeks from Jul 6)",
+      owner: "Unassigned",
+      sourceId: "contractor-tracker",
+      sourceName: "41_Paquin_Contractor_Tracker.xlsx",
+      locator: "Contractor Tracker!A6:L6",
+      sourceDate: "Report as of July 20, 2026",
+      notes: "Estimated range excludes tax and disbursements. Final fee depends on building size/complexity; the tracker says a final fee and schedule update had not been received since Jul 10.",
+      verification: "Pending source review",
+      confidence: "High",
+      official: false,
+      importedAt: "2026-08-12",
+      nextAction: "Obtain the final fee, disbursements and confirmed schedule.",
+    },
+    {
+      id: "contractor-hlc-pca",
+      title: "HLC Consulting (PCA)",
+      type: "Contractor",
+      status: "Identified",
+      sourceStatus: "Listed on Sheet1 only",
+      scope: "Property Condition Assessment (ASTM E2018-24)",
+      contact: "Nathan Moschler",
+      contactDetail: "Not supplied for this engagement",
+      quoteLow: null,
+      quoteHigh: null,
+      totalLow: null,
+      totalHigh: null,
+      proposedDate: "Not supplied",
+      owner: "Unassigned",
+      sourceId: "contractor-tracker",
+      sourceName: "41_Paquin_Contractor_Tracker.xlsx",
+      locator: "Sheet1!A4:C4",
+      sourceDate: "Workbook attached August 12, 2026",
+      notes: "This PCA engagement appears in the workbook’s secondary list but not in the detailed tracker. No price, date, contact activity or engagement status is supplied.",
+      verification: "Pending source review",
+      confidence: "High",
+      official: false,
+      importedAt: "2026-08-12",
+      nextAction: "Confirm whether PCA outreach occurred and add a dated communication or proposal record.",
+    },
+    {
+      id: "contractor-hlc-esa",
+      title: "HLC Consulting (Phase I ESA)",
+      type: "Contractor",
+      status: "In discussion",
+      sourceStatus: "Proposal Received — Unsigned",
+      scope: "Environmental Site Assessment (CSA Z768-01)",
+      contact: "Nathan Moschler",
+      contactDetail: "204-290-1031",
+      quoteLow: 3700,
+      quoteHigh: 3700,
+      totalLow: 3885,
+      totalHigh: 3885,
+      proposedDate: "Proposed Jul 23 PM or Jul 24 AM",
+      owner: "Unassigned",
+      sourceId: "contractor-tracker",
+      sourceName: "41_Paquin_Contractor_Tracker.xlsx",
+      locator: "Contractor Tracker!A7:L7",
+      sourceDate: "Report as of July 20, 2026",
+      notes: "Proposal is recorded as received but unsigned. Fee includes an assumed CA$1,000 third-party ERIS search; reliance letters are CA$450 each. Signing is required before engagement.",
+      verification: "Pending source review",
+      confidence: "High",
+      official: false,
+      importedAt: "2026-08-12",
+      nextAction: "Review scope and agreement, then record signature or rejection evidence.",
+    },
+    {
+      id: "contractor-barnes",
+      title: "Barnes & Duncan",
+      type: "Contractor",
+      status: "In discussion",
+      sourceStatus: "Estimate Received — Unsigned",
+      scope: "Building Location Certificate + Additional Features",
+      contact: "Avery Bowen / Christian Korell",
+      contactDetail: "204-284-5999",
+      quoteLow: 2950,
+      quoteHigh: 2950,
+      totalLow: 3150.5,
+      totalHigh: 3150.5,
+      proposedDate: "Fieldwork starts 5 business days after authorization",
+      owner: "Unassigned",
+      sourceId: "contractor-tracker",
+      sourceName: "41_Paquin_Contractor_Tracker.xlsx",
+      locator: "Contractor Tracker!A8:L8",
+      sourceDate: "Report as of July 20, 2026",
+      notes: "Estimate is recorded as received but unsigned. The stated scope is narrower than the originally requested boundary/easement/encroachment survey; CA$53 of other fees is included in estimated totals.",
+      verification: "Pending source review",
+      confidence: "High",
+      official: false,
+      importedAt: "2026-08-12",
+      nextAction: "Confirm required survey scope and estimate validity before authorization.",
+    },
+    {
+      id: "contractor-jilmark",
+      title: "Jilmark Construction",
+      type: "Contractor",
+      status: "Conflicting information",
+      sourceStatus: "No Fee required",
+      scope: "Design-build / GC pricing",
+      contact: "David Regehr-Wiens",
+      contactDetail: "Not supplied",
+      quoteLow: null,
+      quoteHigh: null,
+      totalLow: null,
+      totalHigh: null,
+      proposedDate: "Confirmed Jul 24, 9:30–11am",
+      owner: "Unassigned",
+      sourceId: "contractor-tracker",
+      sourceName: "41_Paquin_Contractor_Tracker.xlsx",
+      locator: "Contractor Tracker!A9:L9",
+      sourceDate: "Report as of July 20, 2026",
+      notes: "The status says no fee is required, while the note says no fee yet and instructs the team to request one. It also asks whether the Jul 16 site visit actually took place.",
+      verification: "Pending source review",
+      confidence: "High",
+      official: false,
+      importedAt: "2026-08-12",
+      nextAction: "Confirm site-visit occurrence and whether a fee or pricing proposal is expected.",
+    },
+    {
+      id: "contractor-castle",
+      title: "Castle Pest Control",
+      type: "Contractor",
+      status: "In discussion",
+      sourceStatus: "No Fee required",
+      scope: "Pest inspection & program plan",
+      contact: "James Girden",
+      contactDetail: "431-999-2402",
+      quoteLow: null,
+      quoteHigh: null,
+      totalLow: null,
+      totalHigh: null,
+      proposedDate: "Proposed Jul 24, 10am",
+      owner: "Unassigned",
+      sourceId: "contractor-tracker",
+      sourceName: "41_Paquin_Contractor_Tracker.xlsx",
+      locator: "Contractor Tracker!A10:L10",
+      sourceDate: "Report as of July 20, 2026",
+      notes: "The tracker says no fee is required but also says to confirm whether the Jul 13 visit occurred and that no quote was received.",
+      verification: "Pending source review",
+      confidence: "High",
+      official: false,
+      importedAt: "2026-08-12",
+      nextAction: "Confirm whether an inspection occurred, what scope is included and whether ongoing program pricing is required.",
+    },
+    {
+      id: "contractor-airrite",
+      title: "Air-Rite Inc",
+      type: "Contractor",
+      status: "In discussion",
+      sourceStatus: "Awaiting Scope Answers",
+      scope: "HVAC, refrigeration & kitchen equipment review",
+      contact: "Ben Hueging",
+      contactDetail: "Not supplied",
+      quoteLow: null,
+      quoteHigh: null,
+      totalLow: null,
+      totalHigh: null,
+      proposedDate: "TBD — awaiting project reply",
+      owner: "Unassigned",
+      sourceId: "contractor-tracker",
+      sourceName: "41_Paquin_Contractor_Tracker.xlsx",
+      locator: "Contractor Tracker!A11:L11",
+      sourceDate: "Report as of July 20, 2026",
+      notes: "The contractor asked whether the plant is operating and for exact review scope. The tracker records that a project-side reply is required.",
+      verification: "Pending source review",
+      confidence: "High",
+      official: false,
+      importedAt: "2026-08-12",
+      nextAction: "Send approved operating-status and scope answers, then record the response and schedule.",
+    },
+    {
+      id: "contractor-parsus",
+      title: "Parsus Engineering",
+      type: "Contractor",
+      status: "In discussion",
+      sourceStatus: "Awaiting Callback",
+      scope: "Facility/process engineering review (CFIA readiness)",
+      contact: "Alex Korotkov / Jesse Nugent",
+      contactDetail: "Callback recorded from 204-336-6637",
+      quoteLow: null,
+      quoteHigh: null,
+      totalLow: null,
+      totalHigh: null,
+      proposedDate: "TBD — awaiting callback",
+      owner: "Unassigned",
+      sourceId: "contractor-tracker",
+      sourceName: "41_Paquin_Contractor_Tracker.xlsx",
+      locator: "Contractor Tracker!A12:L12",
+      sourceDate: "Report as of July 20, 2026",
+      notes: "The tracker records that Jesse Nugent attempted a return call on Jul 16 and that the call had not been returned as of the report date.",
+      verification: "Pending source review",
+      confidence: "High",
+      official: false,
+      importedAt: "2026-08-12",
+      nextAction: "Assign a current owner to return the call and document the outcome.",
+    },
+    {
+      id: "contractor-phillips",
+      title: "Phillips & Stevens",
+      type: "Contractor",
+      status: "In discussion",
+      sourceStatus: "No Response",
+      scope: "Survey certificate",
+      contact: "Wilson Phillips",
+      contactDetail: "Not supplied",
+      quoteLow: null,
+      quoteHigh: null,
+      totalLow: null,
+      totalHigh: null,
+      proposedDate: "TBD — no response",
+      owner: "Unassigned",
+      sourceId: "contractor-tracker",
+      sourceName: "41_Paquin_Contractor_Tracker.xlsx",
+      locator: "Contractor Tracker!A13:L13",
+      sourceDate: "Report as of July 20, 2026",
+      notes: "The tracker says drawings and the address were sent Jul 10 and no availability or fee response had been received as of the report date.",
+      verification: "Pending source review",
+      confidence: "High",
+      official: false,
+      importedAt: "2026-08-12",
+      nextAction: "Follow up or establish a documented alternate survey option.",
+    },
+    {
+      id: "contractor-beach-rocke",
+      title: "Beach Rocke Engineering",
+      type: "Contractor",
+      status: "Declined",
+      sourceStatus: "Declined",
+      scope: "Structural engineering assessment",
+      contact: "Roman Hudon",
+      contactDetail: "Not supplied",
+      quoteLow: null,
+      quoteHigh: null,
+      totalLow: null,
+      totalHigh: null,
+      proposedDate: "N/A",
+      owner: "Unassigned",
+      sourceId: "contractor-tracker",
+      sourceName: "41_Paquin_Contractor_Tracker.xlsx",
+      locator: "Contractor Tracker!A14:L14",
+      sourceDate: "Report as of July 20, 2026",
+      notes: "The tracker records two declines, first due to timing and then because the building was too large for the office to take on.",
+      verification: "Pending source review",
+      confidence: "High",
+      official: false,
+      importedAt: "2026-08-12",
+      nextAction: "Identify an alternate structural engineering firm; do not treat Beach Rocke as available.",
+    },
+    {
+      id: "risk-offtake",
+      title: "No signed supply or offtake contracts documented",
+      type: "Risk",
+      status: "Missing information",
+      owner: "Unassigned",
+      sourceId: "proposal",
+      sourceName: "shelly general proposal.docx",
+      locator: "Commercial readiness · exact page pending",
+      sourceDate: "August 2026",
+      notes: "The supplied brief explicitly says no signed supply or offtake contracts are documented for the expansion.",
+      verification: "Pending source attachment",
+      confidence: "Medium",
+      official: false,
+      importedAt: "2026-08-11",
+      nextAction: "Maintain a prospect pipeline, but only mark a contract secured when a signed agreement is approved as evidence.",
+    },
+    {
+      id: "risk-firm-quotes",
+      title: "Firm equipment quotations are pending",
+      type: "Risk",
+      status: "Missing information",
+      owner: "Unassigned",
+      sourceId: "equipment",
+      sourceName: "Equipment_Report_v2.docx",
+      locator: "Sourcing status · exact section pending",
+      sourceDate: "July 20, 2026",
+      notes: "Researched supplier and pricing assumptions are not firm quotations or purchase orders.",
+      verification: "Pending source attachment",
+      confidence: "Medium",
+      official: false,
+      importedAt: "2026-08-11",
+      nextAction: "Obtain comparable, dated quotations including freight, duty, installation, warranty and certification.",
+    },
+  ],
+  people: [
+    {
+      id: "person-vince",
+      name: "Vince Bignell",
+      role: "Owner and culinary lead",
+      relationship: "Project leadership",
+      outreachState: "Verified current fact",
+      evidence: "Named in the supplied brief and retained in the current two-person leadership roster by the user on August 12, 2026.",
+      contact: "Not stored",
+    },
+    {
+      id: "person-cat",
+      name: "Cat",
+      role: "Leadership role — title not supplied",
+      relationship: "Project leadership",
+      outreachState: "Verified current fact",
+      evidence: "Added to the current leadership roster through the user’s direct correction on August 12, 2026.",
+      contact: "Contact details and formal title not supplied.",
+    },
+  ],
+  funding: [
+    { id: "owner-equity", label: "Owner equity", amount: 1000000, percent: 4, status: "Confirmed by user", detail: "CA$1.0M total owner equity; described in the brief as the facility deposit already deployed." },
+    { id: "debt", label: "Debt", amount: 8750000, percent: 35, status: "In discussion", detail: "No issued term sheet or credit approval documented in the brief." },
+    { id: "grant", label: "Grant / contribution", amount: 15250000, percent: 61, status: "Proposed allocation", detail: "Includes the user-directed CA$5.25M reallocation. No award is implied." },
+  ],
+  equipmentData: {
+    importedAt: "August 12, 2026",
+    sourceDate: "Revision 2 · July 20, 2026",
+    categories: 22,
+    machineCount: 64,
+    equipmentFob: "USD ~$689K (~CA$930K)",
+    totalProject: "CA$1.6–1.8M",
+    timeline: "Staged delivery over 4–6 months",
+    sourcePath: "sources/Equipment_Report_v2.docx",
+    items: [
+      { id: "eq-01", line: "Meat slicer / flaker", supplier: "Zhengzhou Beres Machinery (Henan)", capacity: "6,000 kg/hr", required: "4,765 kg/hr", qty: 2, unitFob: "US$2,299–4,000", extendedFob: "US$6,300", wave: "Wave 2" },
+      { id: "eq-02", line: "Meat dicer", supplier: "Chengdu Vleda Star (Sichuan) — Verified", capacity: "3,000 kg/hr", required: "3,176 kg/hr", qty: 2, unitFob: "US$7,800–8,385", extendedFob: "US$16,200", wave: "Wave 2" },
+      { id: "eq-03", line: "Root vegetable wash + peel", supplier: "Jiaozuo Zhoufeng (Henan) — 13 yrs", capacity: "2,000 kg/hr", required: "3,971 kg/hr", qty: 2, unitFob: "~US$2,000", extendedFob: "US$4,000", wave: "Wave 3" },
+      { id: "eq-04", line: "Root vegetable multi-cutter", supplier: "Saidashi Machinery (Henan)", capacity: "2,500 kg/hr", required: "1,588 kg/hr", qty: 1, unitFob: "US$3,365", extendedFob: "US$3,365", wave: "Wave 3" },
+      { id: "eq-05", line: "Root vegetable slicer", supplier: "Shandong Xinlongjia (Shandong)", capacity: "3,000 kg/hr", required: "1,191 kg/hr", qty: 1, unitFob: "~US$3,500", extendedFob: "US$3,500", wave: "Wave 2" },
+      { id: "eq-06", line: "Root vegetable dicer", supplier: "Shandong Dongsheng (Shandong)", capacity: "3,000–5,000 kg/hr", required: "1,191 kg/hr", qty: 1, unitFob: "Quote ~US$17,500", extendedFob: "US$17,500", wave: "Wave 2" },
+      { id: "eq-07", line: "Leafy vegetable washer", supplier: "Zhaoqing Fengxiang (Guangdong) — 17 yrs", capacity: "3,000 kg/hr", required: "2,647 kg/hr", qty: 2, unitFob: "US$1,500–3,370", extendedFob: "US$4,870", wave: "Wave 3" },
+      { id: "eq-08", line: "Leafy vegetable cutter", supplier: "Zhucheng Dayang (Shandong) — 5 yrs", capacity: "2,000 kg/hr", required: "2,647 kg/hr", qty: 2, unitFob: "US$1,200–4,000", extendedFob: "US$5,200", wave: "Wave 3" },
+      { id: "eq-09", line: "Leafy centrifugal dryer", supplier: "Shandong Leading (Shandong) — 10 yrs", capacity: "1,500 kg/hr", required: "2,647 kg/hr", qty: 2, unitFob: "US$17,600–22,000", extendedFob: "US$39,600", wave: "Wave 2" },
+      { id: "eq-10", line: "Potato peel + wash line", supplier: "Zibo Taibo Industrial (Shandong)", capacity: "3,000 kg/hr", required: "2,647 kg/hr", qty: 1, unitFob: "Quote ~US$20,000/line", extendedFob: "US$20,000", wave: "Wave 2" },
+      { id: "eq-11", line: "Fruit peel / cut", supplier: "Henan Vic Machinery (Henan) — 13 yrs", capacity: "1,500 kg/hr", required: "1,324 kg/hr", qty: 1, unitFob: "~US$6,200", extendedFob: "US$6,200", wave: "Wave 3" },
+      { id: "eq-12", line: "Rice multihead weighers", supplier: "Guangdong Kenwei (Guangdong) — 18 yrs", capacity: "120 packs/min", required: "245 packs/min", qty: 3, unitFob: "~US$14,000", extendedFob: "US$42,000", wave: "Wave 1" },
+      { id: "eq-13", line: "Soup fillers — hot/chunks", supplier: "Guangdong Rifu (Guangdong) — Verified", capacity: "133 packs/min", required: "196 packs/min", qty: 2, unitFob: "US$15,000–20,000", extendedFob: "US$35,000", wave: "Wave 1" },
+      { id: "eq-14", line: "Sauce fillers — servo", supplier: "Shanghai Npack (Shanghai) — 15 yrs", capacity: "100 packs/min", required: "147 packs/min", qty: 2, unitFob: "~US$15,000", extendedFob: "US$30,000", wave: "Wave 1" },
+      { id: "eq-15", line: "Salad multihead weighers", supplier: "Guangdong Kenwei (Guangdong) — 18 yrs", capacity: "80 packs/min", required: "98 packs/min", qty: 2, unitFob: "~US$30,000", extendedFob: "US$60,000", wave: "Wave 1" },
+      { id: "eq-16", line: "Noodle multihead weighers", supplier: "Guangdong Kenwei (Guangdong) — 18 yrs", capacity: "60 packs/min", required: "98 packs/min", qty: 2, unitFob: "~US$17,000", extendedFob: "US$34,000", wave: "Wave 1" },
+      { id: "eq-17", line: "MAP tray sealers", supplier: "Guangzhou Fuhe (Guangdong) — 16 yrs", capacity: "140 trays/min", required: "~690 trays/min", qty: 6, unitFob: "~US$34,000", extendedFob: "US$204,000", wave: "Wave 1" },
+      { id: "eq-18", line: "Rotary cup fill-seal", supplier: "Wenzhou Crownchi (Zhejiang) — 8 yrs", capacity: "60 cups/min", required: "~200 cups/min", qty: 4, unitFob: "~US$11,000", extendedFob: "US$44,000", wave: "Wave 2" },
+      { id: "eq-19", line: "Tunnel ovens — patties", supplier: "Henan Gondor (Henan) — 5 yrs", capacity: "2,000 kg/hr", required: "3,970 kg/hr", qty: 2, unitFob: "US$8,499–18,499", extendedFob: "US$27,000", wave: "Wave 1" },
+      { id: "eq-20", line: "Pressure cookers — 1,000 L", supplier: "Shandong Longze (Shandong) — 12 yrs", capacity: "~470 kg/hr each", required: "2,382 kg/hr", qty: 6, unitFob: "US$7,500–8,000", extendedFob: "US$46,500", wave: "Wave 2" },
+      { id: "eq-21", line: "Jacketed kettles — 1,000 L", supplier: "Shandong Hede (Shandong) — 6 yrs", capacity: "~500 kg/hr each", required: "1,588 kg/hr", qty: 4, unitFob: "US$650–2,930", extendedFob: "US$7,160", wave: "Wave 3" },
+      { id: "eq-22", line: "Metal detectors — CCP", supplier: "JunHong Electronic (Guangdong) — 20 yrs", capacity: "1 per lane", required: "12 lanes + 2 spare", qty: 14, unitFob: "~US$2,300", extendedFob: "US$32,200", wave: "Wave 3" },
+    ],
+    supplemental: [
+      { line: "200 L Euro-bin / meat trolley", specification: "790 × 675 × 700 mm · SS304 mirror finish · DIN 9797", qty: 400, unitCost: "~CA$500 landed", total: "CA$200,000" },
+      { line: "Industrial 10-trolley blast chiller", specification: "5.2 × 1.8 × 2.4 m · 30–50 HP · includes stated SPE-1000 certification", qty: 10, unitCost: "~CA$17,000 landed", total: "CA$170,000" },
+    ],
+    budget: [
+      { item: "Equipment FOB China — 64 machines", estimate: "USD ~$689K (~CA$930K)", note: "Extended prices; quoted items use estimates." },
+      { item: "Freight, insurance, customs and inland rail", estimate: "CA$220–320K", note: "10–14 40-ft containers via Vancouver and rail to Winnipeg." },
+      { item: "SPE-1000 field evaluation", estimate: "CA$51–96K", note: "CA$800–1,500 per machine for 64 machines." },
+      { item: "CRN registration", estimate: "CA$30–50K", note: "Ten pressure vessels: six cookers and four kettles." },
+      { item: "Installation and commissioning", estimate: "CA$120–180K", note: "Planning estimate for multi-line integration." },
+      { item: "Contingency — 15%", estimate: "CA$210–240K", note: "Remediation, spares and price variance." },
+      { item: "Total equipment-scope project", estimate: "CA$1.6–1.8M", note: "Excludes building services, cold-chain warehousing and outbound logistics." },
+    ],
+  },
+  productionData: {
+    importedAt: "August 12, 2026",
+    sourceDate: "August 11, 2026",
+    sourcePath: "sources/PRODUCTION LOGISTICS BREAKDOWN.docx",
+    targetMeals: "1,000,000 meals/day",
+    mealWeight: "450 g average",
+    dailyMass: "450,000 kg/day",
+    effectiveHours: "17 hr/day at 85% OEE",
+    plantRate: "26,500 kg/hr",
+    packRate: "~980 packs/min sustained",
+    split: { hot: 38, cold: 62 },
+    hotCapacity: "170,000 kg/day · approximately 377,000 meals",
+    chilling: { fleet: "10 blast chillers", bins: "100 × 200 L bins per cycle", load: "20,000 kg/cycle", cycle: "120 minutes", throughput: "10,000 kg/hr" },
+    footprint: [
+      { area: "Chilling area", metric: "~250 m²", imperial: "~2,700 sq. ft." },
+      { area: "Bin storage / wash", metric: "~150 m²", imperial: "~1,600 sq. ft." },
+      { area: "Total logistics footprint", metric: "~400 m²", imperial: "~4,300 sq. ft." },
+    ],
+    streams: [
+      { id: "hot", name: "Heat flow", share: "38% of capacity", steps: [
+        { step: "01", title: "Cooking", detail: "Kettles and ovens run on staggered 45–60 minute cycles." },
+        { step: "02", title: "Transfer", detail: "Product is decanted through mobile lobe pumps into 200 L Euro-bins." },
+        { step: "03", title: "Blast chilling", detail: "Bins enter ten blast chillers for a two-hour drop to 41°F." },
+        { step: "04", title: "Cold buffer", detail: "Chilled work-in-progress is held in cold storage." },
+        { step: "05", title: "Packaging", detail: "Product is called forward to packaging lines 1–4." },
+      ]},
+      { id: "cold", name: "Cold flow", share: "62% of capacity", steps: [
+        { step: "01", title: "Wash and prep", detail: "Vegetables and fruit are washed and cut on high-capacity continuous lines." },
+        { step: "02", title: "Assembly", detail: "Sandwich and wrap items move through high-velocity assembly belts." },
+        { step: "03", title: "Direct packaging", detail: "Items feed directly to MAP sealers and cup fillers on lines 5–12." },
+        { step: "04", title: "Cold-chain dispatch", detail: "Unheated products bypass blast chilling, preserving hot-flow capacity." },
+      ]},
+    ],
+    scaling: "+1 ten-trolley blast chiller adds approximately 1,000 kg/hr of hot-food capacity.",
+    scalingCost: "The same source separately states ~CA$6,500 per additional unit; this conflicts with its ~CA$17,000 landed unit price and requires supplier reconciliation.",
+    recommendation: "Proceed with an approximately 40/60 hot/cold split for initial Wave 1 procurement and facility layout.",
+  },
+  workplanSnapshot: {
+    importedAt: "August 12, 2026",
+    spreadsheetName: "Richard Project Management",
+    spreadsheetUrl: "https://docs.google.com/spreadsheets/d/1gqojEjzs8s99tcJHS9bwhLfvhzeSxCaXauj2-oFf1E8/edit#gid=613747079",
+    assignments: [
+      { id: "sheet-01", assignment: "Shelly’s Bistro — proposal for the restaurant assessment", originalDue: "12 Jun 2026", newDue: "31 Aug 2026", community: "SIB", collaborators: "Cat, Princely", status: "In progress", notes: "Waiting for further instructions from Cat." },
+      { id: "sheet-02", assignment: "The franchise book for Shelly’s", originalDue: "12 Jun 2026", newDue: "31 Aug 2026", community: "SIB", collaborators: "Cat, Vince", status: "In progress", notes: "Cat is reviewing." },
+      { id: "sheet-03", assignment: "OCCFN store assessment", originalDue: "12 Jun 2026", newDue: "31 Aug 2026", community: "AIMA", collaborators: "Paul, Michael", status: "Blocker", notes: "No leadership feedback as of June 22; passed to Michael." },
+      { id: "sheet-04", assignment: "OCCFN proposal for store expansion", originalDue: "12 Jun 2026", newDue: "31 Aug 2026", community: "AIMA", collaborators: "Paul, Michael", status: "Blocker", notes: "Passed to Michael." },
+      { id: "sheet-05", assignment: "Update business plan for the commissary unit", originalDue: "19 Jun 2026", newDue: "31 Aug 2026", community: "SIB", collaborators: "Cat", status: "In progress", notes: "Cat is currently reviewing." },
+      { id: "sheet-06", assignment: "Flush the machinery out", originalDue: "19 Jun 2026", newDue: "31 Aug 2026", community: "SIB", collaborators: "Cat, Princely", status: "In progress", notes: "For Cat’s review." },
+      { id: "sheet-07", assignment: "Promotional materials audit", originalDue: "31 Aug 2026", newDue: "", community: "SIB", collaborators: "Princely", status: "Recurring", notes: "Brochure, pitch deck, magazine, presentation slides and webpage QR code." },
+      { id: "sheet-08", assignment: "3CX 1-800 number setup", originalDue: "30 Jun 2026", newDue: "31 Aug 2026", community: "SIB", collaborators: "Princely", status: "Blocker", notes: "1-800-Shellys; REM is still working on it." },
+      { id: "sheet-09", assignment: "IT assessment lists", originalDue: "24 Jul 2026", newDue: "31 Aug 2026", community: "SIB", collaborators: "Richard", status: "Blocker", notes: "Awaiting detailed IT assessment lists from James via WhatsApp." },
+      { id: "sheet-10", assignment: "Mail program funders", originalDue: "31 Aug 2026", newDue: "", community: "SIB", collaborators: "Richard", status: "Recurring", notes: "Funding outreach." },
+      { id: "sheet-11", assignment: "Project email management", originalDue: "31 Aug 2026", newDue: "", community: "SIB", collaborators: "Princely", status: "Recurring", notes: "Daily follow-up required." },
+      { id: "sheet-12", assignment: "Facility / routine audit", originalDue: "31 Aug 2026", newDue: "", community: "SIB", collaborators: "Princely", status: "Recurring", notes: "Ensure routines are being implemented." },
+      { id: "sheet-13", assignment: "Ministerial outreach follow-up", originalDue: "31 Aug 2026", newDue: "", community: "SIB", collaborators: "Richard", status: "Recurring", notes: "Materials shared with Minister office (Julie Kentner); awareness confirmed, with site visit pending post-NDA." },
+      { id: "sheet-14", assignment: "AI / dashboard consolidation meeting", originalDue: "5 Aug 2026", newDue: "", community: "AIMA", collaborators: "Cat, Jayce", status: "In progress", notes: "Integration of updates." },
+      { id: "sheet-15", assignment: "Meeting with CS Mac Gillivray", originalDue: "6 Aug 2026", newDue: "", community: "SIB", collaborators: "Cat, Vince", status: "Pending", notes: "Frontier School Division." },
+      { id: "sheet-16", assignment: "Meeting with Minister Munoz", originalDue: "6 Aug 2026", newDue: "", community: "SIB", collaborators: "Ashley, Cat, Vince", status: "Pending", notes: "Ministry of New Technology." },
+      { id: "sheet-17", assignment: "Work on Cat’s business cards and titles", originalDue: "7 Aug 2026", newDue: "", community: "AIMA", collaborators: "Favour, Duche", status: "In progress", notes: "Align cards and titles." },
+      { id: "sheet-18", assignment: "SJASD Nutrition Program — menu and pricing", originalDue: "10 Aug 2026", newDue: "", community: "SIB", collaborators: "Cat, Duche, Favour", status: "In progress", notes: "Prepare nutritious menu options and pricing for the school-based program (Yvonne Perry, SJASD)." },
+      { id: "sheet-19", assignment: "Factory design 3D rendering and motion graphics", originalDue: "10 Aug 2026", newDue: "", community: "SIB", collaborators: "Princely, Duche", status: "In progress", notes: "Awaiting pricing breakdown and timeline from Jethro (Cocreators Built)." },
+      { id: "sheet-20", assignment: "Workflow strategy meeting", originalDue: "31 Aug 2026", newDue: "", community: "AIMA", collaborators: "Duche, Izzi, Moses", status: "Recurring", notes: "Focus on aligning current assignments." },
+      { id: "sheet-21", assignment: "Marketing review meeting", originalDue: "31 Aug 2026", newDue: "", community: "AIMA, SIB, Audit Expert", collaborators: "Duche, Izzi, Cat, Favour, Moses", status: "Recurring", notes: "5:00 AM." },
+      { id: "sheet-22", assignment: "Shelly’s Bistro floorplans factory meeting", originalDue: "31 Aug 2026", newDue: "", community: "SIB", collaborators: "Cat, Vince", status: "Recurring", notes: "Expansion discussion." },
+      { id: "sheet-23", assignment: "Flush out version 3 of the business plan using Cat’s edit", originalDue: "", newDue: "", community: "SIB", collaborators: "Cat", status: "In progress", notes: "" },
+    ],
+    sixWeekPlan: [
+      { week: "Week 1", focus: "Asset development, funding framework, promotion and institutional outreach", objective: "Build the foundation: assets, funding model and broad institutional buy-in.", actions: "Develop the funding framework and pricing/grant model. Finalize designs; print Week Packs and Sovereignty brochures; launch webpage content. Contact school divisions, MFNERC and Ministers, then submit AMP proof-of-concept grant applications.", deliverable: "Funding framework, final printed materials and webpage launch, outreach/LOI log, ministerial correspondence log and grant submissions." },
+      { week: "Week 2", focus: "Institutional negotiation and LOI tracking", objective: "Convert interest to commitment.", actions: "Follow up on education and government scrums, draft partnership terms, negotiate pilot dates and track LOI status daily.", deliverable: "Signed LOIs and negotiation log." },
+      { week: "Week 3", focus: "Partner discovery, site information and pilot scope", objective: "Confirm partner needs and pilot requirements.", actions: "Collect meal volumes, delivery locations, dietary and procurement requirements, local contacts and timing. Confirm pilot-ready partners, shortlist sites and update the LOI tracker.", deliverable: "Partner needs summary, pilot-site shortlist, updated LOI tracker and initial pilot scope." },
+      { week: "Week 4", focus: "Pilot readiness, costing and funding package", objective: "Turn confirmed interest into a practical pilot plan.", actions: "Verify site readiness, storage, delivery access, logistics, staffing and equipment needs. Build cost-per-meal and Phase 1 budget assumptions, then draft the funding package.", deliverable: "Pilot-readiness checklist, site notes, costing model, draft funding package and Phase 1 pilot budget." },
+      { week: "Week 5", focus: "Proposal review, partner alignment and submission prep", objective: "Align partners before final approval and commitment.", actions: "Circulate the draft pilot plan, budget and funding package; gather feedback, refine the budget and timeline, confirm support letters/LOIs and prepare the final submission package.", deliverable: "Stakeholder feedback log, refined budget, updated support letters/LOIs and final Week 6 submission package." },
+      { week: "Week 6", focus: "Commitment finalization and reporting", objective: "Secure funding commitments.", actions: "Review final responses, calculate projected revenue and grants, and finalize funding commitments for Phase 2 scaling.", deliverable: "Six-week outreach and funding final report." },
+    ],
+  },
+  fundingOpportunities: [
+    {
+      id: "opp-srf",
+      name: "Strategic Response Fund — Food Security Call",
+      category: "Grant / contribution",
+      pipeline: "Active application",
+      availability: "Submitted application",
+      fitLevel: "Strong project fit",
+      status: "Under review — not approved",
+      amount: "Application amount not independently verified",
+      intake: "First intake closed August 4, 2026; a second intake is expected later in fall 2026",
+      fit: "ISED confirmed the full Shelly’s Bistro application was received and entered into review. The call targets food-processing capacity, modernization and critical infrastructure.",
+      nextAction: "Vince and Cat to complete an internal financial review and nominate one response contact. Await ISED requests without describing the application as awarded.",
+      source: "ISED acknowledgement email · August 5, 2026",
+      sourceUrl: "https://mail.google.com/mail/#all/19fd3622a45c6c45",
+      programUrl: "https://ised-isde.canada.ca/site/ised/en/programs-and-initiatives/strategic-response-fund/key-investment-priorities/government-funding-food-processing-supply-chain-and-manufacturing-projects/detailed-application-criteria",
+      verification: "Official email reviewed",
+    },
+    {
+      id: "opp-bump",
+      name: "Building Up Manitoba Program (BUMP)",
+      category: "Cost-shared workforce grant",
+      pipeline: "Eligibility screening",
+      availability: "Available now",
+      fitLevel: "Strong workforce fit",
+      status: "More information requested",
+      amount: "50% cost share · up to CA$10K per employee / CA$25K HR strategy · CA$100K total maximum",
+      intake: "Continuous intake; activities must finish within the April 1–March 31 fiscal year",
+      fit: "A Manitoba consultant asked Shelly’s Bistro to explain training outcomes, trainees, curriculum and/or the external HR-strategy deliverable before a meeting is booked.",
+      nextAction: "Vince to answer Monique Leclerc directly. Resolve the external-provider ownership conflict and quantify jobs, wage changes, training participants, curriculum and measurable outcomes.",
+      source: "Government of Manitoba email · August 5, 2026",
+      sourceUrl: "https://mail.google.com/mail/#all/19fd296c4be13ac5",
+      programUrl: "https://www.gov.mb.ca/jec/busdev/financial/bump/index.html",
+      verification: "Official email and program page reviewed",
+    },
+    {
+      id: "opp-fcc",
+      name: "Farm Credit Canada Indigenous food financing",
+      category: "Debt financing",
+      pipeline: "Lender evaluation",
+      availability: "Available now",
+      fitLevel: "Strong financing fit",
+      status: "In discussion — no approval",
+      amount: "No amount committed; proposed debt layer is CA$8.75M",
+      intake: "Relationship-led evaluation",
+      fit: "FCC is evaluating the building/equipment request and may require a partner lender. Accountant-prepared statements and revenue-support documents are prerequisites for serious consideration.",
+      nextAction: "Vince to send accountant-prepared statements, then signed LOIs/MOUs and contract evidence as available.",
+      source: "FCC email thread · August 6–11, 2026",
+      sourceUrl: "https://mail.google.com/mail/#all/19ff139fb4f49d1a",
+      programUrl: "https://www.fcc-fac.ca/en/financing/agriculture/indigenous",
+      verification: "Official lender email reviewed",
+    },
+    {
+      id: "opp-ic-canada",
+      name: "FCC / IC Canada advisory cost share",
+      category: "Subsidized advisory support",
+      pipeline: "Discovery call pending",
+      availability: "Available through FCC",
+      fitLevel: "Support fit",
+      status: "Accessible through FCC — not yet enrolled",
+      amount: "FCC states an 85% subsidy; typical participant cost about CA$2K, subject to confirmed scope and pricing",
+      intake: "Discovery call awaiting confirmation",
+      fit: "FCC proposed advisory support for financial management, strategic planning, operational efficiency and scaling food production.",
+      nextAction: "Send Vince’s email to Nicholas Boucher and confirm Vince will attend the discovery call. Confirm final scope, hours and price before enrolment.",
+      source: "FCC email thread · August 10–11, 2026",
+      sourceUrl: "https://mail.google.com/mail/#all/19ff139fb4f49d1a",
+      programUrl: "https://www.fcc-fac.ca/en/knowledge/work-with-business-advisors",
+      verification: "Official lender email reviewed",
+    },
+    {
+      id: "opp-fpegf",
+      name: "First Peoples Economic Growth Fund",
+      category: "First Nations financing / contribution",
+      pipeline: "Introduced",
+      availability: "Available now",
+      fitLevel: "Strong ownership fit",
+      status: "Follow-up pending — no offer",
+      amount: "Program-dependent; individual-owner Business Contribution Fund maximum is CA$99,999",
+      intake: "Contact-led screening",
+      fit: "FCC introduced Shelly’s Bistro to FPEGF. The official Business Contribution Fund supports eligible First Nations business expansion but requires minimum equity, commercial financing and viability evidence.",
+      nextAction: "Vince to contact Clayton Burka and ask which FPEGF financing/contribution program fits the ownership and project scale, then request the exact document list.",
+      source: "FCC/FPEGF introduction thread · August 4–5, 2026",
+      sourceUrl: "https://mail.google.com/mail/#all/19fcda70489342a9",
+      programUrl: "https://firstpeoplesfund.ca/summary-of-programs/business-contribution-fund/",
+      verification: "Introduction email and official program page reviewed",
+    },
+    {
+      id: "opp-prairiescan-bsp",
+      name: "PrairiesCan Business Scale-up and Productivity",
+      category: "Interest-free repayable contribution",
+      pipeline: "Live researched opportunity",
+      availability: "Continuous intake",
+      fitLevel: "Strong expansion fit",
+      status: "Eligibility to validate — no application found",
+      amount: "CA$200K–CA$5M, up to 50% of eligible project costs",
+      intake: "Continuous two-stage intake",
+      fit: "Food and beverage processing is eligible and preferred; manufacturing-capacity equipment can qualify. Land acquisition is not eligible, and at least 50% confirmed non-government funding is required.",
+      nextAction: "Contact a PrairiesCan officer before an EOI. Test equipment-only scope and assemble two years of statements, interim statements and confirmed non-government funding evidence.",
+      source: "Official Canada.ca pages reviewed August 12, 2026; Manitoba email noted a PrairiesCan discussion",
+      sourceUrl: "https://mail.google.com/mail/#all/19fa49e77d799116",
+      programUrl: "https://www.canada.ca/en/prairies-economic-development/services/funding/business-scale-up-productivity/application-process.html",
+      verification: "Official program page reviewed · mailbox has no application confirmation",
+    },
+  ],
+  fundingOutcomes: [
+    {
+      name: "Canada Infrastructure Bank",
+      status: "Screened out — not a fit",
+      detail: "A CIB Indigenous and Northern Infrastructure representative advised on July 17, 2026 that the project does not fit CIB’s structured project-finance mandate, then referred the relationship to FCC.",
+      sourceUrl: "https://mail.google.com/mail/#all/19f709521769aaae",
+    },
+    {
+      name: "Manitoba Trade Growth Investment Financing",
+      status: "Screened out — not a fit",
+      detail: "The Manitoba program analyst confirmed on July 23, 2026 that TGIF was not the right fit for the stated funding need. The official program also requires at least 25% project equity, while the corrected owner-equity layer is 4%.",
+      sourceUrl: "https://mail.google.com/mail/#all/19f8fa400282e06d",
+    },
+  ],
+  emailScan: {
+    mailbox: "richardc@shellysbistro.com",
+    scannedAt: "August 12, 2026",
+    queryWindow: "March 19–August 11, 2026",
+    messages: 410,
+    threads: 184,
+    categories: [
+      { label: "Leadership & project", count: 47 },
+      { label: "Facility & contractors", count: 20 },
+      { label: "Customers & government", count: 56 },
+      { label: "Funding", count: 13 },
+      { label: "Other project correspondence", count: 48 },
+    ],
+    note: "The all-time mailbox scan matched Shelly’s/Shelley Bistro, Paquin Road, SIB RTE and Ready To Eat terms. Follow-ups below prioritize current actionable threads and are not a bulk copy of private message bodies.",
+  },
+  followUps: [
+    {
+      id: "follow-fcc",
+      priority: "Now",
+      organization: "Farm Credit Canada / IC Canada",
+      subject: "Financing documents and advisory discovery call",
+      lastDate: "August 11, 2026",
+      status: "Action required",
+      owner: "Vince",
+      nextAction: "Send Vince’s email and confirm participation. Provide accountant-prepared statements, then forward each signed LOI/MOU or contract support as it becomes available.",
+      evidence: "FCC is waiting to arrange the IC Canada call and cannot seriously consider financing before reviewing statements and revenue support.",
+      sourceUrl: "https://mail.google.com/mail/#all/19ff139fb4f49d1a",
+    },
+    {
+      id: "follow-bump",
+      priority: "Now",
+      organization: "Government of Manitoba — BUMP",
+      subject: "Additional information requested",
+      lastDate: "August 10, 2026",
+      status: "Response incomplete",
+      owner: "Vince",
+      nextAction: "Respond directly to Monique Leclerc with the training/HR scope, participants, provider, curriculum, outcomes and measurement plan. Address the related-party provider conflict before proposing AIMA.",
+      evidence: "The official August 5 request says a meeting can be booked after the additional information is received; the latest thread message only discusses the conflict internally.",
+      sourceUrl: "https://mail.google.com/mail/#all/19fd296c4be13ac5",
+    },
+    {
+      id: "follow-srf",
+      priority: "Now",
+      organization: "ISED — Strategic Response Fund",
+      subject: "Application under review and internal financial check",
+      lastDate: "August 8, 2026",
+      status: "Internal decision required",
+      owner: "Vince & Cat",
+      nextAction: "Review the submitted financials together, document whether corrections or clarifications are needed, and agree on one authorized contact while the official review continues.",
+      evidence: "ISED confirmed review on August 5. A later internal email raised material concern about the financial presentation; no official withdrawal was found.",
+      sourceUrl: "https://mail.google.com/mail/#all/19fd00b5ba2a86a9",
+    },
+    {
+      id: "follow-fpegf",
+      priority: "This week",
+      organization: "First Peoples Economic Growth Fund",
+      subject: "FCC introduction requires direct follow-up",
+      lastDate: "August 5, 2026",
+      status: "Waiting on outreach",
+      owner: "Vince",
+      nextAction: "Call or email Clayton Burka, confirm ownership structure and project cost, and request the program recommendation and document checklist.",
+      evidence: "The introduction and outbound project summary are present; no FPEGF response or offer was found in the scan.",
+      sourceUrl: "https://mail.google.com/mail/#all/19fcda70489342a9",
+    },
+    {
+      id: "follow-manitoba-meeting",
+      priority: "This week",
+      organization: "Manitoba Agriculture / Agri-Food",
+      subject: "Shelly’s Bistro expansion meeting recap",
+      lastDate: "August 11, 2026",
+      status: "Meeting held or scheduled — outcome not captured",
+      owner: "Vince",
+      nextAction: "Record the August 11 meeting outcome, send a concise recap and assign any documents or introductions promised in the meeting.",
+      evidence: "Karen Walker-Tibble sent a same-day calendar invitation; no later outcome email was found in the scanned window.",
+      sourceUrl: "https://mail.google.com/mail/#all/19f8f92828cc2200",
+    },
+    {
+      id: "follow-winnipeg-edt",
+      priority: "This week",
+      organization: "Economic Development Winnipeg",
+      subject: "Winnipeg EDT connection",
+      lastDate: "August 11, 2026",
+      status: "Meeting confirmed — outcome not captured",
+      owner: "Vince",
+      nextAction: "Add the meeting outcome and follow up with Lindsay Goodine on specific site, financing, workforce or investment-navigation support.",
+      evidence: "The latest message confirms the meeting; no post-meeting action record was found.",
+      sourceUrl: "https://mail.google.com/mail/#all/19ff12d2c3e7fe3b",
+    },
+    {
+      id: "follow-mcw",
+      priority: "This week",
+      organization: "MCW",
+      subject: "Mechanical/electrical quote collection",
+      lastDate: "August 8, 2026",
+      status: "Quote decision pending",
+      owner: "Cat",
+      nextAction: "Confirm whether the quote package was finalized, register the received scope and fee, and compare it with the contractor tracker before a selection decision.",
+      evidence: "Cat advised that quote collection should be finalized early the following week.",
+      sourceUrl: "https://mail.google.com/mail/#all/19f614645e3a72f5",
+    },
+    {
+      id: "follow-castle",
+      priority: "This week",
+      organization: "Castle Pest Control",
+      subject: "Site-visit quote review status",
+      lastDate: "August 10, 2026",
+      status: "Inbound follow-up awaiting response",
+      owner: "Cat",
+      nextAction: "Acknowledge Jonathan Pedersen’s follow-up and state whether the quote is under review, declined or awaiting comparison; record the decision in the contractor tracker.",
+      evidence: "The contractor asked whether its late-July site-visit quote had entered review or reached a decision.",
+      sourceUrl: "https://mail.google.com/mail/#all/19fec6a85bbd38e2",
+    },
+    {
+      id: "follow-sjasd",
+      priority: "This week",
+      organization: "St. James-Assiniboia School Division",
+      subject: "August 10 nutrition-program meeting",
+      lastDate: "July 31, 2026",
+      status: "Meeting date passed — recap not found",
+      owner: "Vince",
+      nextAction: "Confirm whether the August 10 meeting occurred; send a recap and log requested menu, capacity, pricing or pilot information.",
+      evidence: "Yvonne Perry confirmed the August 10 meeting and said electronic material could wait until the meeting; no later thread was found in the scan.",
+      sourceUrl: "https://mail.google.com/mail/#all/19fb3d9045d9f1bd",
+    },
+    {
+      id: "follow-pembina",
+      priority: "Date-based",
+      organization: "Pembina Trails School Division",
+      subject: "Universal nutrition program follow-up",
+      lastDate: "August 6, 2026",
+      status: "Follow up late August / early September",
+      owner: "Vince",
+      nextAction: "Contact the division’s nutrition-program leaders when they return in late August or early September, using the corrected Pembina Trails context.",
+      evidence: "The superintendent said key leaders resume work in late August/early September and would receive the information.",
+      sourceUrl: "https://mail.google.com/mail/#all/19f29ac50d0e44d6",
+    },
+    {
+      id: "follow-low-carbon",
+      priority: "Date-based",
+      organization: "Manitoba Environment and Climate Change",
+      subject: "Low-carbon Indigenous food manufacturing partnership",
+      lastDate: "August 5, 2026",
+      status: "Outbound request — no response found",
+      owner: "Vince",
+      nextAction: "Follow up after 7–10 business days with a one-page request focused on the 90-day low-carbon manufacturing partnership and the exact decision sought.",
+      evidence: "An outbound ministerial meeting request was found; no response appeared in the scanned window.",
+      sourceUrl: "https://mail.google.com/mail/#all/19fd261efdfcc730",
+    },
+    {
+      id: "follow-prairiescan",
+      priority: "This week",
+      organization: "PrairiesCan",
+      subject: "Business Scale-up and Productivity screening",
+      lastDate: "July 29, 2026",
+      status: "Referral noted — direct response not found",
+      owner: "Vince",
+      nextAction: "Contact the Manitoba regional office before filing an EOI and test an equipment/manufacturing-capacity scope against BSP requirements.",
+      evidence: "A Manitoba contact said PrairiesCan had been approached; no direct PrairiesCan reply or application confirmation was found.",
+      sourceUrl: "https://mail.google.com/mail/#all/19f6badfb96fc7e1",
+    },
+  ],
+  calendarSnapshot: {
+    account: "richardc@yensbooks.com",
+    importedAt: "August 12, 2026",
+    note: "This is the currently connected primary calendar, not the richardc@shellysbistro.com mailbox account. Events are read-only snapshots and should be confirmed as Shelly’s project meetings.",
+    events: [
+      { id: "cal-cameron", title: "Meeting with Cameron — marketing", schedule: "Thu, Aug 13 · 8:00–9:00 AM", cadence: "One-time", relevance: "Likely work meeting · project relevance to confirm", location: "Not supplied", url: "https://www.google.com/calendar/event?eid=MGVrOHNxaHB1bHVkOXFhYXFvdXVuazA5dGIgcmljaGFyZGNAeWVuc2Jvb2tzLmNvbQ&ctz=America/Winnipeg" },
+      { id: "cal-scrum", title: "Scrum meeting", schedule: "Next: Thu, Aug 13 · 6:00–7:00 AM", cadence: "Recurring weekdays", relevance: "Work cadence · project relevance to confirm", location: "Online / not supplied", url: "https://www.google.com/calendar/event?eid=MmxsaXM0YmZibDZhdGRodmhpMTBhbW02aDJfMjAyNjA4MTNUMTEwMDAwWiByaWNoYXJkY0B5ZW5zYm9va3MuY29t&ctz=America/Winnipeg" },
+      { id: "cal-task-management", title: "15-minute task management", schedule: "Next: Mon, Aug 17 · 11:00–11:15 AM", cadence: "Recurring", relevance: "Work cadence · project relevance to confirm", location: "Online / not supplied", url: "https://www.google.com/calendar/event?eid=MDZmZDE4c281YjZwYWZoMXFtcDRxNGxtNTBfMjAyNjA4MTdUMTYwMDAwWiByaWNoYXJkY0B5ZW5zYm9va3MuY29t&ctz=America/Winnipeg" },
+      { id: "cal-updates", title: "Paul & Richard updates", schedule: "Mon, Aug 17 · 10:00–10:30 AM", cadence: "Recurring weekly", relevance: "Work meeting · project relevance to confirm", location: "Online / not supplied", url: "https://www.google.com/calendar/event?eid=MjBpZzlxbWd0cThsNWY4MmkxazZ0YmU1NGVfMjAyNjA4MTdUMTUwMDAwWiByaWNoYXJkY0B5ZW5zYm9va3MuY29t&ctz=America/Winnipeg" },
+      { id: "cal-cat-marketing", title: "Marketing review with Cat", schedule: "Tue, Aug 18 · 5:00–6:00 AM", cadence: "Recurring weekly", relevance: "Likely Shelly’s work meeting · confirm scope", location: "Online / not supplied", url: "https://www.google.com/calendar/event?eid=MmpzYTJmYzN1Ymg2bmsyYTg5bXRtazU1dXBfMjAyNjA4MThUMTAwMDAwWiByaWNoYXJkY0B5ZW5zYm9va3MuY29t&ctz=America/Winnipeg" },
+    ],
+  },
+  budget: [
+    { id: "budget-facility", activity: "Facility acquisition", amountThousands: 8700, status: "Conditional", detail: "Includes CA$1,000k deposit and CA$7,700k balance.", sourceId: "proposal", verification: "Pending source attachment" },
+  ],
+  conflicts: [
+    {
+      id: "conflict-contact-identity",
+      title: "Current leadership differs from the original project brief",
+      subject: "Leadership roster",
+      state: "Open",
+      detail: "The original build brief identifies Richard Chimebele as expansion project manager. The user corrected current leadership to Vince and Cat only on August 12, 2026. Richard remains associated only with the authenticated project mailbox and historical tracker notes, not the leadership roster.",
+      nextAction: "Update or supersede the proposal/workplan leadership references while retaining their historical source provenance.",
+    },
+    {
+      id: "conflict-budget-truncation",
+      title: "Eleven proposal budget activities are absent from the supplied prompt",
+      subject: "Budget completeness",
+      state: "Open",
+      detail: "The build prompt asks for twelve budget activities but ends after the Facility acquisition row. The other activities and values were not supplied.",
+      nextAction: "Attach the approved proposal and extract the complete budget table into the review queue.",
+    },
+    {
+      id: "conflict-owner-equity",
+      title: "User corrections change the proposed financing stack",
+      subject: "Financing plan",
+      state: "Open",
+      detail: "The original build brief stated CA$6.25M / 25% owner equity and CA$10.0M / 40% grants. The user corrected the current plan to CA$1.0M / 4% owner equity and CA$15.25M / 61% grants on August 12, 2026. The structured financing stack uses the correction and retains the superseded values here for provenance.",
+      nextAction: "Reconcile the corrected allocation with the approved proposal and map the CA$15.25M grant/contribution layer to specific programs without implying awards.",
+    },
+    {
+      id: "conflict-transcona",
+      title: "Transcona invoice dispute resolution is internally inconsistent",
+      subject: "Contractor invoice status",
+      state: "Open",
+      detail: "Contractor Tracker row 5 labels the status ‘Invoiced Dispute Resolved’, while the same row’s date says DISPUTED and its note says not to pay until the authorization dispute is resolved.",
+      nextAction: "Attach the resolution or current invoice decision and approve one current state without altering the source workbook.",
+    },
+    {
+      id: "conflict-jilmark-fee",
+      title: "Jilmark fee status conflicts with the tracker note",
+      subject: "Contractor pricing status",
+      state: "Open",
+      detail: "Contractor Tracker row 9 says ‘No Fee required’, but its note says no fee yet and directs the team to request the fee after confirming the site visit.",
+      nextAction: "Confirm whether the no-fee status applies to a visit only or to the requested design-build/GC pricing engagement.",
+    },
+  ],
+};
+
+const ui = {
+  view: "overview",
+  workplanFilter: "All",
+  search: "",
+  activeRecordId: null,
+  pendingSourceId: null,
+};
+
+let state = loadState();
+
+const mainContent = document.querySelector("#mainContent");
+const sidebar = document.querySelector("#sidebar");
+const scrim = document.querySelector("#scrim");
+const drawer = document.querySelector("#recordDrawer");
+const drawerTitle = document.querySelector("#drawerTitle");
+const drawerBody = document.querySelector("#drawerBody");
+const viewTitle = document.querySelector("#viewTitle");
+const viewEyebrow = document.querySelector("#viewEyebrow");
+const recordDialog = document.querySelector("#recordDialog");
+const approvalDialog = document.querySelector("#approvalDialog");
+
+function cloneSeed() {
+  return JSON.parse(JSON.stringify(seedState));
+}
+
+function loadState() {
+  try {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (!saved) return cloneSeed();
+    const parsed = JSON.parse(saved);
+    return parsed.version === seedState.version ? parsed : cloneSeed();
+  } catch (_error) {
+    return cloneSeed();
+  }
+}
+
+function saveState() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+  updateNavCounts();
+}
+
+function openSourceVault() {
+  return new Promise((resolve, reject) => {
+    const request = indexedDB.open(SOURCE_DB, 1);
+    request.onupgradeneeded = () => {
+      if (!request.result.objectStoreNames.contains("originals")) request.result.createObjectStore("originals", { keyPath: "sourceId" });
+    };
+    request.onsuccess = () => resolve(request.result);
+    request.onerror = () => reject(request.error);
+  });
+}
+
+async function storeSourceOriginal(sourceId, file, hash) {
+  const db = await openSourceVault();
+  return new Promise((resolve, reject) => {
+    const transaction = db.transaction("originals", "readwrite");
+    const store = transaction.objectStore("originals");
+    const check = store.get(sourceId);
+    check.onsuccess = () => {
+      if (check.result) {
+        transaction.abort();
+        reject(new Error("An immutable original is already registered for this source."));
+        return;
+      }
+      store.add({ sourceId, file, hash, storedAt: new Date().toISOString() });
+    };
+    check.onerror = () => reject(check.error);
+    transaction.oncomplete = () => {
+      db.close();
+      resolve();
+    };
+    transaction.onerror = () => {
+      db.close();
+      reject(transaction.error);
+    };
+    transaction.onabort = () => db.close();
+  });
+}
+
+async function getSourceOriginal(sourceId) {
+  const db = await openSourceVault();
+  return new Promise((resolve, reject) => {
+    const request = db.transaction("originals", "readonly").objectStore("originals").get(sourceId);
+    request.onsuccess = () => {
+      db.close();
+      resolve(request.result || null);
+    };
+    request.onerror = () => {
+      db.close();
+      reject(request.error);
+    };
+  });
+}
+
+async function registerSourceOriginal(sourceId, file) {
+  const source = state.sources.find((item) => item.id === sourceId);
+  if (!source || !file) return;
+  if (source.state === "Available" && source.immutableOriginal) {
+    showToast("This source already has an immutable original. Add a new source/version instead of replacing it.");
+    return;
+  }
+  try {
+    const digest = await crypto.subtle.digest("SHA-256", await file.arrayBuffer());
+    const hash = Array.from(new Uint8Array(digest), (byte) => byte.toString(16).padStart(2, "0")).join("");
+    await storeSourceOriginal(sourceId, file, hash);
+    source.state = "Available";
+    source.immutableOriginal = true;
+    source.attachedName = file.name;
+    source.fileSize = file.size;
+    source.importedAt = new Date().toISOString();
+    source.sha256 = hash;
+    source.reference = `Immutable local original · SHA-256 ${hash}`;
+    saveState();
+    render();
+    showToast("Original registered in the local evidence vault. Extracted claims still require review.");
+  } catch (error) {
+    showToast(error.message || "The source original could not be registered.");
+  }
+}
+
+async function downloadSourceOriginal(sourceId) {
+  try {
+    const stored = await getSourceOriginal(sourceId);
+    if (!stored) {
+      showToast("The stored original is unavailable in this browser profile.");
+      return;
+    }
+    const url = URL.createObjectURL(stored.file);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = stored.file.name;
+    document.body.append(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(url);
+  } catch (_error) {
+    showToast("The stored original could not be opened.");
+  }
+}
+
+function escapeHtml(value = "") {
+  return String(value)
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function formatMoney(value, compact = false) {
+  if (compact) {
+    return new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD", notation: "compact", maximumFractionDigits: 2 }).format(value);
+  }
+  return new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 }).format(value);
+}
+
+function formatQuoteRange(low, high) {
+  if (low == null && high == null) return "Not supplied";
+  if (low === high || high == null) return formatMoney(low);
+  return `${formatMoney(low)}–${formatMoney(high)}`;
+}
+
+function statusBadge(status) {
+  return `<span class="status-badge" data-state="${escapeHtml(status)}">${escapeHtml(status)}</span>`;
+}
+
+function verificationBadge(verification) {
+  const approved = verification === "Approved";
+  return `<span class="verification-badge${approved ? " is-approved" : ""}">${escapeHtml(verification)}</span>`;
+}
+
+function typeBadge(type) {
+  return `<span class="type-badge">${escapeHtml(type)}</span>`;
+}
+
+function pendingRecords() {
+  return state.records.filter((record) => record.verification !== "Approved" && record.verification !== "Rejected");
+}
+
+function workplanRecords() {
+  return state.records.filter((record) => ["Task", "Milestone"].includes(record.type));
+}
+
+function projectAssignments() {
+  return state.workplanSnapshot.assignments.filter((item) => item.community.includes("SIB"));
+}
+
+function richardAssignments() {
+  return projectAssignments().filter((item) => item.collaborators.split(",").map((name) => name.trim()).includes("Richard"));
+}
+
+function assignmentMatchesSearch(item) {
+  return !ui.search || Object.values(item).join(" ").toLocaleLowerCase().includes(ui.search.toLocaleLowerCase());
+}
+
+function contractorRecords() {
+  return state.records.filter((record) => record.type === "Contractor");
+}
+
+function updateNavCounts() {
+  document.querySelector("#workplanCount").textContent = projectAssignments().length;
+  document.querySelector("#equipmentCount").textContent = state.equipmentData.categories;
+  document.querySelector("#fundingOpportunityCount").textContent = state.fundingOpportunities.filter((item) => item.availability !== "Submitted application").length;
+  document.querySelector("#calendarCount").textContent = state.calendarSnapshot.events.length;
+  document.querySelector("#followUpCount").textContent = state.followUps.filter((item) => ["Now", "This week"].includes(item.priority)).length;
+}
+
+function searchableText(record) {
+  return [record.title, record.type, record.status, record.sourceStatus, record.scope, record.contact, record.contactDetail, record.owner, record.sourceName, record.notes, record.nextAction, record.verification]
+    .join(" ")
+    .toLocaleLowerCase();
+}
+
+function matchesSearch(record) {
+  return !ui.search || searchableText(record).includes(ui.search.toLocaleLowerCase());
+}
+
+function render() {
+  document.querySelectorAll(".nav-item").forEach((item) => item.classList.toggle("is-active", item.dataset.view === ui.view));
+  const views = {
+    overview: { title: "Expansion overview", eyebrow: "Project controls", render: renderOverview },
+    workplan: { title: "Google Sheet workplan", eyebrow: "Connected delivery plan", render: renderWorkplan },
+    equipment: { title: "Equipment & prices", eyebrow: "64-machine procurement plan", render: renderEquipment },
+    production: { title: "Production breakdown", eyebrow: "One-million-meal flow", render: renderProduction },
+    funding: { title: "Funding & budget", eyebrow: "Financial readiness", render: renderFunding },
+    opportunities: { title: "Live funding", eyebrow: "Available project-fit programs", render: renderFundingOpportunities },
+    calendar: { title: "Meeting schedule", eyebrow: "Calendar snapshot", render: renderCalendar },
+    stakeholders: { title: "People & outreach", eyebrow: "Relationship evidence", render: renderStakeholders },
+    followups: { title: "Email follow-ups", eyebrow: "Mailbox action queue", render: renderFollowUps },
+  };
+
+  const view = views[ui.view] || views.overview;
+  viewTitle.textContent = view.title;
+  viewEyebrow.textContent = view.eyebrow;
+  mainContent.innerHTML = view.render();
+  mainContent.scrollTop = 0;
+  updateNavCounts();
+}
+
+function truthBanner() {
+  return `
+    <section class="sync-banner" aria-label="Connected data status">
+      <div>
+        <strong>Connected operational snapshot</strong>
+        <p>Google Sheet workplan and project mailbox data refreshed August 12, 2026. Use the source links to see changes made after this snapshot.</p>
+      </div>
+      <span class="sync-pill"><i></i> Synced</span>
+    </section>`;
+}
+
+function renderOverview() {
+  const tasks = projectAssignments();
+  const counts = tasks.reduce((result, task) => {
+    result[task.status] = (result[task.status] || 0) + 1;
+    return result;
+  }, {});
+  const distribution = ["In progress", "Recurring", "Blocker", "Pending"];
+  const liveFunding = state.fundingOpportunities.filter((item) => item.availability !== "Submitted application");
+  const myTasks = richardAssignments();
+  const totalTasks = tasks.length || 1;
+
+  return `
+    <div class="content-stack">
+      ${truthBanner()}
+      <section class="hero-grid">
+        <article class="project-hero">
+          <div class="hero-copy">
+            <p class="eyebrow">Shelly’s Bistro · RTE expansion</p>
+            <h3>Grow the food system. Keep every next move visible.</h3>
+            <p>A connected view of the 41 Paquin Road expansion—workplan, available funding, meetings and follow-ups brought into one practical workspace.</p>
+          </div>
+          <img class="hero-logo" src="assets/shellys-bistro-logo.png" alt="" aria-hidden="true" />
+          <div class="hero-meta">
+            <span>CA$25.0M proposed cost</span>
+            <span>40,000+ sq. ft. concept</span>
+            <span>Vince + Cat leadership</span>
+          </div>
+        </article>
+        <article class="pulse-panel">
+          <div>
+            <div class="panel-heading">
+              <div>
+                <h3>Workplan pulse</h3>
+                <p>Current Shelly’s rows from the connected Google Sheet.</p>
+              </div>
+              <div class="pulse-number">${tasks.length}<small> tasks</small></div>
+            </div>
+            <div class="distribution">
+              ${distribution.map((status, index) => {
+                const count = counts[status] || 0;
+                const className = ["bar-fill--green", "bar-fill--blue", "bar-fill--amber", "bar-fill--gray", ""][index];
+                return `<div class="distribution-row"><span>${status}</span><progress class="status-progress ${className}" value="${count}" max="${totalTasks}">${count}</progress><strong>${count}</strong></div>`;
+              }).join("")}
+            </div>
+          </div>
+        </article>
+      </section>
+
+      <section class="metrics-grid" aria-label="Project metrics">
+        ${metricCard("Project cost", "$25.0M", "Fully allocated across equity, debt and grants/contributions.", "Plan")}
+        ${metricCard("Sheet assignments", String(tasks.length), "Shelly’s Bistro rows currently reflected from Google Sheets.", "Connected")}
+        ${metricCard("Live funding fits", String(liveFunding.length), "Programs and financing paths available for action now.", "Live")}
+        ${metricCard("Email actions", String(state.followUps.filter((item) => ["Now", "This week"].includes(item.priority)).length), "Priority follow-ups found in the connected project mailbox.", "Follow up", true)}
+      </section>
+
+      <section class="grid-two">
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <h3>Richard’s current assignments</h3>
+              <p>Three Shelly’s Bistro rows assigned to Richard in the General sheet.</p>
+            </div>
+            <button class="plain-link" type="button" data-navigate="workplan">Open workplan →</button>
+          </div>
+          <div class="assignment-list">
+            ${myTasks.map((item) => `
+              <div class="assignment-row">
+                <div><strong>${escapeHtml(item.assignment)}</strong><span>${escapeHtml(item.notes || "No note supplied")}</span></div>
+                <div>${statusBadge(item.status)}<small>${escapeHtml(item.newDue || item.originalDue || "No due date")}</small></div>
+              </div>`).join("")}
+          </div>
+        </article>
+
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <h3>Funding moves ready now</h3>
+              <p>Best-fit paths with a concrete next action.</p>
+            </div>
+            <button class="plain-link" type="button" data-navigate="opportunities">View all →</button>
+          </div>
+          <div class="funding-next-list">
+            ${liveFunding.slice(0, 3).map((item) => `
+              <div class="funding-next-row">
+                <span>${escapeHtml(item.fitLevel)}</span>
+                <div><strong>${escapeHtml(item.name)}</strong><p>${escapeHtml(item.nextAction)}</p></div>
+              </div>`).join("")}
+          </div>
+        </article>
+      </section>
+
+      <section class="grid-equal">
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <h3>Financing posture</h3>
+              <p>Proposed stack; approval and security states preserved.</p>
+            </div>
+            <button class="plain-link" type="button" data-navigate="funding">Open budget →</button>
+          </div>
+          ${fundingBar()}
+        </article>
+        <article class="panel">
+          <div class="panel-heading">
+            <div>
+              <h3>Next operational moves</h3>
+              <p>Highest-value actions across the connected workspace.</p>
+            </div>
+          </div>
+          <div class="milestone-list">
+            ${milestoneRow("01", "Complete the FCC financial package", "Send accountant-prepared statements and revenue-support documents.")}
+            ${milestoneRow("02", "Answer the BUMP information request", "Define trainees, curriculum, outcomes and the external provider.")}
+            ${milestoneRow("03", "Publish meeting outcomes", "Record decisions and owners from the latest government and school-division meetings.")}
+          </div>
+        </article>
+      </section>
+    </div>`;
+}
+
+function metricCard(label, value, detail, tag, accent = false) {
+  return `
+    <article class="metric-card${accent ? " metric-card--accent" : ""}">
+      <div class="metric-card__top"><span>${escapeHtml(label)}</span><span>${escapeHtml(tag)}</span></div>
+      <div class="metric-card__value">${escapeHtml(value)}</div>
+      <div class="metric-card__detail">${escapeHtml(detail)}</div>
+    </article>`;
+}
+
+function evidenceRow(record) {
+  return `
+    <div class="evidence-row">
+      <div>
+        <button type="button" data-record-id="${escapeHtml(record.id)}">${escapeHtml(record.title)}</button>
+        <div class="row-meta"><span>${escapeHtml(record.sourceName)}</span><span>${escapeHtml(record.owner)}</span></div>
+      </div>
+      <div>${statusBadge(record.status)}</div>
+    </div>`;
+}
+
+function blockerRow(record, index, conflict = false) {
+  return `
+    <div class="blocker-row">
+      <span class="severity-mark${index > 0 ? " severity-mark--medium" : ""}"></span>
+      <div>
+        <button class="table-link" type="button" ${conflict ? 'data-navigate="funding"' : `data-record-id="${escapeHtml(record.id)}"`}>${escapeHtml(record.title)}</button>
+        <div class="row-meta"><span>${escapeHtml(record.nextAction || "Review required")}</span></div>
+      </div>
+      ${statusBadge(record.status)}
+    </div>`;
+}
+
+function milestoneRow(index, title, detail) {
+  return `
+    <div class="milestone-row">
+      <div>
+        <p class="row-title">${escapeHtml(index)} · ${escapeHtml(title)}</p>
+        <div class="row-meta"><span>${escapeHtml(detail)}</span></div>
+      </div>
+    </div>`;
+}
+
+function fundingBar() {
+  return `
+    <div class="funding-stack">
+      <div class="funding-bar" role="img" aria-label="Corrected financing composition: 4 percent owner equity, 35 percent proposed debt and 61 percent proposed grant or contribution funding">
+        ${state.funding.map((item) => `<div class="funding-segment funding-segment--${escapeHtml(item.id)}"><div><strong>${item.percent}% · ${escapeHtml(item.label)}</strong><span>${formatMoney(item.amount, true)}</span></div></div>`).join("")}
+      </div>
+      <div class="callout"><strong>Corrected financing allocation</strong>Owner equity totals CA$1.0M, proposed debt is CA$8.75M and the proposed grant/contribution layer is CA$15.25M. The stack reconciles to CA$25.0M; only the allocation is confirmed, not availability or approval.</div>
+    </div>`;
+}
+
+function renderPublishedTaskChart() {
+  const states = ["In progress", "Recurring", "Blocker", "Pending"];
+  const tasks = projectAssignments();
+  const counts = Object.fromEntries(states.map((item) => [item, tasks.filter((task) => task.status === item).length]));
+  const max = Math.max(1, ...Object.values(counts));
+  return `
+    <section class="panel published-chart" aria-label="Published task status chart">
+      <div class="panel-heading"><div><h3>Published Google Sheet task chart</h3><p>${tasks.length} Shelly’s Bistro assignments from the General tab.</p></div><span class="status-badge" data-state="Verified current fact">Published</span></div>
+      <div class="task-chart">
+        ${states.map((item) => `
+          <div class="task-chart__row">
+            <span>${escapeHtml(item)}</span>
+            <progress class="status-progress" max="${max}" value="${counts[item]}" aria-label="${escapeHtml(item)}: ${counts[item]}"></progress>
+            <strong>${counts[item]}</strong>
+          </div>`).join("")}
+      </div>
+      <p class="chart-note">Status is shown exactly as listed in the imported sheet; no synthetic completion percentage is added.</p>
+    </section>`;
+}
+
+function renderSixWeekPlan() {
+  return `
+    <section class="panel plan-panel">
+      <div class="panel-heading">
+        <div><p class="eyebrow">Richard Workplan tab</p><h3>Published six-week workplan</h3><p>Focus, objective, actions and deliverable from the connected Google Sheet.</p></div>
+        <a class="button button--ghost" href="${escapeHtml(state.workplanSnapshot.spreadsheetUrl.replace("gid=613747079", "gid=1493963392"))}" target="_blank" rel="noopener noreferrer">Open live sheet</a>
+      </div>
+      <div class="week-grid">
+        ${state.workplanSnapshot.sixWeekPlan.map((item) => `
+          <article class="week-card">
+            <div class="week-card__top"><span>${escapeHtml(item.week)}</span><strong>${escapeHtml(item.focus)}</strong></div>
+            <p class="week-objective">${escapeHtml(item.objective)}</p>
+            <p>${escapeHtml(item.actions)}</p>
+            <div class="week-deliverable"><span>Deliverable</span>${escapeHtml(item.deliverable)}</div>
+          </article>`).join("")}
+      </div>
+    </section>`;
+}
+
+function renderWorkplan() {
+  const filters = [
+    { label: "All Shelly’s", value: "All" },
+    { label: "Richard", value: "Richard" },
+    { label: "In progress", value: "In progress" },
+    { label: "Recurring", value: "Recurring" },
+    { label: "Blocker", value: "Blocker" },
+    { label: "Pending", value: "Pending" },
+  ];
+  const assignments = projectAssignments()
+    .filter((item) => ui.workplanFilter === "All" || (ui.workplanFilter === "Richard" ? item.collaborators.split(",").map((name) => name.trim()).includes("Richard") : item.status === ui.workplanFilter))
+    .filter(assignmentMatchesSearch);
+  const blockers = projectAssignments().filter((item) => item.status === "Blocker").length;
+
+  return `
+    <div class="content-stack">
+      ${truthBanner()}
+      <section class="metrics-grid">
+        ${metricCard("Shelly’s assignments", String(projectAssignments().length), "Current SIB rows from the General sheet.", "Google Sheets")}
+        ${metricCard("Richard assigned", String(richardAssignments().length), "Rows where Richard is listed as a collaborator.", "My work")}
+        ${metricCard("Blockers", String(blockers), "Items explicitly marked Blocker in the source sheet.", "Attention")}
+        ${metricCard("Published plan", "6 weeks", "Richard’s complete Focus → Deliverable plan.", "Current", true)}
+      </section>
+      ${renderSixWeekPlan()}
+      <div class="section-title">
+        <div><h3>Current assignment register</h3><p>Filtered to Shelly’s Bistro rows. Dates and working notes are preserved from the General sheet.</p></div>
+        <a class="button button--primary" href="${escapeHtml(state.workplanSnapshot.spreadsheetUrl)}" target="_blank" rel="noopener noreferrer">Open Google Sheet</a>
+      </div>
+      <div class="toolbar">
+        <div class="filter-group">
+          ${filters.map((filter) => `<button class="filter-button${ui.workplanFilter === filter.value ? " is-active" : ""}" type="button" data-filter="${escapeHtml(filter.value)}">${escapeHtml(filter.label)}</button>`).join("")}
+        </div>
+        <span class="record-count">${assignments.length} shown · ${projectAssignments().length} total</span>
+      </div>
+      ${renderPublishedTaskChart()}
+      <section class="panel panel--flush">
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Assignment</th><th>Status</th><th>Collaborators</th><th>Due</th><th>Working note</th></tr></thead>
+            <tbody>
+              ${assignments.map((item) => `
+                <tr>
+                  <td><strong>${escapeHtml(item.assignment)}</strong><span class="cell-subtext">${escapeHtml(item.community)}</span></td>
+                  <td>${statusBadge(item.status)}</td>
+                  <td>${escapeHtml(item.collaborators)}</td>
+                  <td><strong>${escapeHtml(item.newDue || item.originalDue || "Not set")}</strong>${item.newDue && item.originalDue ? `<span class="cell-subtext">Original: ${escapeHtml(item.originalDue)}</span>` : ""}</td>
+                  <td>${escapeHtml(item.notes || "—")}</td>
+                </tr>`).join("") || `<tr><td colspan="5">${emptyState("No matching assignments", "Change the filter or clear the search.")}</td></tr>`}
+            </tbody>
+          </table>
+        </div>
+      </section>
+    </div>`;
+}
+
+function renderEquipment() {
+  const equipment = state.equipmentData.items.filter((item) => !ui.search || Object.values(item).join(" ").toLocaleLowerCase().includes(ui.search.toLocaleLowerCase()));
+  const waveCounts = ["Wave 1", "Wave 2", "Wave 3"].map((wave) => ({ wave, count: state.equipmentData.items.filter((item) => item.wave === wave).reduce((sum, item) => sum + item.qty, 0) }));
+  return `
+    <div class="content-stack">
+      <section class="equipment-hero">
+        <div>
+          <p class="eyebrow">Equipment Report · Revision 2</p>
+          <h3>Multi-line fleet sized for one million meals per day.</h3>
+          <p>Prices below are planning figures from the attached report. USD FOB and CAD landed/project values stay in their source currencies; no exchange conversion has been invented.</p>
+        </div>
+        <a class="button button--primary" href="${escapeHtml(state.equipmentData.sourcePath)}" download>Download source report</a>
+      </section>
+      <section class="metrics-grid">
+        ${metricCard("Equipment categories", String(state.equipmentData.categories), "Processing, cooking, filling, sealing and food-safety equipment.", "Register")}
+        ${metricCard("Machine fleet", String(state.equipmentData.machineCount), "Multi-unit N+1 production design.", "Units")}
+        ${metricCard("Equipment FOB", "~CA$930K", "Source also reports approximately US$689K.", "Planning")}
+        ${metricCard("Equipment scope total", "$1.6–1.8M", "CAD including logistics, compliance, installation and contingency.", "CAD", true)}
+      </section>
+      <section class="panel panel--flush">
+        <div class="panel-heading"><div><h3>Master equipment register</h3><p>${equipment.length} of ${state.equipmentData.categories} categories shown · all prices from attached July 2026 source.</p></div></div>
+        <div class="table-wrap">
+          <table class="data-table equipment-table">
+            <thead><tr><th>Equipment</th><th>Supplier</th><th>Capacity / required</th><th>Qty</th><th>Unit FOB</th><th>Extended FOB</th><th>Wave</th></tr></thead>
+            <tbody>${equipment.map((item) => `
+              <tr>
+                <td><strong>${escapeHtml(item.line)}</strong></td>
+                <td>${escapeHtml(item.supplier)}</td>
+                <td><strong>${escapeHtml(item.capacity)}</strong><span class="cell-subtext">Required: ${escapeHtml(item.required)}</span></td>
+                <td class="equipment-qty">${item.qty}</td>
+                <td class="money">${escapeHtml(item.unitFob)}</td>
+                <td class="money">${escapeHtml(item.extendedFob)}</td>
+                <td><span class="wave-chip">${escapeHtml(item.wave)}</span></td>
+              </tr>`).join("") || `<tr><td colspan="7">${emptyState("No matching equipment", "Clear the search to show the complete register.")}</td></tr>`}</tbody>
+          </table>
+        </div>
+      </section>
+      <section class="grid-two">
+        <article class="panel">
+          <div class="panel-heading"><div><h3>Supplemental chilled-flow equipment</h3><p>Canadian landed-cost figures from the production logistics attachment.</p></div></div>
+          <div class="supplemental-list">
+            ${state.equipmentData.supplemental.map((item) => `
+              <div class="supplemental-row"><div><strong>${escapeHtml(item.line)}</strong><p>${escapeHtml(item.specification)}</p></div><div><span>${item.qty} units</span><strong>${escapeHtml(item.unitCost)}</strong><small>${escapeHtml(item.total)} total</small></div></div>`).join("")}
+          </div>
+          <div class="callout callout--danger u-mt-12"><strong>Price reconciliation required</strong>The logistics report later states ~CA$6,500 for an additional blast chiller, versus ~CA$17,000 landed in its equipment specification. Use a current supplier RFQ before budgeting.</div>
+        </article>
+        <article class="panel">
+          <div class="panel-heading"><div><h3>Procurement waves</h3><p>Machine quantities by ordering stage.</p></div></div>
+          <div class="wave-summary">
+            ${waveCounts.map((item) => `<div><span>${escapeHtml(item.wave)}</span><strong>${item.count}</strong><small>machines</small></div>`).join("")}
+          </div>
+          <div class="milestone-list u-mt-12">
+            ${milestoneRow("01", "Bottleneck + long-lead", "MAP sealers, tunnel ovens, weighers and filling systems.")}
+            ${milestoneRow("02", "Processing lines", "Cutting, cooking, cup filling and drying systems.")}
+            ${milestoneRow("03", "Short-lead + balance", "Wash/peel, kettles and 14 CCP metal detectors.")}
+          </div>
+        </article>
+      </section>
+      <section class="panel panel--flush">
+        <div class="panel-heading"><div><h3>Equipment-scope budget</h3><p>Planning estimates; building utilities, cold-chain warehousing and 450 t/day outbound logistics are outside this scope.</p></div></div>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>Budget item</th><th>Estimate</th><th>Basis</th></tr></thead><tbody>${state.equipmentData.budget.map((item) => `<tr><td><strong>${escapeHtml(item.item)}</strong></td><td class="money">${escapeHtml(item.estimate)}</td><td>${escapeHtml(item.note)}</td></tr>`).join("")}</tbody></table></div>
+      </section>
+    </div>`;
+}
+
+function renderFlowStream(stream) {
+  return `
+    <article class="flow-stream flow-stream--${escapeHtml(stream.id)}">
+      <div class="flow-stream__heading"><div><p class="eyebrow">Stream ${stream.id === "hot" ? "A" : "B"}</p><h3>${escapeHtml(stream.name)}</h3></div><strong>${escapeHtml(stream.share)}</strong></div>
+      <div class="flow-steps">
+        ${stream.steps.map((item, index) => `
+          <div class="flow-step">
+            <span>${escapeHtml(item.step)}</span>
+            <div><strong>${escapeHtml(item.title)}</strong><p>${escapeHtml(item.detail)}</p></div>
+            ${index < stream.steps.length - 1 ? '<i aria-hidden="true">→</i>' : ""}
+          </div>`).join("")}
+      </div>
+    </article>`;
+}
+
+function renderProduction() {
+  const data = state.productionData;
+  return `
+    <div class="content-stack">
+      <section class="production-hero">
+        <div><p class="eyebrow">Production Logistics & Capacity Analysis</p><h3>Two parallel flows protect the one-million-meal target.</h3><p>The attached analysis splits hot product through a defined chilling constraint while cold product moves directly from prep and assembly into packaging.</p></div>
+        <div class="split-donut"><div><strong>${data.split.hot}%</strong><span>hot</span><strong>${data.split.cold}%</strong><span>cold</span></div></div>
+      </section>
+      <section class="metrics-grid">
+        ${metricCard("Daily target", "1.0M", "Meals per day at a 450 g average meal weight.", "Meals")}
+        ${metricCard("Daily product", "450 t", "450,000 kg of finished product per day.", "Mass")}
+        ${metricCard("Instantaneous rate", "26,500", "kg/hr across 17 effective production hours.", "kg/hr")}
+        ${metricCard("Packaging rate", "~980", "Sustained packs per minute across parallel lanes.", "packs/min", true)}
+      </section>
+      <section class="flow-grid">
+        ${data.streams.map(renderFlowStream).join("")}
+      </section>
+      <section class="grid-two">
+        <article class="panel chilling-panel">
+          <div class="panel-heading"><div><p class="eyebrow">Primary constraint</p><h3>Blast chilling bottleneck</h3><p>Hot product capacity is limited by the 120-minute cooling cycle.</p></div><span class="status-badge" data-state="Blocker">Capacity gate</span></div>
+          <div class="chilling-grid">
+            <div><span>Fleet</span><strong>${escapeHtml(data.chilling.fleet)}</strong></div>
+            <div><span>Cycle load</span><strong>${escapeHtml(data.chilling.load)}</strong></div>
+            <div><span>Cycle</span><strong>${escapeHtml(data.chilling.cycle)}</strong></div>
+            <div><span>Throughput</span><strong>${escapeHtml(data.chilling.throughput)}</strong></div>
+          </div>
+          <div class="capacity-band"><span>Hot-food ceiling</span><strong>${escapeHtml(data.hotCapacity)}</strong></div>
+        </article>
+        <article class="panel">
+          <div class="panel-heading"><div><p class="eyebrow">Facility impact</p><h3>Dedicated logistics footprint</h3><p>Space required for chilling, circulation, bin storage and wash.</p></div></div>
+          <div class="footprint-list">${data.footprint.map((item) => `<div><span>${escapeHtml(item.area)}</span><strong>${escapeHtml(item.metric)}</strong><small>${escapeHtml(item.imperial)}</small></div>`).join("")}</div>
+        </article>
+      </section>
+      <section class="scaling-banner">
+        <div><p class="eyebrow">Scaling rule</p><h3>${escapeHtml(data.scaling)}</h3><p>${escapeHtml(data.scalingCost)}</p></div>
+        <div><span>Recommended operating mix</span><strong>40 / 60</strong><small>hot / cold</small></div>
+      </section>
+      <div class="source-actions"><span>Source: Production Logistics & Capacity Analysis · August 11, 2026</span><a class="button button--ghost" href="${escapeHtml(data.sourcePath)}" download>Download source breakdown</a></div>
+    </div>`;
+}
+
+function renderFunding() {
+  const fundingRecords = state.records.filter((record) => record.type === "Funding").filter(matchesSearch);
+  const fundingAmounts = { "fund-owner-equity": 1000000, "fund-debt": 8750000, "fund-grants": 15250000 };
+  return `
+    <div class="content-stack">
+      ${truthBanner()}
+      <section class="metrics-grid">
+        ${metricCard("Total proposed cost", "$25.0M", "Formal project budget stated in the supplied brief.", "Proposal")}
+        ${metricCard("Owner equity", "$1.0M", "4% of project cost; corrected and confirmed by the user.", "4%")}
+        ${metricCard("Proposed debt", "$8.75M", "35% of project cost; FCC discussion is not approval.", "35%")}
+        ${metricCard("Proposed grants", "$15.25M", "61% allocation; no award is implied.", "61%", true)}
+      </section>
+      <section class="panel">
+        <div class="panel-heading">
+          <div><h3>Proposed financing stack</h3><p>Amounts reconcile to CA$25.0M; availability and approval are separate questions.</p></div>
+        </div>
+        ${fundingBar()}
+      </section>
+      <section class="grid-two">
+        <article class="panel panel--flush">
+          <div class="panel-heading"><div><h3>Financing evidence</h3><p>Each layer preserves its exact commitment state.</p></div></div>
+          <div class="table-wrap">
+            <table class="data-table">
+              <thead><tr><th>Layer</th><th>Amount</th><th>Truth state</th><th>Verification</th></tr></thead>
+              <tbody>${fundingRecords.map((record) => `<tr><td><button class="table-link" type="button" data-record-id="${escapeHtml(record.id)}">${escapeHtml(record.title)}</button></td><td class="money">${formatMoney(fundingAmounts[record.id] || 0, true)}</td><td>${statusBadge(record.status)}</td><td>${verificationBadge(record.verification)}</td></tr>`).join("")}</tbody>
+            </table>
+          </div>
+        </article>
+        <article class="panel">
+          <div class="panel-heading"><div><h3>Readiness interpretation</h3><p>What the current evidence does—and does not—support.</p></div></div>
+          <div class="callout"><strong>Owner equity corrected</strong>CA$1.0M is the full owner-equity contribution, not one component of a CA$6.25M contribution. The original brief value is preserved as an open conflict.</div>
+          <div class="callout callout--danger u-mt-12"><strong>No debt approval documented</strong>Negotiation is not a term sheet, credit approval or committed funding.</div>
+          <div class="callout callout--danger u-mt-12"><strong>Grant allocation is not an award</strong>The CA$5.25M previously shown as a gap is now included in the CA$15.25M grant/contribution layer at the user’s direction. Each program still needs its own verified application and approval state.</div>
+        </article>
+      </section>
+      <section class="panel panel--flush">
+        <div class="panel-heading"><div><h3>Proposal budget activities</h3><p>CA$000s · only values present in the supplied prompt are shown.</p></div></div>
+        <div class="table-wrap">
+          <table class="data-table">
+            <thead><tr><th>Activity</th><th>Amount (CA$000s)</th><th>State</th><th>Composition</th><th>Verification</th></tr></thead>
+            <tbody>${state.budget.map((item) => `<tr><td>${escapeHtml(item.activity)}</td><td class="money">${new Intl.NumberFormat("en-CA").format(item.amountThousands)}</td><td>${statusBadge(item.status)}</td><td>${escapeHtml(item.detail)}</td><td>${verificationBadge(item.verification)}</td></tr>`).join("")}</tbody>
+          </table>
+        </div>
+      </section>
+      <div class="callout callout--danger"><strong>Budget table incomplete</strong>The prompt ended after row 1 of 12. Eleven activities and their amounts were not fabricated. Attach the proposal to complete this register through controlled extraction and approval.</div>
+    </div>`;
+}
+
+function renderFundingOpportunities() {
+  const submitted = state.fundingOpportunities.find((item) => item.availability === "Submitted application");
+  const live = state.fundingOpportunities.filter((item) => item.availability !== "Submitted application");
+  const opportunities = live.filter((item) => !ui.search || Object.values(item).join(" ").toLowerCase().includes(ui.search.toLowerCase()));
+  const contributionPaths = live.filter((item) => !item.category.toLowerCase().includes("debt")).length;
+  return `
+    <div class="content-stack">
+      ${truthBanner()}
+      <section class="metrics-grid">
+        ${metricCard("Available fits", String(live.length), "Programs, financing and cost-shared support available for action.", "Live")}
+        ${metricCard("Grant / support paths", String(contributionPaths), "Non-debt options in the current fit list.", "Mix")}
+        ${metricCard("Submitted", submitted ? "1" : "0", "SRF Food Security application is under review.", "Applied")}
+        ${metricCard("Grant allocation", "$15.25M", "Project target; program awards are not yet secured.", "Target", true)}
+      </section>
+      ${submitted ? `
+        <section class="application-banner">
+          <div><span>Current application</span><h3>${escapeHtml(submitted.name)}</h3><p>${escapeHtml(submitted.status)} · ${escapeHtml(submitted.intake)}</p></div>
+          <div><strong>${escapeHtml(submitted.fitLevel)}</strong><p>${escapeHtml(submitted.nextAction)}</p><a class="plain-link" href="${escapeHtml(submitted.programUrl)}" target="_blank" rel="noopener noreferrer">Official program details →</a></div>
+        </section>` : ""}
+      <div class="section-title"><div><h3>Available and suited to the project</h3><p>Only open or continuously accessible paths are shown here. Fit was checked against the project’s ownership, food-processing, workforce and expansion needs.</p></div></div>
+      <section class="opportunity-grid">
+        ${opportunities.map((item) => `
+          <article class="opportunity-card">
+            <div class="opportunity-card__top">
+              <div><p class="eyebrow">${escapeHtml(item.category)}</p><h4>${escapeHtml(item.name)}</h4></div>
+              <span class="fit-chip">${escapeHtml(item.fitLevel)}</span>
+            </div>
+            <div class="opportunity-card__meta"><span>${escapeHtml(item.availability)}</span><span>${escapeHtml(item.pipeline)}</span></div>
+            <p class="opportunity-amount">${escapeHtml(item.amount)}</p>
+            <p><strong>Availability:</strong> ${escapeHtml(item.intake)}</p>
+            <p><strong>Why it fits:</strong> ${escapeHtml(item.fit)}</p>
+            <div class="callout"><strong>Next action</strong>${escapeHtml(item.nextAction)}</div>
+            <div class="opportunity-card__footer">
+              <span>${escapeHtml(item.verification)}</span>
+              <div><a class="plain-link" href="${escapeHtml(item.sourceUrl)}" target="_blank" rel="noopener noreferrer">Email evidence</a><a class="plain-link" href="${escapeHtml(item.programUrl)}" target="_blank" rel="noopener noreferrer">Official program</a></div>
+            </div>
+          </article>`).join("") || emptyState("No matching funding opportunities", "Clear the search to restore the funding pipeline.")}
+      </section>
+    </div>`;
+}
+
+function renderCalendar() {
+  const events = state.calendarSnapshot.events.filter((item) => !ui.search || Object.values(item).join(" ").toLowerCase().includes(ui.search.toLowerCase()));
+  const recurring = state.calendarSnapshot.events.filter((item) => item.cadence.toLowerCase().includes("recurring")).length;
+  return `
+    <div class="content-stack">
+      <section class="metrics-grid">
+        ${metricCard("Schedule entries", String(state.calendarSnapshot.events.length), "Likely work meetings selected from the connected calendar.", "Snapshot")}
+        ${metricCard("Recurring", String(recurring), "Recurring work cadences shown once with their next occurrence.", "Series")}
+        ${metricCard("Calendar account", "Yens Books", "Connected as richardc@yensbooks.com.", "Account")}
+        ${metricCard("Imported", "Aug 12", "Read-only snapshot; no calendar events were changed.", "2026", true)}
+      </section>
+      <div class="callout callout--danger"><strong>Account check</strong>${escapeHtml(state.calendarSnapshot.note)} No future event explicitly titled Shelly’s, Paquin, FCC, BUMP or SRF was found; likely work events below remain marked for confirmation.</div>
+      <section class="panel panel--flush">
+        <div class="panel-heading"><div><h3>Upcoming meeting schedule</h3><p>America/Winnipeg · recurring series are consolidated to their next occurrence.</p></div></div>
+        <div class="schedule-list">
+          ${events.map((item) => `
+            <article class="schedule-row">
+              <div class="schedule-date"><strong>${escapeHtml(item.schedule.split("·")[0].trim())}</strong><span>${escapeHtml(item.schedule.includes("·") ? item.schedule.split("·").slice(1).join("·").trim() : item.schedule)}</span></div>
+              <div><h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(item.relevance)}</p><div class="row-meta"><span>${escapeHtml(item.cadence)}</span><span>${escapeHtml(item.location)}</span></div></div>
+              <a class="button button--ghost" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">Open calendar</a>
+            </article>`).join("") || emptyState("No matching meetings", "Clear the search to restore the calendar snapshot.")}
+        </div>
+      </section>
+    </div>`;
+}
+
+function renderFollowUps() {
+  const items = state.followUps.filter((item) => !ui.search || Object.values(item).join(" ").toLowerCase().includes(ui.search.toLowerCase()));
+  const urgent = state.followUps.filter((item) => item.priority === "Now").length;
+  const thisWeek = state.followUps.filter((item) => item.priority === "This week").length;
+  return `
+    <div class="content-stack">
+      <section class="metrics-grid">
+        ${metricCard("Messages scanned", String(state.emailScan.messages), `${state.emailScan.queryWindow} · connected project mailbox.`, "Email")}
+        ${metricCard("Unique threads", String(state.emailScan.threads), "Deduplicated project-related conversations.", "Threads")}
+        ${metricCard("Act now", String(urgent), "Funding and governance responses requiring immediate handling.", "Now", true)}
+        ${metricCard("This week", String(thisWeek), "Meetings, quotes and referrals needing follow-up.", "Queue")}
+      </section>
+      <div class="callout"><strong>Mailbox coverage</strong>${escapeHtml(state.emailScan.note)}</div>
+      <section class="panel panel--flush">
+        <div class="panel-heading"><div><h3>Email coverage by subject</h3><p>All ${state.emailScan.threads} matching threads were classified; the action queue below highlights current follow-up work.</p></div></div>
+        <div class="email-coverage">
+          ${state.emailScan.categories.map((item) => `<div><span>${escapeHtml(item.label)}</span><strong>${item.count}</strong></div>`).join("")}
+        </div>
+      </section>
+      <section class="panel panel--flush">
+        <div class="panel-heading"><div><h3>Follow-up queue</h3><p>Leadership owners are limited to Vince and Cat.</p></div><span class="record-count">${items.length} shown · ${state.followUps.length} total</span></div>
+        <div class="followup-list">
+          ${items.map((item) => `
+            <article class="followup-row" data-priority="${escapeHtml(item.priority)}">
+              <div class="followup-priority"><span>${escapeHtml(item.priority)}</span><small>${escapeHtml(item.lastDate)}</small></div>
+              <div>
+                <p class="eyebrow">${escapeHtml(item.organization)}</p>
+                <h4>${escapeHtml(item.subject)}</h4>
+                <p>${escapeHtml(item.evidence)}</p>
+                <div class="callout"><strong>Next · ${escapeHtml(item.owner)}</strong>${escapeHtml(item.nextAction)}</div>
+              </div>
+              <div class="followup-actions">${statusBadge(item.status)}<a class="button button--ghost" href="${escapeHtml(item.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open thread</a></div>
+            </article>`).join("") || emptyState("No matching follow-ups", "Clear the search to restore the mailbox action queue.")}
+        </div>
+      </section>
+    </div>`;
+}
+
+function renderStakeholders() {
+  const outreach = state.records.filter((record) => record.type === "Outreach").filter(matchesSearch);
+  const contractors = contractorRecords().filter(matchesSearch);
+  const visiblePeople = state.people.filter((person) => !ui.search || Object.values(person).join(" ").toLowerCase().includes(ui.search.toLowerCase()));
+  return `
+    <div class="content-stack">
+      ${truthBanner()}
+      <div class="section-title">
+        <div><h3>People, organizations and contact evidence</h3><p>A person is never marked contacted without an approved email, meeting, call or letter record.</p></div>
+        <button class="button button--primary" type="button" data-open-record-dialog>Add outreach record</button>
+      </div>
+      <section class="people-grid">
+        ${visiblePeople.map((person) => `
+          <article class="person-card">
+            <div class="person-card__top"><div><p class="eyebrow">${escapeHtml(person.relationship)}</p><h4>${escapeHtml(person.name)}</h4></div>${statusBadge(person.outreachState)}</div>
+            <p><strong>${escapeHtml(person.role)}</strong></p>
+            <p>${escapeHtml(person.evidence)}</p>
+            <div class="person-card__footer"><span>${escapeHtml(person.contact)}</span></div>
+          </article>`).join("") || emptyState("No matching people", "Clear the search to see identified project leadership.")}
+      </section>
+      <section class="metrics-grid">
+        ${metricCard("Contractor engagements", String(contractorRecords().length), "Unique contractor/scope records across both workbook sheets.", "Tracker")}
+        ${metricCard("Priced records", "4", "Rows with a price, range, proposal or estimate in the detailed tracker.", "Quotes")}
+        ${metricCard("Quote totals incl. GST", "$15.0K–$18.4K", "Workbook totals; not accepted contracts or approved spend.", "Range")}
+        ${metricCard("Internal contradictions", "2", "Transcona resolution and Jilmark fee status require reconciliation.", "Review", true)}
+      </section>
+      <section class="panel panel--flush">
+        <div class="panel-heading"><div><h3>41 Paquin contractor due diligence</h3><p>Report as of July 20, 2026. Source status is preserved exactly; every extraction remains pending approval.</p></div><a class="plain-link" href="sources/41_Paquin_Contractor_Tracker.xlsx" download>Download source workbook</a></div>
+        <div class="table-wrap">
+          <table class="data-table contractor-table">
+            <thead><tr><th>Contractor & scope</th><th>Contact</th><th>Tracker status</th><th>Est. total incl. GST</th><th>Proposed / confirmed date</th><th>Verification</th></tr></thead>
+            <tbody>
+              ${contractors.map((record) => `<tr>
+                <td><button class="table-link" type="button" data-record-id="${escapeHtml(record.id)}">${escapeHtml(record.title)}</button><span class="cell-subtext">${escapeHtml(record.scope)}</span></td>
+                <td>${escapeHtml(record.contact)}<span class="cell-subtext">${escapeHtml(record.contactDetail)}</span></td>
+                <td>${statusBadge(record.status)}<span class="cell-subtext">Source: ${escapeHtml(record.sourceStatus)}</span></td>
+                <td class="money">${escapeHtml(formatQuoteRange(record.totalLow, record.totalHigh))}<span class="cell-subtext">Not an approved commitment</span></td>
+                <td>${escapeHtml(record.proposedDate)}</td>
+                <td>${verificationBadge(record.verification)}<span class="cell-subtext">${escapeHtml(record.locator)}</span></td>
+              </tr>`).join("") || `<tr><td colspan="6">${emptyState("No matching contractors", "Clear the search to restore the tracker records.")}</td></tr>`}
+            </tbody>
+          </table>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-heading"><div><h3>Additional outreach evidence</h3><p>Approved communications are required before a party can be described as contacted outside the tracker’s dated record.</p></div></div>
+        ${outreach.length ? `<div class="evidence-list">${outreach.map(evidenceRow).join("")}</div>` : emptyState("No separate outreach records", "The contractor tracker is imported above. Add newer emails, call notes or meeting records separately so July status is not presented as current.")}
+      </section>
+      <section class="grid-equal">
+        <article class="panel"><div class="panel-heading"><div><h3>Email evidence connection</h3><p>Secure mailbox source.</p></div></div><div class="callout"><strong>Gmail OAuth connected</strong>The authenticated profile confirms richardc@shellysbistro.com. Funding evidence and action metadata from 410 matching messages across 184 threads were reviewed; mailbox ownership does not create a leadership role.</div></article>
+        <article class="panel"><div class="panel-heading"><div><h3>Customers & offtake</h3><p>Commercial commitments for the expansion.</p></div></div><div class="callout callout--danger"><strong>No signed offtake contracts documented</strong>Current institutional customers do not automatically become committed expansion customers.</div></article>
+      </section>
+    </div>`;
+}
+
+function renderSources() {
+  const sources = state.sources.filter((source) => !ui.search || Object.values(source).join(" ").toLowerCase().includes(ui.search.toLowerCase()));
+  return `
+    <div class="content-stack">
+      ${truthBanner()}
+      <div class="section-title"><div><h3>Authoritative source register</h3><p>Originals remain immutable; corrections belong to structured records and retain provenance.</p></div></div>
+      <section class="source-grid">
+        ${sources.map((source) => {
+          const stateClass = ["Available", "Connected"].includes(source.state) ? "source-state--connected" : source.state === "Not connected" ? "source-state--pending" : "";
+          return `
+            <article class="source-card">
+              <div class="source-card__top"><div><p class="eyebrow">${escapeHtml(source.type)}</p><h4>${escapeHtml(source.name)}</h4></div><span class="source-state ${stateClass}" title="${escapeHtml(source.state)}"></span></div>
+              <p>${escapeHtml(source.detail)}</p>
+              <div class="source-card__footer"><span>${escapeHtml(source.declaredDate)}</span><strong>${escapeHtml(source.state)}</strong></div>
+              <div class="source-card__actions">
+                ${source.relativePath ? `<a class="plain-link" href="${escapeHtml(source.relativePath)}" download>Download immutable source copy</a>` : source.immutableOriginal ? `<button class="plain-link" type="button" data-download-source-id="${escapeHtml(source.id)}">Download registered original</button>` : ["proposal", "menu", "logistics", "equipment"].includes(source.id) ? `<button class="plain-link" type="button" data-register-source-id="${escapeHtml(source.id)}">Register immutable original</button>` : `<span>${escapeHtml(source.reference)}</span>`}
+                ${source.sha256 ? `<span title="${escapeHtml(source.sha256)}">SHA-256 · ${escapeHtml(source.sha256.slice(0, 12))}…</span>` : ""}
+              </div>
+            </article>`;
+        }).join("") || emptyState("No matching sources", "Clear the search to restore the source register.")}
+      </section>
+      <section class="panel">
+        <div class="panel-heading"><div><h3>Open data-quality conflicts</h3><p>Conflicts are retained explicitly; the application does not silently choose a value.</p></div><span class="status-badge" data-state="Conflicting information">${state.conflicts.filter((item) => item.state === "Open").length} open</span></div>
+        <div class="source-list">
+          ${state.conflicts.map((conflict, index) => `
+            <article class="conflict-card">
+              <span class="conflict-index">${String(index + 1).padStart(2, "0")}</span>
+              <div><h4>${escapeHtml(conflict.title)}</h4><p>${escapeHtml(conflict.detail)}</p><div class="row-meta u-mt-8"><span>Next: ${escapeHtml(conflict.nextAction)}</span></div></div>
+              ${statusBadge(conflict.state === "Open" ? "Conflicting information" : conflict.state)}
+            </article>`).join("")}
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-heading"><div><h3>Precedence by subject</h3><p>Applied when evidence is imported and reconciled.</p></div></div>
+        <div class="table-wrap"><table class="data-table"><thead><tr><th>Subject</th><th>First authority</th><th>Fallback / control</th></tr></thead><tbody>
+          <tr><td>Task status & owners</td><td>Live Google Sheet</td><td>Approved manual updates</td></tr>
+          <tr><td>Scope, financing, readiness & governance</td><td>Latest approved proposal</td><td>Create a conflict when another source differs</td></tr>
+          <tr><td>Equipment & supplier research</td><td>Latest approved equipment report</td><td>Research is not contact, quote or purchase</td></tr>
+          <tr><td>Flow, throughput & logistics</td><td>Latest approved logistics analysis</td><td>Preserve assumptions requiring validation</td></tr>
+          <tr><td>Menu & declared icons</td><td>Menu source</td><td>Do not infer allergens beyond declared evidence</td></tr>
+          <tr><td>Outreach & contact</td><td>Approved communication record</td><td>No evidence means not contacted</td></tr>
+        </tbody></table></div>
+      </section>
+    </div>`;
+}
+
+function renderApprovals() {
+  const pending = pendingRecords().filter(matchesSearch);
+  const approved = state.records.filter((record) => record.verification === "Approved").filter(matchesSearch);
+  return `
+    <div class="content-stack">
+      ${truthBanner()}
+      <section class="metrics-grid">
+        ${metricCard("Awaiting review", String(pending.length), "Seeded extractions and manual drafts.", "Queue")}
+        ${metricCard("Approved records", String(approved.length), "Entered into the official local project record.", "Official")}
+        ${metricCard("Source originals", "0 / 4", "Named authoritative documents attached in this workspace.", "Files")}
+        ${metricCard("Open conflicts", String(state.conflicts.filter((item) => item.state === "Open").length), "Must be resolved with provenance, never overwritten.", "Quality", true)}
+      </section>
+      <section class="panel">
+        <div class="panel-heading"><div><h3>Pending evidence review</h3><p>Approval requires a verified locator, reviewer note and attestation.</p></div></div>
+        <div class="review-list">
+          ${pending.length ? pending.map((record) => `
+            <article class="approval-card">
+              <div>
+                <div class="badge-row">${typeBadge(record.type)}${statusBadge(record.status)}${verificationBadge(record.verification)}</div>
+                <button class="table-link" type="button" data-record-id="${escapeHtml(record.id)}">${escapeHtml(record.title)}</button>
+                <div class="row-meta u-mt-6"><span>${escapeHtml(record.sourceName)}</span><span>${escapeHtml(record.locator || "Source locator missing")}</span></div>
+              </div>
+              <div class="approval-actions"><button class="button button--ghost" type="button" data-record-id="${escapeHtml(record.id)}">Inspect</button><button class="button button--primary" type="button" data-approve-id="${escapeHtml(record.id)}">Review</button><button class="button button--danger" type="button" data-reject-id="${escapeHtml(record.id)}">Needs correction</button></div>
+            </article>`).join("") : emptyState("Review queue is clear", "New extracted or manual records will appear here before entering the official record.")}
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-heading"><div><h3>Approved official records</h3><p>Approval is local to this workspace and records its evidence locator and review note.</p></div></div>
+        ${approved.length ? `<div class="evidence-list">${approved.map(evidenceRow).join("")}</div>` : emptyState("No records approved", "The supplied source originals are missing, so seeded claims should not be approved yet.")}
+      </section>
+    </div>`;
+}
+
+function emptyState(title, detail) {
+  return `<div class="empty-state"><strong>${escapeHtml(title)}</strong><span>${escapeHtml(detail)}</span></div>`;
+}
+
+function openRecord(recordId) {
+  const record = state.records.find((item) => item.id === recordId);
+  if (!record) return;
+  ui.activeRecordId = recordId;
+  drawerTitle.textContent = record.title;
+  const source = state.sources.find((item) => item.id === record.sourceId);
+  drawerBody.innerHTML = `
+    <section class="drawer-section">
+      <div class="badge-row badge-row--roomy">${typeBadge(record.type)}${statusBadge(record.status)}${verificationBadge(record.verification)}</div>
+      <p>${escapeHtml(record.notes || "No notes supplied.")}</p>
+    </section>
+    <section class="drawer-section">
+      <h3>Record controls</h3>
+      <div class="detail-grid">
+        <div class="detail-item"><span>Owner</span><strong>${escapeHtml(record.owner || "Unassigned")}</strong></div>
+        <div class="detail-item"><span>Confidence</span><strong>${escapeHtml(record.confidence || "Not assessed")}</strong></div>
+        <div class="detail-item"><span>Imported</span><strong>${escapeHtml(record.importedAt || "Unknown")}</strong></div>
+        <div class="detail-item"><span>Official record</span><strong>${record.official ? "Yes" : "No"}</strong></div>
+      </div>
+    </section>
+    <section class="drawer-section">
+      <h3>Source provenance</h3>
+      <p><strong>${escapeHtml(record.sourceName || "Source not supplied")}</strong><br>${escapeHtml(source?.type || "Source type not supplied")} · ${escapeHtml(record.sourceDate || "Date not supplied")}<br>${escapeHtml(record.locator || "Locator not supplied")}<br>${escapeHtml(source?.reference || "Source reference not supplied")}</p>
+    </section>
+    <section class="drawer-section">
+      <h3>Next evidence control</h3>
+      <p>${escapeHtml(record.nextAction || "Attach and verify an authoritative source.")}</p>
+    </section>
+    ${record.review ? `<section class="drawer-section"><h3>Approval history</h3><p>${escapeHtml(record.review.note)}<br><strong>Locator:</strong> ${escapeHtml(record.review.locator)}<br><strong>Reviewed:</strong> ${escapeHtml(record.review.date)}</p></section>` : ""}
+    <section class="drawer-section">
+      <div class="action-row">
+        ${record.verification !== "Approved" ? `<button class="button button--primary" type="button" data-approve-id="${escapeHtml(record.id)}">Review for approval</button>` : ""}
+        ${record.verification !== "Rejected" && record.verification !== "Approved" ? `<button class="button button--danger" type="button" data-reject-id="${escapeHtml(record.id)}">Needs correction</button>` : ""}
+      </div>
+    </section>`;
+  drawer.classList.add("is-open");
+  drawer.setAttribute("aria-hidden", "false");
+  scrim.hidden = false;
+  document.querySelector("#closeDrawerBtn").focus();
+}
+
+function closeDrawer() {
+  drawer.classList.remove("is-open");
+  drawer.setAttribute("aria-hidden", "true");
+  ui.activeRecordId = null;
+  if (!sidebar.classList.contains("is-open")) scrim.hidden = true;
+}
+
+function openApproval(recordId) {
+  const record = state.records.find((item) => item.id === recordId);
+  if (!record) return;
+  const source = state.sources.find((item) => item.id === record.sourceId);
+  if (source && ["Missing", "Not connected"].includes(source.state)) {
+    closeDrawer();
+    showToast("Register or connect the cited source before approving this record.");
+    return;
+  }
+  closeDrawer();
+  approvalDialog.querySelector('[name="recordId"]').value = record.id;
+  approvalDialog.querySelector('[name="verifiedLocator"]').value = record.locator || "";
+  approvalDialog.querySelector('[name="reviewNote"]').value = "";
+  approvalDialog.querySelector('[name="attestation"]').checked = false;
+  document.querySelector("#approvalSummary").innerHTML = `<strong>${escapeHtml(record.title)}</strong><span>${escapeHtml(record.status)} · ${escapeHtml(record.sourceName)}</span>`;
+  approvalDialog.showModal();
+}
+
+function rejectRecord(recordId) {
+  const record = state.records.find((item) => item.id === recordId);
+  if (!record) return;
+  record.verification = "Needs correction";
+  record.official = false;
+  record.review = { date: new Date().toISOString(), note: "Returned for correction before approval.", locator: record.locator || "Missing" };
+  saveState();
+  closeDrawer();
+  render();
+  showToast("Record returned for correction; it remains outside the official project record.");
+}
+
+function showToast(message) {
+  const toast = document.querySelector("#toast");
+  toast.textContent = message;
+  toast.classList.add("is-visible");
+  window.clearTimeout(showToast.timeout);
+  showToast.timeout = window.setTimeout(() => toast.classList.remove("is-visible"), 3200);
+}
+
+function navigate(view) {
+  ui.view = view;
+  closeDrawer();
+  closeMobileMenu();
+  render();
+}
+
+function closeMobileMenu() {
+  sidebar.classList.remove("is-open");
+  document.querySelector("#mobileMenuBtn").setAttribute("aria-expanded", "false");
+  if (!drawer.classList.contains("is-open")) scrim.hidden = true;
+}
+
+function exportSnapshot() {
+  const snapshot = {
+    exportedAt: new Date().toISOString(),
+    confidentiality: "Confidential internal project information",
+    warning: "Verification states must be read with every record. Proposed, researched, applied or discussed items are not secured facts.",
+    data: state,
+  };
+  const blob = new Blob([JSON.stringify(snapshot, null, 2)], { type: "application/json" });
+  const url = URL.createObjectURL(blob);
+  const anchor = document.createElement("a");
+  anchor.href = url;
+  anchor.download = `shellys-rte-project-snapshot-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.append(anchor);
+  anchor.click();
+  anchor.remove();
+  URL.revokeObjectURL(url);
+  showToast("Confidential JSON snapshot exported with truth and verification states.");
+}
+
+document.addEventListener("click", (event) => {
+  const nav = event.target.closest("[data-view]");
+  if (nav) navigate(nav.dataset.view);
+
+  const navigateButton = event.target.closest("[data-navigate]");
+  if (navigateButton) navigate(navigateButton.dataset.navigate);
+
+  const recordButton = event.target.closest("[data-record-id]");
+  if (recordButton) openRecord(recordButton.dataset.recordId);
+
+  const approveButton = event.target.closest("[data-approve-id]");
+  if (approveButton) openApproval(approveButton.dataset.approveId);
+
+  const rejectButton = event.target.closest("[data-reject-id]");
+  if (rejectButton) rejectRecord(rejectButton.dataset.rejectId);
+
+  const registerSourceButton = event.target.closest("[data-register-source-id]");
+  if (registerSourceButton) {
+    ui.pendingSourceId = registerSourceButton.dataset.registerSourceId;
+    document.querySelector("#sourceFileInput").click();
+  }
+
+  const downloadSourceButton = event.target.closest("[data-download-source-id]");
+  if (downloadSourceButton) downloadSourceOriginal(downloadSourceButton.dataset.downloadSourceId);
+
+  const filterButton = event.target.closest("[data-filter]");
+  if (filterButton) {
+    ui.workplanFilter = filterButton.dataset.filter;
+    render();
+  }
+
+  if (event.target.closest("[data-open-record-dialog]")) recordDialog.showModal();
+
+  const closeDialogButton = event.target.closest("[data-close-dialog]");
+  if (closeDialogButton) document.querySelector(`#${closeDialogButton.dataset.closeDialog}`).close();
+});
+
+document.querySelector("#mobileMenuBtn").addEventListener("click", () => {
+  const willOpen = !sidebar.classList.contains("is-open");
+  sidebar.classList.toggle("is-open", willOpen);
+  document.querySelector("#mobileMenuBtn").setAttribute("aria-expanded", String(willOpen));
+  scrim.hidden = !willOpen;
+});
+
+scrim.addEventListener("click", () => {
+  closeDrawer();
+  closeMobileMenu();
+});
+
+document.querySelector("#closeDrawerBtn").addEventListener("click", closeDrawer);
+document.querySelector("#addRecordBtn").addEventListener("click", () => recordDialog.showModal());
+document.querySelector("#exportBtn").addEventListener("click", exportSnapshot);
+
+document.querySelector("#globalSearch").addEventListener("input", (event) => {
+  ui.search = event.target.value.trim();
+  render();
+});
+
+document.querySelector("#sourceFileInput").addEventListener("change", (event) => {
+  const [file] = event.target.files;
+  const sourceId = ui.pendingSourceId;
+  ui.pendingSourceId = null;
+  event.target.value = "";
+  if (sourceId && file) registerSourceOriginal(sourceId, file);
+});
+
+document.querySelector("#recordForm").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const data = new FormData(event.currentTarget);
+  const title = String(data.get("title") || "").trim();
+  if (!title) return;
+  const source = String(data.get("source") || "").trim();
+  const type = String(data.get("type") || "Task");
+  const record = {
+    id: `manual-${Date.now()}`,
+    title,
+    type,
+    status: String(data.get("status") || "Proposed"),
+    owner: String(data.get("owner") || "").trim() || "Unassigned",
+    sourceId: "manual",
+    sourceName: source || "Source not supplied",
+    locator: String(data.get("locator") || "").trim() || "Source locator missing",
+    sourceDate: "Not supplied",
+    notes: String(data.get("notes") || "").trim() || "No notes supplied.",
+    verification: source ? "Pending manual review" : "Missing source",
+    confidence: "Not assessed",
+    official: false,
+    importedAt: new Date().toISOString(),
+    nextAction: source ? "Review against the cited original before approval." : "Attach a source and locator before approval.",
+  };
+  state.records.unshift(record);
+  saveState();
+  event.currentTarget.reset();
+  recordDialog.close();
+  if (["Task", "Milestone"].includes(type)) ui.view = "workplan";
+  if (type === "Outreach") ui.view = "stakeholders";
+  render();
+  showToast("Draft saved locally. It is not part of the official project record yet.");
+});
+
+document.querySelector("#approvalForm").addEventListener("submit", (event) => {
+  event.preventDefault();
+  const data = new FormData(event.currentTarget);
+  const record = state.records.find((item) => item.id === data.get("recordId"));
+  if (!record) return;
+  record.verification = "Approved";
+  record.official = true;
+  record.locator = String(data.get("verifiedLocator") || "").trim();
+  record.review = {
+    date: new Date().toISOString(),
+    locator: record.locator,
+    note: String(data.get("reviewNote") || "").trim(),
+  };
+  saveState();
+  approvalDialog.close();
+  render();
+  showToast("Record approved and entered into the official local project record.");
+});
+
+document.querySelector("#resetDataBtn").addEventListener("click", () => {
+  if (!window.confirm("Restore the seeded workspace? This removes local draft and approval changes from this browser.")) return;
+  const registeredSources = state.sources.filter((source) => source.immutableOriginal).map((source) => ({
+    id: source.id,
+    state: source.state,
+    immutableOriginal: source.immutableOriginal,
+    attachedName: source.attachedName,
+    fileSize: source.fileSize,
+    importedAt: source.importedAt,
+    sha256: source.sha256,
+    reference: source.reference,
+  }));
+  state = cloneSeed();
+  registeredSources.forEach((registered) => {
+    const source = state.sources.find((item) => item.id === registered.id);
+    if (source) Object.assign(source, registered);
+  });
+  saveState();
+  ui.view = "overview";
+  ui.search = "";
+  document.querySelector("#globalSearch").value = "";
+  render();
+  showToast("Seeded workspace restored.");
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeDrawer();
+    closeMobileMenu();
+  }
+});
+
+render();

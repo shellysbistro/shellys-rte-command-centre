@@ -1,0 +1,14 @@
+{
+  "name": "shellys-rte-command-centre",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local-first evidence-led project command centre for Shelly’s Bistro’s proposed RTE expansion.",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "check": "node --check app.js && node --check server.js",
+    "test": "npm run check"
+  }
+}

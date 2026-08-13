@@ -1,0 +1,222 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow, noarchive" />
+    <meta name="referrer" content="no-referrer" />
+    <meta
+      http-equiv="Content-Security-Policy"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"
+    />
+    <title>Shelly’s Bistro — RTE Project Command Centre</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <a class="skip-link" href="#mainContent">Skip to project content</a>
+
+    <div class="app-shell">
+      <aside class="sidebar" id="sidebar" aria-label="Primary navigation">
+        <div class="brand-block">
+          <img class="brand-logo" src="assets/shellys-bistro-logo.png" alt="Shelly’s Bistro flower logo" />
+          <div>
+            <p class="eyebrow">Shelly’s Bistro</p>
+            <h1>Project Hub</h1>
+          </div>
+        </div>
+
+        <div class="confidential-chip">
+          <span class="status-dot"></span>
+          Confidential · local workspace
+        </div>
+
+        <nav class="nav-list" id="primaryNav">
+          <button class="nav-item is-active" data-view="overview" type="button">
+            <span class="nav-icon" aria-hidden="true">01</span>
+            <span>Overview</span>
+          </button>
+          <button class="nav-item" data-view="workplan" type="button">
+            <span class="nav-icon" aria-hidden="true">02</span>
+            <span>Workplan</span>
+            <span class="nav-count" id="workplanCount">0</span>
+          </button>
+          <button class="nav-item" data-view="equipment" type="button">
+            <span class="nav-icon" aria-hidden="true">03</span>
+            <span>Equipment &amp; prices</span>
+            <span class="nav-count" id="equipmentCount">0</span>
+          </button>
+          <button class="nav-item" data-view="production" type="button">
+            <span class="nav-icon" aria-hidden="true">04</span>
+            <span>Production flow</span>
+          </button>
+          <button class="nav-item" data-view="funding" type="button">
+            <span class="nav-icon" aria-hidden="true">05</span>
+            <span>Funding &amp; budget</span>
+          </button>
+          <button class="nav-item" data-view="opportunities" type="button">
+            <span class="nav-icon" aria-hidden="true">06</span>
+            <span>Live funding</span>
+            <span class="nav-count" id="fundingOpportunityCount">0</span>
+          </button>
+          <button class="nav-item" data-view="calendar" type="button">
+            <span class="nav-icon" aria-hidden="true">07</span>
+            <span>Meeting schedule</span>
+            <span class="nav-count" id="calendarCount">0</span>
+          </button>
+          <button class="nav-item" data-view="stakeholders" type="button">
+            <span class="nav-icon" aria-hidden="true">08</span>
+            <span>People &amp; outreach</span>
+          </button>
+          <button class="nav-item" data-view="followups" type="button">
+            <span class="nav-icon" aria-hidden="true">09</span>
+            <span>Email follow-ups</span>
+            <span class="nav-count nav-count--alert" id="followUpCount">0</span>
+          </button>
+        </nav>
+
+        <div class="sidebar-footer">
+          <p>Connected workspace</p>
+          <span>Workplan, funding, meetings and follow-ups in one place.</span>
+          <button class="text-button" id="resetDataBtn" type="button">Restore seeded workspace</button>
+        </div>
+      </aside>
+
+      <section class="workspace">
+        <header class="topbar">
+          <div class="topbar-left">
+            <button class="mobile-menu" id="mobileMenuBtn" type="button" aria-label="Open navigation" aria-expanded="false">Menu</button>
+            <div>
+              <p class="eyebrow" id="viewEyebrow">Project controls</p>
+              <h2 id="viewTitle">Expansion overview</h2>
+            </div>
+          </div>
+
+          <div class="topbar-actions">
+            <label class="search-box">
+              <span class="sr-only">Search project records</span>
+              <input id="globalSearch" type="search" placeholder="Search records" autocomplete="off" />
+            </label>
+            <button class="button button--ghost" id="exportBtn" type="button">Export snapshot</button>
+            <button class="button button--primary" id="addRecordBtn" type="button">Add record</button>
+          </div>
+        </header>
+
+        <main class="main-content" id="mainContent" tabindex="-1"></main>
+      </section>
+    </div>
+
+    <div class="scrim" id="scrim" hidden></div>
+
+    <aside class="record-drawer" id="recordDrawer" aria-label="Record details" aria-hidden="true">
+      <div class="drawer-header">
+        <div>
+          <p class="eyebrow">Evidence record</p>
+          <h2 id="drawerTitle">Record details</h2>
+        </div>
+        <button class="icon-button" id="closeDrawerBtn" type="button" aria-label="Close record details">Close</button>
+      </div>
+      <div class="drawer-body" id="drawerBody"></div>
+    </aside>
+
+    <dialog class="dialog" id="recordDialog">
+      <form method="dialog" id="recordForm">
+        <div class="dialog-header">
+          <div>
+            <p class="eyebrow">Manual project entry</p>
+            <h2>Add a project record</h2>
+          </div>
+          <button class="icon-button" type="button" data-close-dialog="recordDialog" aria-label="Close">Close</button>
+        </div>
+
+        <p class="form-note">New entries are saved as drafts. A source reference is required before approval.</p>
+
+        <div class="form-grid">
+          <label class="field field--wide">
+            <span>Record title</span>
+            <input name="title" required maxlength="120" placeholder="e.g. Fire-suppression design quote received" />
+          </label>
+          <label class="field">
+            <span>Record type</span>
+            <select name="type" required>
+              <option value="Task">Task</option>
+              <option value="Decision">Decision</option>
+              <option value="Risk">Risk / blocker</option>
+              <option value="Outreach">Outreach</option>
+              <option value="Evidence">Evidence</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Truth state</span>
+            <select name="status" required>
+              <option value="Proposed">Proposed / planned</option>
+              <option value="Identified">Identified, not contacted</option>
+              <option value="In discussion">In discussion, not committed</option>
+              <option value="Applied">Submitted / applied, not approved</option>
+              <option value="In progress">In progress</option>
+              <option value="Completed">Completed action</option>
+              <option value="Missing information">Missing information</option>
+            </select>
+          </label>
+          <label class="field">
+            <span>Owner</span>
+            <input name="owner" maxlength="80" placeholder="Unassigned" />
+          </label>
+          <label class="field">
+            <span>Source name</span>
+            <input name="source" maxlength="120" placeholder="Document, email, call note…" />
+          </label>
+          <label class="field field--wide">
+            <span>Source locator</span>
+            <input name="locator" maxlength="160" placeholder="Page, section, sheet tab/row, message date…" />
+          </label>
+          <label class="field field--wide">
+            <span>Notes</span>
+            <textarea name="notes" rows="4" maxlength="1000" placeholder="State what is known without implying a commitment or completion."></textarea>
+          </label>
+        </div>
+
+        <div class="dialog-actions">
+          <button class="button button--ghost" type="button" data-close-dialog="recordDialog">Cancel</button>
+          <button class="button button--primary" type="submit" value="save">Save draft</button>
+        </div>
+      </form>
+    </dialog>
+
+    <dialog class="dialog dialog--narrow" id="approvalDialog">
+      <form method="dialog" id="approvalForm">
+        <input type="hidden" name="recordId" />
+        <div class="dialog-header">
+          <div>
+            <p class="eyebrow">Controlled verification</p>
+            <h2>Approve evidence record</h2>
+          </div>
+          <button class="icon-button" type="button" data-close-dialog="approvalDialog" aria-label="Close">Close</button>
+        </div>
+
+        <div class="review-summary" id="approvalSummary"></div>
+        <label class="field">
+          <span>Verified source locator</span>
+          <input name="verifiedLocator" required maxlength="160" placeholder="e.g. Proposal, p. 14, Financing Plan" />
+        </label>
+        <label class="field">
+          <span>Reviewer note</span>
+          <textarea name="reviewNote" rows="3" required maxlength="500" placeholder="What did you verify against the original source?"></textarea>
+        </label>
+        <label class="check-field">
+          <input name="attestation" type="checkbox" required />
+          <span>I checked this claim against the cited original and confirm the truth state is accurate.</span>
+        </label>
+
+        <div class="dialog-actions">
+          <button class="button button--ghost" type="button" data-close-dialog="approvalDialog">Cancel</button>
+          <button class="button button--primary" type="submit" value="approve">Approve record</button>
+        </div>
+      </form>
+    </dialog>
+
+    <div class="toast" id="toast" role="status" aria-live="polite"></div>
+    <input class="sr-only" id="sourceFileInput" type="file" accept=".pdf,.docx,.xlsx,.xls,.csv,.txt,.png,.jpg,.jpeg" />
+
+    <script src="app.js" defer></script>
+  </body>
+</html>
