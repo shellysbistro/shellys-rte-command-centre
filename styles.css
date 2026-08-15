@@ -1032,7 +1032,7 @@ a:focus-visible {
 }
 
 .market-table {
-  min-width: 1500px;
+  min-width: 1760px;
 }
 
 .target-table {
@@ -1047,6 +1047,14 @@ a:focus-visible {
 .target-table td:nth-child(2),
 .outreach-table td:first-child {
   min-width: 190px;
+}
+
+.market-table td:nth-child(2) {
+  min-width: 310px;
+}
+
+.market-table td:nth-child(3) {
+  min-width: 165px;
 }
 
 .market-table td:last-child,

@@ -1,6 +1,6 @@
 "use strict";
 
-const STORAGE_KEY = "shellys-rte-command-centre-v9";
+const STORAGE_KEY = "shellys-rte-command-centre-v10";
 const SOURCE_DB = "shellys-rte-source-vault-v1";
 
 const seedState = {
@@ -25,10 +25,12 @@ const seedState = {
       id: "menu",
       name: "Shellys School Nutrition Menu.pdf",
       type: "Menu",
-      declaredDate: "Not supplied",
-      state: "Missing",
-      detail: "Expected six-page menu with 45 food items and a declared allergen/icon legend. Original file was not attached.",
-      reference: "Awaiting immutable original",
+      declaredDate: "PDF created August 11, 2026",
+      state: "Available",
+      detail: "Six-page school nutrition menu with 45 items across eggless breakfast, egg breakfast, nutritious menu and fat lunch sections, plus a six-icon allergen legend. Ingredient statements are used as the menu evidence for produce priorities.",
+      reference: "Pages 1–6 · imported August 15, 2026 · SHA-256 771A90B689B22A5E2421DAF09210F3245C7BFCB43E908A4DE0C2C55DD31AB416",
+      relativePath: "sources/Shellys School Nutrition Menu.pdf",
+      sha256: "771A90B689B22A5E2421DAF09210F3245C7BFCB43E908A4DE0C2C55DD31AB416",
     },
     {
       id: "logistics",
@@ -910,28 +912,39 @@ const seedState = {
     importedAt: "August 15, 2026",
     produceSource: "sources/Shellys_Bistro_Canada_Produce_Data.xlsx",
     targetSource: "sources/Shellys_LOI_MOU_Target_List_Expanded.xlsx",
+    menuSource: "sources/Shellys School Nutrition Menu.pdf",
+    menuItemCount: 45,
+    dailyUseModel: {
+      mealsPerDay: 1000000,
+      menuItems: 45,
+      servingsPerItem: 22222.22,
+      method: "One million meals per day divided equally across the 45 PDF menu items, multiplied by planning portions for each named produce ingredient.",
+      sideChoice: "Where a meal offers mashed potatoes or carrot/celery sticks, demand is split 50/50; carrot and celery are split evenly inside the sticks option.",
+      genericFruit: "Generic mixed fruit, fruit topping and compote demand is split equally across apples, bananas, grapes, strawberries and blueberries/cranberries.",
+      exclusion: "Purchasing yield, trim, spoilage, cooking loss and menu popularity are not included. Zero means the produce is not named in the current PDF—not that it can never be used.",
+    },
     produceInventoryCount: 52,
     producePriorities: [
-      { produce: "Lettuce", category: "Vegetable/herb", dataYear: "2025", importValue: 682433000, unitValue: 2.7108, importDependence: "High", supplyRisk: "High", season: "MB Jun–Sep; imports dominate Oct–May", menuImportance: "Critical", menuUse: "Bannock taco, veggie burgers and wraps; likely deluxe burgers", attentionScore: 17, action: "Dual-source Canadian greenhouse/field and Mexico/US; quote weekly and keep menu substitution rules." },
-      { produce: "Tomatoes", category: "Vegetable/herb", dataYear: "2025", importValue: 198398000, unitValue: 1.7737, importDependence: "Medium", supplyRisk: "Medium", season: "MB field Aug–Sep; Canadian greenhouse broader season; imports peak winter", menuImportance: "Critical", menuUse: "Bannock taco, taco poutine/rice, burgers and wraps", attentionScore: 15, action: "Dual-source Canadian greenhouse/field and Mexico/US; quote weekly and keep menu substitution rules." },
-      { produce: "White potatoes", category: "Vegetable/herb", dataYear: "2024/25", importValue: 82103900, unitValue: 0.7169, importDependence: "Low/Medium", supplyRisk: "Low", season: "MB harvest Aug–Oct; storage supply most/all year", menuImportance: "Critical", menuUse: "Fries, poutines and combo sides", attentionScore: 13, action: "Prioritize Manitoba/Canadian potatoes or a domestic fry supplier; contract volume and quality specs." },
-      { produce: "Celery", category: "Vegetable/herb", dataYear: "2025", importValue: 98407000, unitValue: 1.3581, importDependence: "High", supplyRisk: "High", season: "Limited local Jul–Sep; imports most of year", menuImportance: "Medium", menuUse: "Likely soup and salad prep", attentionScore: 13, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
-      { produce: "Onions and shallots", category: "Vegetable/herb", dataYear: "2025", importValue: 292812000, unitValue: 1.1536, importDependence: "Low/Medium", supplyRisk: "Medium", season: "MB harvest Aug–Sep; storage into winter; imports bridge gaps", menuImportance: "High", menuUse: "Likely soup, burger and sauce prep; onion rings are prepared", attentionScore: 12, action: "Buy Manitoba/Canadian in season and storage crop; set grade/yield specs and monitor shrink." },
-      { produce: "Cabbage / kale", category: "Vegetable/herb", dataYear: "2025", importValue: 269920000, unitValue: 2.3365, importDependence: "Low/Medium", supplyRisk: "Medium", season: "MB Jul–Oct; storage cabbage into winter", menuImportance: "High", menuUse: "Coleslaw served with burger and wrap combos", attentionScore: 12, action: "Buy Manitoba/Canadian in season and storage crop; set grade/yield specs and monitor shrink." },
-      { produce: "Dill / mixed herbs", category: "Vegetable/herb", dataYear: "2024", currency: "USD", importValue: 215177377, unitValue: 1.7855, importDependence: "Medium", supplyRisk: "Medium", season: "MB Jun–Sep; greenhouse/imported or frozen/dried off-season", menuImportance: "High", menuUse: "Honey-dill sauce; repeated chicken/poutine application", attentionScore: 12, action: "Standardize the honey-dill recipe; trial frozen/local dill and track sauce yield." },
-      { produce: "Garlic", category: "Vegetable/herb", dataYear: "2025", importValue: 97200000, unitValue: 3.3610, importDependence: "High", supplyRisk: "Medium", season: "Canadian harvest Jul–Aug; stored; imports year-round", menuImportance: "Medium", menuUse: "Likely sauces, soup and savoury prep", attentionScore: 12, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
-      { produce: "Blueberries / cranberries", category: "Fruit", dataYear: "2024", currency: "USD", importValue: 401753762, unitValue: 4.9184, importDependence: "Low/Medium", supplyRisk: "Medium", season: "Canadian berries summer/fall; frozen Canadian year-round", menuImportance: "High", menuUse: "Citrus blueberry spread and cheesecake; Indigenous seasonal opportunity", attentionScore: 11, action: "Use Canadian frozen berries for spreads/desserts; reserve fresh imports for garnish." },
-      { produce: "Carrots and turnips", category: "Vegetable/herb", dataYear: "2025", importValue: 180020000, unitValue: 1.6334, importDependence: "Low/Medium", supplyRisk: "Low", season: "MB Jul–Oct; storage supply through winter", menuImportance: "High", menuUse: "Taco rice; likely soup and fried-rice prep", attentionScore: 11, action: "Buy Manitoba/Canadian in season and storage crop; set grade/yield specs and monitor shrink." },
-      { produce: "Avocados", category: "Fruit", dataYear: "2024", importValue: 420684000, unitValue: 3.7250, importDependence: "High", supplyRisk: "High", season: "Imported year-round", menuImportance: "Low", menuUse: "Potential wraps, tacos and specials", attentionScore: 11, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
-      { produce: "Peppers", category: "Vegetable/herb", dataYear: "2025", importValue: 225422000, unitValue: 2.6232, importDependence: "Medium", supplyRisk: "Medium", season: "MB Aug–Sep; Canadian greenhouse broader; imports winter", menuImportance: "Medium", menuUse: "Likely fried rice, salsa and rotating specials", attentionScore: 11, action: "Dual-source Canadian greenhouse/field and Mexico/US; quote weekly and keep menu substitution rules." },
-      { produce: "Cucumbers", category: "Vegetable/herb", dataYear: "2025", importValue: 34489000, unitValue: 2.1811, importDependence: "Medium", supplyRisk: "Medium", season: "MB Jul–Sep; Canadian greenhouse broader; imports winter", menuImportance: "Medium", menuUse: "Likely salads, pickles and garnish", attentionScore: 11, action: "Dual-source Canadian greenhouse/field and Mexico/US; quote weekly and keep menu substitution rules." },
-      { produce: "Strawberries", category: "Fruit", dataYear: "2024", importValue: 734907000, unitValue: 4.6794, importDependence: "High", supplyRisk: "Medium", season: "MB Jun–Jul; imports most of year", menuImportance: "Low", menuUse: "Potential desserts and catering", attentionScore: 10, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
-      { produce: "Lemons and limes", category: "Fruit", dataYear: "2024", importValue: 213235000, unitValue: 1.7866, importDependence: "High", supplyRisk: "Medium", season: "Imported year-round", menuImportance: "Medium", menuUse: "Citrus blueberry spread/cheesecake; sauces and drinks", attentionScore: 10, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
-      { produce: "Bananas", category: "Fruit", dataYear: "2024", importValue: 711938000, unitValue: 1.1287, importDependence: "High", supplyRisk: "Medium", season: "Imported year-round", menuImportance: "Low", menuUse: "Potential breakfast, dessert or catering fruit", attentionScore: 9, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
-      { produce: "Broccoli and cauliflower", category: "Vegetable/herb", dataYear: "2025", importValue: 311205000, unitValue: 2.1014, importDependence: "Medium", supplyRisk: "Medium", season: "MB/Canada Jul–Oct; imports mainly Nov–Jun", menuImportance: "Low", menuUse: "Likely vegetable sides and soup rotation", attentionScore: 9, action: "Buy seasonally; track case price, usable yield and waste before changing suppliers." },
-      { produce: "Peas", category: "Vegetable/herb", dataYear: "2025", importValue: 82179000, unitValue: 4.2238, importDependence: "Medium", supplyRisk: "Medium", season: "MB fresh Jun–Aug; frozen year-round", menuImportance: "Medium", menuUse: "Taco rice and fried-rice mix", attentionScore: 9, action: "Buy seasonally; track case price, usable yield and waste before changing suppliers." },
-      { produce: "Grapes", category: "Fruit", dataYear: "2024", importValue: 913605000, unitValue: 4.3118, importDependence: "High", supplyRisk: "Medium", season: "Imported year-round; Canadian late summer/fall", menuImportance: "Low", menuUse: "Potential catering fruit trays", attentionScore: 8, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
-      { produce: "Apples", category: "Fruit", dataYear: "2024", importValue: 269485000, unitValue: 1.6347, importDependence: "Low/Medium", supplyRisk: "Low", season: "Canadian Aug–Nov; controlled storage year-round", menuImportance: "Low", menuUse: "Potential catering, dessert and seasonal specials", attentionScore: 7, action: "Buy Manitoba/Canadian in season and storage crop; set grade/yield specs and monitor shrink." },
+      { produce: "Lettuce", category: "Vegetable/herb", dataYear: "2025", importValue: 682433000, unitValue: 2.7108, importDependence: "High", supplyRisk: "High", season: "MB Jun–Sep; imports dominate Oct–May", menuImportance: "Critical", menuUse: "9 menu items: Tuna Sandwich; Chicken Wrap; Chicken Caesar Wrap; Garden Salad; Caesar Salad; Sandwich; Chicken Burger; Taco Beef Bowl; Crispy Chicken Burger", menuEvidenceType: "Named ingredient", expectedDailyKg: 5777.78, estimateConfidence: "Medium", attentionScore: 17, action: "Dual-source Canadian greenhouse/field and Mexico/US; quote weekly and keep menu substitution rules." },
+      { produce: "Tomatoes", category: "Vegetable/herb", dataYear: "2025", importValue: 198398000, unitValue: 1.7737, importDependence: "Medium", supplyRisk: "Medium", season: "MB field Aug–Sep; Canadian greenhouse broader season; imports peak winter", menuImportance: "Critical", menuUse: "13 menu items: Chicken Caesar Wrap; Garden Salad; Tomato Soup; Hamburger Soup; Chicken Noodle Soup; Tomato Alphabet Soup; Chicken Burger; Spaghetti Meat Sauce; Veggie Spaghetti; Taco Beef Bowl; Crispy Chicken Burger; Chicken Parmesan; Cheese Ravioli", menuEvidenceType: "Named ingredient", expectedDailyKg: 17000, estimateConfidence: "Medium", attentionScore: 15, action: "Dual-source Canadian greenhouse/field and Mexico/US; quote weekly and keep menu substitution rules." },
+      { produce: "White potatoes", category: "Vegetable/herb", dataYear: "2024/25", importValue: 82103900, unitValue: 0.7169, importDependence: "Low/Medium", supplyRisk: "Low", season: "MB harvest Aug–Oct; storage supply most/all year", menuImportance: "Critical", menuUse: "Breakfast hash browns in 2 boxes; Fries; Hamburger Soup; Poutine; and 5 side-choice meals", menuEvidenceType: "Named ingredient", expectedDailyKg: 18888.89, estimateConfidence: "Medium", attentionScore: 13, action: "Prioritize Manitoba/Canadian potatoes or a domestic fry supplier; contract volume and quality specs." },
+      { produce: "Celery", category: "Vegetable/herb", dataYear: "2025", importValue: 98407000, unitValue: 1.3581, importDependence: "High", supplyRisk: "High", season: "Limited local Jul–Sep; imports most of year", menuImportance: "Medium", menuUse: "Frittata; Veggie Soup; Hamburger Soup; Chicken Noodle Soup; Tomato Alphabet Soup; Veggie Spaghetti; Chicken Parmesan; and 5 side-choice meals", menuEvidenceType: "Named ingredient", expectedDailyKg: 6444.44, estimateConfidence: "Medium", attentionScore: 13, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
+      { produce: "Onions and shallots", category: "Vegetable/herb", dataYear: "2025", importValue: 292812000, unitValue: 1.1536, importDependence: "Low/Medium", supplyRisk: "Medium", season: "MB harvest Aug–Sep; storage into winter; imports bridge gaps", menuImportance: "High", menuUse: "Frittata; Veggie Soup; Hamburger Soup; Chicken Noodle Soup; Tomato Alphabet Soup; Veggie Spaghetti; Chicken Parmesan", menuEvidenceType: "Named ingredient", expectedDailyKg: 4000, estimateConfidence: "Medium", attentionScore: 12, action: "Buy Manitoba/Canadian in season and storage crop; set grade/yield specs and monitor shrink." },
+      { produce: "Cabbage / kale", category: "Vegetable/herb", dataYear: "2025", importValue: 269920000, unitValue: 2.3365, importDependence: "Low/Medium", supplyRisk: "Medium", season: "MB Jul–Oct; storage cabbage into winter", menuImportance: "High", menuUse: "Garden Salad names cabbage; kale is not named", menuEvidenceType: "Named ingredient", expectedDailyKg: 444.44, estimateConfidence: "Medium", attentionScore: 12, action: "Buy Manitoba/Canadian in season and storage crop; set grade/yield specs and monitor shrink." },
+      { produce: "Dill / mixed herbs", category: "Vegetable/herb", dataYear: "2024", currency: "USD", importValue: 215177377, unitValue: 1.7855, importDependence: "Medium", supplyRisk: "Medium", season: "MB Jun–Sep; greenhouse/imported or frozen/dried off-season", menuImportance: "High", menuUse: "Honey-dill sauce on Chicken Fingers; herbs in Tomato Soup, Veggie Soup, Hamburger Soup and Tomato Alphabet Soup", menuEvidenceType: "Named ingredient", expectedDailyKg: 111.11, estimateConfidence: "Medium", attentionScore: 12, action: "Standardize the honey-dill recipe; trial frozen/local dill and track sauce yield." },
+      { produce: "Garlic", category: "Vegetable/herb", dataYear: "2025", importValue: 97200000, unitValue: 3.3610, importDependence: "High", supplyRisk: "Medium", season: "Canadian harvest Jul–Aug; stored; imports year-round", menuImportance: "Medium", menuUse: "Mac & Cheese with Garlic Toast; Spaghetti Meat Sauce with Garlic Toast; Veggie Spaghetti; Chicken Alfredo with Garlic Toast; Chicken Parmesan", menuEvidenceType: "Named ingredient", expectedDailyKg: 422.22, estimateConfidence: "Medium", attentionScore: 12, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
+      { produce: "Blueberries / cranberries", category: "Fruit", dataYear: "2024", currency: "USD", importValue: 401753762, unitValue: 4.9184, importDependence: "Low/Medium", supplyRisk: "Medium", season: "Canadian berries summer/fall; frozen Canadian year-round", menuImportance: "High", menuUse: "Not individually named; allocated an equal share of mixed fruit, fruit topping and fruit compote", menuEvidenceType: "Generic fruit allocation", expectedDailyKg: 1644.44, estimateConfidence: "Low", attentionScore: 11, action: "Use Canadian frozen berries for spreads/desserts; reserve fresh imports for garnish." },
+      { produce: "Carrots and turnips", category: "Vegetable/herb", dataYear: "2025", importValue: 180020000, unitValue: 1.6334, importDependence: "Low/Medium", supplyRisk: "Low", season: "MB Jul–Oct; storage supply through winter", menuImportance: "High", menuUse: "Frittata; Garden Salad; Veggie Soup; Hamburger Soup; Chicken Noodle Soup; Carrot Soup; Tomato Alphabet Soup; Veggie Spaghetti; and 5 side-choice meals", menuEvidenceType: "Named ingredient", expectedDailyKg: 11555.56, estimateConfidence: "Medium", attentionScore: 11, action: "Buy Manitoba/Canadian in season and storage crop; set grade/yield specs and monitor shrink." },
+      { produce: "Avocados", category: "Fruit", dataYear: "2024", importValue: 420684000, unitValue: 3.7250, importDependence: "High", supplyRisk: "High", season: "Imported year-round", menuImportance: "Low", menuUse: "Not named in the current PDF menu", menuEvidenceType: "Not named", expectedDailyKg: 0, estimateConfidence: "Menu evidence only", attentionScore: 11, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
+      { produce: "Peppers", category: "Vegetable/herb", dataYear: "2025", importValue: 225422000, unitValue: 2.6232, importDependence: "Medium", supplyRisk: "Medium", season: "MB Aug–Sep; Canadian greenhouse broader; imports winter", menuImportance: "Medium", menuUse: "Not named in the current PDF menu", menuEvidenceType: "Not named", expectedDailyKg: 0, estimateConfidence: "Menu evidence only", attentionScore: 11, action: "Dual-source Canadian greenhouse/field and Mexico/US; quote weekly and keep menu substitution rules." },
+      { produce: "Cucumbers", category: "Vegetable/herb", dataYear: "2025", importValue: 34489000, unitValue: 2.1811, importDependence: "Medium", supplyRisk: "Medium", season: "MB Jul–Sep; Canadian greenhouse broader; imports winter", menuImportance: "Medium", menuUse: "Garden Salad", menuEvidenceType: "Named ingredient", expectedDailyKg: 444.44, estimateConfidence: "Medium", attentionScore: 11, action: "Dual-source Canadian greenhouse/field and Mexico/US; quote weekly and keep menu substitution rules." },
+      { produce: "Strawberries", category: "Fruit", dataYear: "2024", importValue: 734907000, unitValue: 4.6794, importDependence: "High", supplyRisk: "Medium", season: "MB Jun–Jul; imports most of year", menuImportance: "Low", menuUse: "Not individually named; allocated an equal share of mixed fruit, fruit topping and fruit compote", menuEvidenceType: "Generic fruit allocation", expectedDailyKg: 1644.44, estimateConfidence: "Low", attentionScore: 10, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
+      { produce: "Lemons and limes", category: "Fruit", dataYear: "2024", importValue: 213235000, unitValue: 1.7866, importDependence: "High", supplyRisk: "Medium", season: "Imported year-round", menuImportance: "Medium", menuUse: "Not named in the current PDF menu", menuEvidenceType: "Not named", expectedDailyKg: 0, estimateConfidence: "Menu evidence only", attentionScore: 10, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
+      { produce: "Bananas", category: "Fruit", dataYear: "2024", importValue: 711938000, unitValue: 1.1287, importDependence: "High", supplyRisk: "Medium", season: "Imported year-round", menuImportance: "Low", menuUse: "Not individually named; allocated an equal share of mixed fruit, fruit topping and fruit compote", menuEvidenceType: "Generic fruit allocation", expectedDailyKg: 1644.44, estimateConfidence: "Low", attentionScore: 9, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
+      { produce: "Broccoli and cauliflower", category: "Vegetable/herb", dataYear: "2025", importValue: 311205000, unitValue: 2.1014, importDependence: "Medium", supplyRisk: "Medium", season: "MB/Canada Jul–Oct; imports mainly Nov–Jun", menuImportance: "Low", menuUse: "Not named in the current PDF menu", menuEvidenceType: "Not named", expectedDailyKg: 0, estimateConfidence: "Menu evidence only", attentionScore: 9, action: "Buy seasonally; track case price, usable yield and waste before changing suppliers." },
+      { produce: "Peas", category: "Vegetable/herb", dataYear: "2025", importValue: 82179000, unitValue: 4.2238, importDependence: "Medium", supplyRisk: "Medium", season: "MB fresh Jun–Aug; frozen year-round", menuImportance: "Medium", menuUse: "Frittata", menuEvidenceType: "Named ingredient", expectedDailyKg: 333.33, estimateConfidence: "Medium", attentionScore: 9, action: "Buy seasonally; track case price, usable yield and waste before changing suppliers." },
+      { produce: "Grapes", category: "Fruit", dataYear: "2024", importValue: 913605000, unitValue: 4.3118, importDependence: "High", supplyRisk: "Medium", season: "Imported year-round; Canadian late summer/fall", menuImportance: "Low", menuUse: "Not individually named; allocated an equal share of mixed fruit, fruit topping and fruit compote", menuEvidenceType: "Generic fruit allocation", expectedDailyKg: 1644.44, estimateConfidence: "Low", attentionScore: 8, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
+      { produce: "Apples", category: "Fruit", dataYear: "2024", importValue: 269485000, unitValue: 1.6347, importDependence: "Low/Medium", supplyRisk: "Low", season: "Canadian Aug–Nov; controlled storage year-round", menuImportance: "Low", menuUse: "Not individually named; allocated an equal share of mixed fruit, fruit topping and fruit compote", menuEvidenceType: "Generic fruit allocation", expectedDailyKg: 1644.44, estimateConfidence: "Low", attentionScore: 7, action: "Buy Manitoba/Canadian in season and storage crop; set grade/yield specs and monitor shrink." },
     ],
     loiTargets: [
       { tier: 1, organization: "Winnipeg School Division", sector: "School nutrition", offer: "Breakfast, lunch and snack", angle: "Largest division in Manitoba; delivers the nutrition program directly.", contactRole: "Superintendent / nutrition lead", indigFit: "Strong" },
@@ -1540,6 +1553,12 @@ function formatQuoteRange(low, high) {
   return `${formatMoney(low)}–${formatMoney(high)}`;
 }
 
+function formatDailyUse(value) {
+  const kilograms = Number(value) || 0;
+  if (!kilograms) return "0 kg/day";
+  return `≈${new Intl.NumberFormat("en-CA", { maximumFractionDigits: 0 }).format(kilograms)} kg/day`;
+}
+
 function statusBadge(status) {
   return `<span class="status-badge" data-state="${escapeHtml(status)}">${escapeHtml(status)}</span>`;
 }
@@ -2036,29 +2055,35 @@ function renderMarket() {
   const linkedOutreach = (target) => state.outreachTracker.find((item) => item.id === outreachByTarget[target.organization]);
   const highDependence = data.producePriorities.filter((item) => item.importDependence === "High").length;
   const strongTargets = data.loiTargets.filter((item) => item.indigFit === "Strong").length;
+  const modeledDailyProduceKg = data.producePriorities.reduce((total, item) => total + (Number(item.expectedDailyKg) || 0), 0);
   return `
     <div class="content-stack">
       <section class="metrics-grid">
-        ${metricCard("National categories", String(data.produceInventoryCount), "Produce categories in the source workbook’s master inventory.", "Market")}
         ${metricCard("Shelly’s priorities", String(data.producePriorities.length), "Menu-linked produce priorities with sourcing actions.", "Supply")}
-        ${metricCard("High import dependence", String(highDependence), "Priority ingredients marked High in the source analysis.", "Risk", true)}
+        ${metricCard("Menu items reviewed", String(data.menuItemCount), "Items across the four food sections of the attached PDF.", "Menu")}
+        ${metricCard("Modeled produce / day", `${(modeledDailyProduceKg / 1000).toFixed(2)} t`, "Capacity-planning scenario; not a purchasing forecast.", "Estimate", true)}
         ${metricCard("LOI / MOU targets", String(data.loiTargets.length), `${strongTargets} have a Strong Indigenous-fit rating.`, "Pipeline")}
       </section>
+      <section class="application-banner">
+        <div><span>Daily consumption planning model</span><h3>One million meals across 45 menu items</h3><p><strong>≈${(modeledDailyProduceKg / 1000).toFixed(2)} tonnes of listed produce per day</strong>, or about ${(modeledDailyProduceKg * 1000 / data.dailyUseModel.mealsPerDay).toFixed(1)} g per meal across this modeled menu mix.</p></div>
+        <div><span>Assumptions to verify before procurement</span><p>${escapeHtml(data.dailyUseModel.method)} ${escapeHtml(data.dailyUseModel.sideChoice)} ${escapeHtml(data.dailyUseModel.genericFruit)}</p><p>${escapeHtml(data.dailyUseModel.exclusion)}</p></div>
+      </section>
       <section class="panel panel--flush">
-        <div class="panel-heading"><div><h3>Shelly’s produce priorities</h3><p>Attention scores and recommended actions come from the attached August 13 produce workbook. Import values use each row’s stated CAD or USD source basis; open the workbook for full currency, HS-code and supplier detail.</p></div><a class="plain-link" href="${escapeHtml(data.produceSource)}" download>Download produce workbook</a></div>
+        <div class="panel-heading"><div><h3>Shelly’s produce priorities</h3><p>Menu evidence comes from the attached school nutrition menu. Attention scores and sourcing actions remain from the August 13 produce workbook; daily use is a transparent planning estimate.</p></div><div class="action-row"><a class="plain-link" href="${escapeHtml(data.menuSource)}" download>Download menu PDF</a><a class="plain-link" href="${escapeHtml(data.produceSource)}" download>Download produce workbook</a></div></div>
         <div class="table-wrap">
           <table class="data-table market-table">
-            <thead><tr><th>Produce</th><th>Menu importance & use</th><th>Import value</th><th>Unit value</th><th>Dependence / risk</th><th>Canadian / local season</th><th>Score</th><th>Recommended sourcing action</th></tr></thead>
+            <thead><tr><th>Produce</th><th>PDF menu evidence</th><th>Expected daily use</th><th>Import value</th><th>Unit value</th><th>Dependence / risk</th><th>Canadian / local season</th><th>Score</th><th>Recommended sourcing action</th></tr></thead>
             <tbody>${produce.map((item) => `<tr>
               <td><strong>${escapeHtml(item.produce)}</strong><span class="cell-subtext">${escapeHtml(item.category)} · ${escapeHtml(item.dataYear)}</span></td>
-              <td>${statusBadge(item.menuImportance)}<span class="cell-subtext">${escapeHtml(item.menuUse)}</span></td>
+              <td><div class="badge-row">${statusBadge(item.menuImportance)}${typeBadge(item.menuEvidenceType)}</div><span class="cell-subtext">${escapeHtml(item.menuUse)}</span></td>
+              <td class="money"><strong>${escapeHtml(formatDailyUse(item.expectedDailyKg))}</strong><span class="cell-subtext">${item.expectedDailyKg ? `${Math.round(item.expectedDailyKg * 1000 / data.dailyUseModel.servingsPerItem)} g per equal 45-item mix · ` : ""}${escapeHtml(item.estimateConfidence)}</span></td>
               <td class="money">${escapeHtml(formatCurrency(item.importValue, item.currency || "CAD", true))}</td>
               <td class="money">${escapeHtml(item.currency === "USD" ? "US$" : "CA$")}${item.unitValue.toFixed(2)}/kg</td>
               <td>${escapeHtml(item.importDependence)} dependence<span class="cell-subtext">${escapeHtml(item.supplyRisk)} supply risk</span></td>
               <td>${escapeHtml(item.season)}</td>
               <td><strong>${item.attentionScore}</strong><span class="cell-subtext">attention</span></td>
               <td>${escapeHtml(item.action)}</td>
-            </tr>`).join("") || `<tr><td colspan="8">${emptyState("No matching produce rows", "Clear the search to restore the priority list.")}</td></tr>`}</tbody>
+            </tr>`).join("") || `<tr><td colspan="9">${emptyState("No matching produce rows", "Clear the search to restore the priority list.")}</td></tr>`}</tbody>
           </table>
         </div>
       </section>
@@ -2086,7 +2111,7 @@ function renderMarket() {
           </table>
         </div>
       </section>
-      <div class="callout"><strong>Source controls</strong>The produce workbook uses mixed CAD and USD source bases, and some HS categories cover more than one product. The target workbook is a planning list, not evidence of contact or commitment; Gmail evidence is linked only where a sent thread was found.</div>
+      <div class="callout"><strong>Source controls</strong>The menu PDF supplies ingredient evidence but does not state recipe weights or actual item popularity, so daily-use values remain estimates until standardized recipes and a demand mix are approved. The produce workbook uses mixed CAD and USD source bases, and some HS categories cover more than one product. The target workbook is a planning list, not evidence of contact or commitment; Gmail evidence is linked only where a sent thread was found. ${highDependence} priorities are marked High import dependence.</div>
     </div>`;
 }
 
@@ -2382,7 +2407,7 @@ function renderApprovals() {
       <section class="metrics-grid">
         ${metricCard("Awaiting review", String(pending.length), "Seeded extractions and manual drafts.", "Queue")}
         ${metricCard("Approved records", String(approved.length), "Entered into the official local project record.", "Official")}
-        ${metricCard("Source originals", "0 / 4", "Named authoritative documents attached in this workspace.", "Files")}
+        ${metricCard("Source originals", "3 / 4", "Named authoritative documents attached in this workspace.", "Files")}
         ${metricCard("Open conflicts", String(state.conflicts.filter((item) => item.state === "Open").length), "Must be resolved with provenance, never overwritten.", "Quality", true)}
       </section>
       <section class="panel">
