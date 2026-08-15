@@ -31,6 +31,7 @@ These direct project-owner instructions override older figures or roles in the o
 8. Publish Richard’s six-week task chart under Workplan.
 9. Do not show dedicated Sources, Conflicts or Pending Source Review tabs in the main navigation. Keep provenance and conflict controls in the data model and on relevant records.
 10. Do not show pending source-review clutter on the user’s operational tabs.
+11. Add a shared **Task assignments** tab where Cat can assign work to Richard. **Add record** is a shortcut to this task form. Richard’s connected task list updates in real time and his device receives an opt-in browser push notification when push is enabled.
 
 ## Non-negotiable truth rules
 
@@ -88,6 +89,7 @@ These direct project-owner instructions override older figures or roles in the o
 ## Source precedence by subject
 
 - Workplan task status and owners: live Google Sheet, then approved manual updates.
+- Shared Cat → Richard assignments: the server-backed task service. Keep these operational assignments visibly separate from the read-only Google Sheet snapshot unless an approved workflow writes them back to the Sheet.
 - Formal scope, readiness, governance and program positions: latest approved proposal.
 - User-directed financing corrections and leadership corrections: direct approved user instruction, while preserving conflicting older source statements.
 - Equipment categories, supplier research, machine counts and sourcing assumptions: latest approved equipment report.
@@ -102,19 +104,20 @@ These direct project-owner instructions override older figures or roles in the o
 
 ## Required navigation
 
-Use exactly these eleven operational tabs in this order:
+Use exactly these twelve operational tabs in this order:
 
 1. Overview
-2. Workplan
-3. Equipment & prices
-4. Production flow
-5. Research & innovation
-6. Market & LOI targets
-7. Funding & budget
-8. Live funding
-9. Meeting schedule
-10. People & outreach
-11. Email follow-ups
+2. Task assignments
+3. Workplan
+4. Equipment & prices
+5. Production flow
+6. Research & innovation
+7. Market & LOI targets
+8. Funding & budget
+9. Live funding
+10. Meeting schedule
+11. People & outreach
+12. Email follow-ups
 
 Do not add Sources, Conflicts or Pending Review to the main navigation.
 
@@ -128,6 +131,7 @@ Do not add Sources, Conflicts or Pending Review to the main navigation.
 - Use strong hierarchy, compact evidence badges, helpful empty states, sticky first columns where useful and clear hover/focus states.
 - Put the outcome and action first; keep audit details available without overwhelming the operational view.
 - Include global search, confidential-workspace labeling and a local JSON snapshot export.
+- Keep **Add record** in the top bar as a shortcut to the shared task-assignment form.
 
 ## View requirements
 
@@ -140,7 +144,22 @@ Do not add Sources, Conflicts or Pending Review to the main navigation.
 - Show readiness, blockers, near-term actions and evidence state.
 - Current leadership cards: Vince Bignell and Cat only. Do not invent Cat’s title or contact information.
 
-### 2. Workplan
+### 2. Task assignments
+
+- Build a dedicated Cat → Richard shared assignment queue.
+- The task form must capture task title, assignee, assigner, priority, due date and useful details. Default to Cat assigning Richard.
+- Save tasks in a server-backed store so connected clients see the same queue; do not rely on browser-local storage for shared tasks.
+- Update every connected task list in real time without requiring a page refresh.
+- Allow task status changes between Assigned, In progress and Completed, and synchronize those changes to every connected client.
+- Show Richard’s open, high-priority, due-soon and completed counts, with clear overdue treatment.
+- Let each browser identify the current device as Cat or Richard. Richard must explicitly enable notifications on his own device.
+- Use the Service Worker, Push API and VAPID web-push flow for opt-in notifications. Never request notification permission automatically on page load.
+- A new task assigned to Richard must attempt a push notification and must still update his task list if push permission, subscription or delivery is unavailable.
+- Keep task notification subscriptions and server data private. Do not expose VAPID private keys or task-store files through static routes or commit them to Git.
+- A notification click should open the Task assignments tab and identify the related task.
+- Keep shared assignments distinct from verified Google Sheet workplan facts unless an approved integration explicitly writes them back.
+
+### 3. Workplan
 
 - Reflect the connected Google Sheet.
 - Preserve the 18 current general assignment rows and Richard’s three assigned items in the current snapshot.
@@ -148,7 +167,7 @@ Do not add Sources, Conflicts or Pending Review to the main navigation.
 - Publish the six-week task chart, including objectives, actions and deliverables.
 - Do not expose pending source-review controls in the workplan table.
 
-### 3. Equipment & prices
+### 4. Equipment & prices
 
 - Include all 22 equipment categories and 64 machines from the equipment report.
 - Retain original USD FOB prices and separately labeled Canadian landed-cost planning figures.
@@ -156,7 +175,7 @@ Do not add Sources, Conflicts or Pending Review to the main navigation.
 - Show procurement waves and the CA$1.6–1.8 million equipment-scope budget.
 - Preserve the blast-chiller price conflict instead of resolving it silently.
 
-### 4. Production flow
+### 5. Production flow
 
 - Show the quantified one-million-meal/day capacity model.
 - Show the documented 38/62 hot/cold flow and the recommended 40/60 operating mix without confusing the two.
@@ -164,7 +183,7 @@ Do not add Sources, Conflicts or Pending Review to the main navigation.
 - Make the blast-chilling bottleneck, logistics footprint and scaling rule prominent.
 - State that the model requires engineering and commissioning validation.
 
-### 5. Research & innovation
+### 6. Research & innovation
 
 Create an innovative researcher workspace containing four linked, stage-gated programs. Label every item as a research hypothesis, concept, experiment or proposed partnership until evidence supports a stronger state.
 
@@ -253,7 +272,7 @@ Display twelve copy-ready research assignments with priority, discipline, full r
 
 The tab must show zero measured waste baseline until real data is supplied and must state that no digester, scholarship, referral agreement, job placement, preservative system or shelf-life extension is operational.
 
-### 6. Market & LOI targets
+### 7. Market & LOI targets
 
 - Include the 52-category national produce inventory summary.
 - Show all 20 Shelly’s priority produce rows.
@@ -303,7 +322,7 @@ Use this explicit scenario:
 
 Modeled total: approximately **73,644 kg/day or 73.64 tonnes/day**, averaging approximately **73.6 g of these listed produce priorities per meal**.
 
-### 7. Funding & budget
+### 8. Funding & budget
 
 - Total proposed cost: CA$25.0 million.
 - Owner equity: CA$1.0 million / 4%.
@@ -312,7 +331,7 @@ Modeled total: approximately **73,644 kg/day or 73.64 tonnes/day**, averaging ap
 - State clearly that proposed allocations are not evidence of awards or credit approval.
 - Keep the original twelve-activity budget incomplete until the missing proposal table or another approved budget source is supplied. Do not invent eleven missing rows.
 
-### 8. Live funding
+### 9. Live funding
 
 - Show only live or plausibly accessible funding opportunities that fit the project.
 - Use current email evidence and authoritative public program sources.
@@ -320,13 +339,13 @@ Modeled total: approximately **73,644 kg/day or 73.64 tonnes/day**, averaging ap
 - Mark applications as submitted, in discussion or planned accurately; never convert them into awards.
 - Keep live-program data refreshable because deadlines and eligibility change.
 
-### 9. Meeting schedule
+### 10. Meeting schedule
 
 - Show the connected primary calendar as a read-only schedule snapshot.
 - The August 15–September 15, 2026 snapshot contained no saved upcoming events.
 - Keep email-proposed meetings separate and label them unconfirmed until added to the calendar or otherwise confirmed.
 
-### 10. People & outreach
+### 11. People & outreach
 
 - Leadership: Vince Bignell and Cat only.
 - Include the current 23-row sent-mail tracker covering 13 Manitoba ministerial portfolios, two provincial program/department relationships, seven school divisions and MFNERC.
@@ -334,7 +353,7 @@ Modeled total: approximately **73,644 kg/day or 73.64 tonnes/day**, averaging ap
 - Include all province ministries and school divisions evidenced in sent mail.
 - Do not count a target-workbook row as contacted without communication evidence.
 
-### 11. Email follow-ups
+### 12. Email follow-ups
 
 - Build the follow-up queue from Shelly’s Bistro-related Gmail threads.
 - Store only the metadata and excerpts needed for the operational record; do not create a bulk mailbox archive.
@@ -363,19 +382,33 @@ Every structured project record should support:
 
 Keep immutable source files under `sources/` and store SHA-256 fingerprints in the source register. Browser-local edits are drafts until reviewed. Exports must retain truth and verification states.
 
+Every shared task should support:
+
+- stable ID;
+- task title and details;
+- assignee and assigner;
+- priority;
+- due date;
+- status;
+- created and updated timestamps.
+
+Store task data, browser-push subscriptions and locally generated VAPID keys under an ignored private data directory. Include shared tasks in confidential JSON snapshot exports, but never export push endpoints, subscription encryption keys or the VAPID private key.
+
 ## Security and deployment boundary
 
-- The current implementation is a local operational prototype.
-- Bind the development server to `127.0.0.1` only.
+- The current implementation is a private operational prototype with a small server-backed shared task service.
+- Bind the development server to `127.0.0.1` by default.
 - Use restrictive browser/server headers and no analytics or trackers.
 - Do not collect passwords.
-- Before hosted multi-user deployment, add organization authentication, role-based access, encrypted server-side storage, audit logs, backups, retention rules and approved OAuth integrations.
+- Block the private task-data directory, VAPID keys and push subscriptions from static HTTP access and Git tracking.
+- Browser push may run on localhost for testing. Cross-device delivery requires one shared HTTPS deployment, durable task and subscription storage, stable VAPID keys and Richard’s explicit notification permission.
+- Before any hosted multi-user deployment, add organization authentication, role-based access, encrypted server-side storage, audit logs, backups, retention rules and approved OAuth integrations. Do not expose the unauthenticated development server directly to the public internet.
 - Keep GitHub visibility private unless the project owner explicitly approves a change.
 
 ## Repository and team workflow
 
 - Default branch: `main`.
-- Run locally with `npm start` or `start-app.ps1`.
+- Install dependencies with `npm install`, then run locally with `npm start` or `start-app.ps1`.
 - Validate with `npm test` before committing.
 - Use feature branches and pull requests for teammate changes when practical.
 - Do not force-push shared branches or commit secrets.
@@ -385,16 +418,18 @@ Keep immutable source files under `sources/` and store SHA-256 fingerprints in t
 
 The build is acceptable only when:
 
-1. All eleven operational tabs render with meaningful current content.
+1. All twelve operational tabs render with meaningful current content.
 2. Owner equity, debt and grants total CA$25.0 million and use the corrected 4% / 35% / 61% split.
 3. Current leadership shows Vince and Cat only.
-4. Workplan reflects the Google Sheet snapshot and publishes the six-week task chart.
-5. Equipment and production views retain source quantities, prices, constraints and uncertainty labels.
-6. Research & innovation displays four research programs, seven unmeasured waste streams, a six-stage voluntary employment pathway, four preservation experiment families and a twelve-assignment Research Pipeline.
-7. Market displays 20 produce priorities, 56 LOI/MOU targets, PDF-backed menu evidence and the expected-daily-use column.
-8. The produce model shows its assumptions and the approximately 73.64-tonne/day result as an estimate.
-9. People & outreach displays 23 evidence-backed government and education rows.
-10. Live funding, calendar and email follow-ups distinguish confirmed facts from proposed or pending actions.
-11. Dedicated source-review and conflict tabs are absent from the operational navigation.
-12. Desktop and mobile layouts have no document-level horizontal overflow; controls retain visible focus and mobile touch targets.
-13. Source downloads work, immutable hashes match and automated validation passes without JavaScript errors.
+4. Task assignments lets Cat create a server-backed Richard assignment through Add record, updates connected lists in real time and supports Assigned → In progress → Completed status changes.
+5. Richard can explicitly enable browser push on his device; a created task attempts push delivery and remains visible even when push is unavailable.
+6. Workplan reflects the Google Sheet snapshot and publishes the six-week task chart without misrepresenting shared tasks as Sheet rows.
+7. Equipment and production views retain source quantities, prices, constraints and uncertainty labels.
+8. Research & innovation displays four research programs, seven unmeasured waste streams, a six-stage voluntary employment pathway, four preservation experiment families and a twelve-assignment Research Pipeline.
+9. Market displays 20 produce priorities, 56 LOI/MOU targets, PDF-backed menu evidence and the expected-daily-use column.
+10. The produce model shows its assumptions and the approximately 73.64-tonne/day result as an estimate.
+11. People & outreach displays 23 evidence-backed government and education rows.
+12. Live funding, calendar and email follow-ups distinguish confirmed facts from proposed or pending actions.
+13. Dedicated source-review and conflict tabs are absent from the operational navigation.
+14. Desktop and mobile layouts have no document-level horizontal overflow; controls retain visible focus and mobile touch targets.
+15. Source downloads work, immutable hashes match and automated validation passes without JavaScript errors.
