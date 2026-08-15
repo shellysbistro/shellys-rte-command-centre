@@ -1,6 +1,6 @@
 "use strict";
 
-const STORAGE_KEY = "shellys-rte-command-centre-v10";
+const STORAGE_KEY = "shellys-rte-command-centre-v11";
 const SOURCE_DB = "shellys-rte-source-vault-v1";
 
 const seedState = {
@@ -1338,6 +1338,123 @@ const seedState = {
       { id: "email-fpegf-lunch", title: "Proposed lunch with Clayton Burka — FPEGF", schedule: "Tue, Aug 18 · 12:00 PM", cadence: "Email proposal", relevance: "Awaiting Clayton confirmation · not saved to Google Calendar", location: "Pho Kim Tuong · 856 Ellice Avenue, Winnipeg", url: "https://mail.google.com/mail/#all/1a002137493af5f1", actionLabel: "Open email" },
     ],
   },
+  innovationData: {
+    refreshedAt: "August 15, 2026",
+    thesis: "Build a prevention-first circular food system and a community-led research talent pipeline around Shelly’s proposed RTE facility.",
+    disclaimer: "These are research programs and partnership hypotheses. No waste baseline, digester design, scholarship fund, referral agreement, employment commitment, preservative claim or shelf-life extension is approved or operational.",
+    programs: [
+      {
+        id: "circular-food",
+        code: "01",
+        theme: "Circular bioeconomy",
+        title: "Zero food waste → biogas",
+        stage: "Discovery",
+        evidenceState: "Authoritative precedent",
+        thesis: "A measured, prevention-first waste system can keep edible food at its highest use and direct only unavoidable, suitable organics to anaerobic digestion for biogas and beneficial digestate use.",
+        goals: ["Measure every material stream by source, reason and destination", "Prevent or recover edible surplus before energy recovery", "Complete an anaerobic-digestion pre-feasibility case for unavoidable residuals"],
+        questions: ["Which streams are avoidable, edible, upcyclable or unavoidable?", "What are the mass, moisture, contamination, volatile-solids and seasonality profiles?", "Is on-site digestion, co-digestion or a third-party offtake model safer and more economical?"],
+        measures: ["kg waste / 1,000 meals", "% prevented or recovered", "% organics diverted", "estimated biogas and digestate yield", "CA$/tonne managed"],
+        nextGate: "Run a four-week, shift-level waste characterization before selecting any technology.",
+        sources: [
+          { label: "ECCC food loss and waste hierarchy", url: "https://www.canada.ca/en/environment-climate-change/services/managing-reducing-waste/food-loss-waste.html" },
+          { label: "NRCan anaerobic-digestion demonstration", url: "https://natural-resources.canada.ca/energy-sources/clean-fuels/urban-waste-electricity-demonstration" },
+          { label: "Manitoba Waste Use Efficiency", url: "https://www.gov.mb.ca/scap/climatechange/sustainableagripro/waste-use-efficiency.html" },
+        ],
+      },
+      {
+        id: "scholarship-studio",
+        code: "02",
+        theme: "Research talent",
+        title: "Scholarships & bursaries",
+        stage: "Concept",
+        evidenceState: "Program landscape identified",
+        thesis: "A Shelly’s-linked award and paid applied-research placement can attract Indigenous and Manitoba learners into food science, nutrition, engineering, logistics and community food-systems research without duplicating existing aid.",
+        goals: ["Map existing aid before creating a new fund", "Define transparent, community-led eligibility and selection", "Pair financial support with paid applied research and mentorship"],
+        questions: ["Which learner groups and disciplines face the largest unmet costs?", "Should support be a bursary, scholarship, paid placement or stackable combination?", "Which institutions and Indigenous organizations should govern selection and research ownership?"],
+        measures: ["applicants and awards", "unmet-cost reduction", "paid placements completed", "research outputs", "learner retention"],
+        nextGate: "Interview prospective learners and partner institutions; publish a funding-gap and governance brief.",
+        sources: [
+          { label: "Canada Indigenous education, bursaries and jobs", url: "https://www.canada.ca/en/services/indigenous-peoples/education-training-jobs.html" },
+          { label: "Indigenous Scholars Awards and Supplements", url: "https://sshrc-crsh.canada.ca/en/funding/opportunities/supplements/2026/indigenous-scholars-awards-and-supplements.aspx" },
+          { label: "Manitoba Advancing Futures Bursary", url: "https://www.gov.mb.ca/wd/ites/youth/advancingfuturesbursary.html" },
+        ],
+      },
+      {
+        id: "inclusive-pathway",
+        code: "03",
+        theme: "Inclusive workforce",
+        title: "Employment & training pathway",
+        stage: "Partnership design",
+        evidenceState: "Referral pathways identified",
+        thesis: "A voluntary, paid, trauma-informed pathway with wrap-around supports can connect school-division parents, families affected by incarceration, people involved with CFS and EIA participants to durable food-sector careers.",
+        goals: ["Co-design referrals with community partners and participants", "Provide paid learning, credentials and progressively responsible work", "Measure retention and advancement rather than intake volume alone"],
+        questions: ["Which barriers—child care, transport, scheduling, ID, food-safety credentials or trust—must be funded?", "Which referrals can occur lawfully with informed consent and minimal data?", "Which roles can support staged entry, recognized credentials and advancement?"],
+        measures: ["voluntary referrals", "paid training completion", "credential attainment", "90/180/365-day retention", "wage and role progression"],
+        nextGate: "Form a participant advisory circle and draft consent, referral, wrap-around-support and paid-placement protocols.",
+        sources: [
+          { label: "Manitoba Training and Employment Services", url: "https://gov.mb.ca/wd/ites/index.html" },
+          { label: "Manitoba EIA employment assistance", url: "https://www.gov.mb.ca/fs/eia/eia_general.html" },
+          { label: "Indigenous Skills and Employment Training", url: "https://www.canada.ca/en/employment-social-development/programs/indigenous-skills-employment-training/service-delivery-organizations.html" },
+          { label: "CORCAN employment partnership model", url: "https://www.canada.ca/en/correctional-service/programs/corcan/corcan-works-offenders.html" },
+        ],
+      },
+      {
+        id: "preservation-lab",
+        code: "04",
+        theme: "Food science",
+        title: "Nutrition-forward preservation lab",
+        stage: "Protocol design",
+        evidenceState: "Regulatory framework identified",
+        thesis: "Permitted ingredients and food-design hurdles may improve nutrition, oxidation control or microbial stability, but every formula requires product-specific safety, sensory, nutrient and shelf-life validation.",
+        goals: ["Screen nutrition-forward ingredient systems against Canadian permissions", "Run product-specific challenge, shelf-life and sensory studies", "Advance only interventions that preserve safety and meal acceptability"],
+        questions: ["Which menu families have the highest spoilage or oxidation risk?", "Can permitted acids, antioxidants, fermentation or plant-derived candidates add value without unacceptable flavour or allergen impacts?", "What pH, water activity, packaging and cold-chain hurdles are needed?"],
+        measures: ["Listeria growth potential", "spoilage counts", "days of validated shelf life", "nutrient retention", "sensory acceptance", "cost / meal"],
+        nextGate: "Select two priority foods and approve a regulator-reviewed design-of-experiments and laboratory plan.",
+        sources: [
+          { label: "Health Canada permitted preservatives", url: "https://www.canada.ca/en/health-canada/services/food-nutrition/food-safety/food-additives/lists-permitted/11-preservatives.html" },
+          { label: "CFIA Listeria controls for RTE food", url: "https://inspection.canada.ca/en/food-safety-industry/preventive-control-plans/listeria-monocytogenes" },
+          { label: "CFIA shelf-life studies", url: "https://inspection.canada.ca/en/preventive-controls/shelf-life-studies" },
+        ],
+      },
+    ],
+    wasteStreams: [
+      { stream: "Edible overproduction", source: "Planning, cooking and packing", baseline: "Not measured", preferredRoute: "Prevent → safe redistribution or approved upcycling", biogasFit: "Residual only", dataNeeded: "kg by SKU/shift; reason; time/temperature; disposition", nextAction: "Add reason-coded weigh station and safe-surplus decision rule." },
+      { stream: "Vegetable and fruit trim", source: "Preparation", baseline: "Not measured", preferredRoute: "Yield improvement → edible upcycling → animal feed/AD review", biogasFit: "Potentially suitable", dataNeeded: "kg/day; moisture; contamination; seasonality", nextAction: "Measure usable yield and separate clean plant material at source." },
+      { stream: "Starch, grain and bakery residuals", source: "Preparation and returned product", baseline: "Not measured", preferredRoute: "Prevention/upcycling → AD review", biogasFit: "Potentially high energy", dataNeeded: "kg/day; total solids; COD; salt; packaging", nextAction: "Characterize by recipe family and keep packaging out of organics." },
+      { stream: "Fats, oils and grease", source: "Cooking and wash-down", baseline: "Not measured", preferredRoute: "Reduce → approved oil recovery/biodiesel → controlled co-digestion", biogasFit: "High yield but process-sensitive", dataNeeded: "litres/day; free fatty acids; contamination; collection method", nextAction: "Separate used oil from grease-trap material and obtain licensed options." },
+      { stream: "Animal-protein residuals", source: "Meat, dairy and egg handling", baseline: "Not measured", preferredRoute: "Prevent → regulated recovery/rendering → AD feasibility", biogasFit: "Requires biosecurity review", dataNeeded: "kg/day; pathogen risk; temperature; regulatory category", nextAction: "Have food-safety and waste specialists approve segregation and handling." },
+      { stream: "High-COD liquids and wastewater solids", source: "Kettles, sauces and sanitation", baseline: "Not measured", preferredRoute: "Reduce at source → capture solids → treatment/co-digestion study", biogasFit: "Site-specific", dataNeeded: "m³/day; COD/BOD; pH; temperature; cleaning chemicals", nextAction: "Sample process wastewater separately from sanitary flows." },
+      { stream: "Packaging-contaminated organics", source: "Packing rejects and returns", baseline: "Not measured", preferredRoute: "Prevent rejects → depackage → recover clean fraction", biogasFit: "Only after depackaging", dataNeeded: "kg/day; packaging type; contamination rate; depackage yield", nextAction: "Track root cause and test whether safe depackaging is economical." },
+    ],
+    pathway: [
+      { step: "01", title: "Voluntary referral", detail: "School divisions, community organizations, CFS/EIA workers or justice-family supports share program information; no personal data moves without informed consent." },
+      { step: "02", title: "Participant-led plan", detail: "Identify goals, strengths, schedule, child care, transport, ID, accessibility and cultural supports." },
+      { step: "03", title: "Paid foundation", detail: "Workplace orientation, food safety, essential skills, digital basics and supported job sampling are paid." },
+      { step: "04", title: "Credential pathway", detail: "Stack role-specific microcredentials, recognized training and apprenticeship hours where available." },
+      { step: "05", title: "Supported placement", detail: "Use predictable schedules, coaching, supervisor check-ins and barrier-removal funds." },
+      { step: "06", title: "Retention & advancement", detail: "Track 90/180/365-day retention, wage progression, promotion and participant-defined outcomes." },
+    ],
+    preservationExperiments: [
+      { candidate: "Vinegar / permitted acetic-acid systems", intendedValue: "Acidification and antimicrobial hurdle", nutritionAngle: "Can reduce reliance on some conventional preservative systems; not inherently a nutrient claim", requiredTests: "pH, sensory, pathogen challenge, spoilage, packaging interaction", gate: "Permitted use and product-specific validation", state: "Research only" },
+      { candidate: "Ascorbic-acid / vitamin-C systems", intendedValue: "Antioxidant and colour/quality protection where permitted", nutritionAngle: "Potential nutrient contribution must be analytically verified through shelf life", requiredTests: "assay, oxidation, sensory, microbiology, label review", gate: "Permitted food/category and validated label claim", state: "Research only" },
+      { candidate: "Fermentation or protective cultures", intendedValue: "Biopreservation through validated competitive or antimicrobial effects", nutritionAngle: "Potential flavour and fermentation benefits; strain- and product-specific", requiredTests: "strain identity, pathogen challenge, pH, metabolites, sensory, allergen review", gate: "Regulatory status plus process and shelf-life validation", state: "Research only" },
+      { candidate: "Herb, spice and berry polyphenol candidates", intendedValue: "Experimental antioxidant or antimicrobial support", nutritionAngle: "Potential phytonutrient contribution; bioavailability and stability unknown", requiredTests: "dose-response, interactions, sensory, nutrient stability, challenge study", gate: "No preservative or health claim without authorization and evidence", state: "Experimental" },
+    ],
+    promptlets: [
+      { id: "R01", discipline: "Data engineering", title: "Factory material-mass balance", priority: "P0", prompt: "Design a lot-, SKU-, line- and shift-level waste event schema that records mass, reason, edibility, contamination, destination, cost and evidence without inventing baseline values.", deliverable: "Data dictionary, event model, validation rules and dashboard measures." },
+      { id: "R02", discipline: "Process engineering", title: "Four-week waste characterization", priority: "P0", prompt: "Engineer a sampling plan that captures representative operating days, source segregation, scale calibration, moisture/solids and contamination while minimizing production disruption.", deliverable: "Sampling protocol, station layout, training sheet and QA checks." },
+      { id: "R03", discipline: "Bioenergy engineering", title: "Anaerobic-digestion pre-feasibility", priority: "P0", prompt: "Compare prevention, third-party organics offtake, co-digestion and on-site digestion using measured feedstock, biogas yield ranges, digestate route, utility integration, permitting, safety and lifecycle economics.", deliverable: "Options matrix, mass/energy balance, risk register and stage-gate recommendation." },
+      { id: "R04", discipline: "Program design", title: "Scholarship gap map", priority: "P0", prompt: "Map existing Indigenous and Manitoba scholarships, bursaries, student aid and paid research placements by eligibility, discipline, value, timing and unmet learner costs.", deliverable: "Deduplicated opportunity map and documented funding-gap thesis." },
+      { id: "R05", discipline: "Governance", title: "Community-led award model", priority: "P1", prompt: "Design transparent selection, conflict-of-interest, privacy, Indigenous data governance, mentorship and reporting rules for a Shelly’s-linked award without inventing eligibility or funding.", deliverable: "Draft terms of reference, scoring rubric and decision log." },
+      { id: "R06", discipline: "Research partnerships", title: "Paid applied-research placement", priority: "P1", prompt: "Specify a paid learner placement that produces useful food-science, engineering, nutrition or logistics research while protecting academic independence and ownership of community knowledge.", deliverable: "Placement brief, supervision model, IP/data clauses and output rubric." },
+      { id: "R07", discipline: "Service design", title: "Consent-based referral pathway", priority: "P0", prompt: "Design a minimal-data, voluntary referral workflow for school-division parents, justice-affected families, CFS-connected people and EIA participants, with explicit consent, withdrawal and no adverse-benefit consequences.", deliverable: "Service blueprint, consent language, data map and escalation paths." },
+      { id: "R08", discipline: "Workforce development", title: "Paid training architecture", priority: "P0", prompt: "Map entry roles to essential skills, food-safety credentials, microcredentials, apprenticeship possibilities, coaching and progressive wage/role milestones.", deliverable: "Competency matrix, curriculum sequence and advancement map." },
+      { id: "R09", discipline: "Impact measurement", title: "Barrier and retention model", priority: "P1", prompt: "Cost the child care, transport, scheduling, equipment, ID, accessibility and coaching supports needed, then define participant-centred 90/180/365-day outcomes.", deliverable: "Unit-cost model, support policy and outcomes framework." },
+      { id: "R10", discipline: "Food science", title: "Nutrition-forward preservation screen", priority: "P0", prompt: "Screen permitted acids, antioxidant nutrients, fermentation/protective cultures and plant candidates by menu family, regulatory status, mechanism, sensory risk and validation burden.", deliverable: "Candidate matrix with go/no-go evidence gates." },
+      { id: "R11", discipline: "Microbiology", title: "Shelf-life design of experiments", priority: "P0", prompt: "Create a product-specific study covering control and treatment formulas, replicate lots, pH/water activity, relevant pathogens and spoilage organisms, sensory testing, cold-chain abuse and statistical decision rules.", deliverable: "Regulator-reviewable protocol and laboratory data plan." },
+      { id: "R12", discipline: "Regulatory affairs", title: "Claim and commercialization gate", priority: "P0", prompt: "Define the evidence required before changing formulation, shelf life, nutrition language or preservative claims, including permitted-use checks, preventive-control updates and label review.", deliverable: "Compliance checklist, approval record and launch gate." },
+    ],
+  },
   budget: [
     { id: "budget-facility", activity: "Facility acquisition", amountThousands: 8700, status: "Conditional", detail: "Includes CA$1,000k deposit and CA$7,700k balance.", sourceId: "proposal", verification: "Pending source attachment" },
   ],
@@ -1599,6 +1716,7 @@ function contractorRecords() {
 function updateNavCounts() {
   document.querySelector("#workplanCount").textContent = projectAssignments().length;
   document.querySelector("#equipmentCount").textContent = state.equipmentData.categories;
+  document.querySelector("#innovationCount").textContent = state.innovationData.programs.length;
   document.querySelector("#targetCount").textContent = state.marketData.loiTargets.length;
   document.querySelector("#fundingOpportunityCount").textContent = state.fundingOpportunities.filter((item) => item.availability !== "Submitted application").length;
   document.querySelector("#calendarCount").textContent = state.calendarSnapshot.events.length;
@@ -1622,6 +1740,7 @@ function render() {
     workplan: { title: "Google Sheet workplan", eyebrow: "Connected delivery plan", render: renderWorkplan },
     equipment: { title: "Equipment & prices", eyebrow: "64-machine procurement plan", render: renderEquipment },
     production: { title: "Production breakdown", eyebrow: "One-million-meal flow", render: renderProduction },
+    innovation: { title: "Research & innovation", eyebrow: "Mission-led research portfolio", render: renderInnovation },
     market: { title: "Market & LOI targets", eyebrow: "Supply intelligence and demand pipeline", render: renderMarket },
     funding: { title: "Funding & budget", eyebrow: "Financial readiness", render: renderFunding },
     opportunities: { title: "Live funding", eyebrow: "Available project-fit programs", render: renderFundingOpportunities },
@@ -2032,6 +2151,76 @@ function renderProduction() {
         <div><span>Recommended operating mix</span><strong>40 / 60</strong><small>hot / cold</small></div>
       </section>
       <div class="source-actions"><span>Source: Production Logistics & Capacity Analysis · August 11, 2026</span><a class="button button--ghost" href="${escapeHtml(data.sourcePath)}" download>Download source breakdown</a></div>
+    </div>`;
+}
+
+function renderInnovation() {
+  const data = state.innovationData;
+  const query = ui.search.toLowerCase();
+  const matches = (item) => !query || Object.values(item).flat().join(" ").toLowerCase().includes(query);
+  const programs = data.programs.filter(matches);
+  const streams = data.wasteStreams.filter(matches);
+  const experiments = data.preservationExperiments.filter(matches);
+  const promptlets = data.promptlets.filter(matches);
+  const p0Count = data.promptlets.filter((item) => item.priority === "P0").length;
+  return `
+    <div class="content-stack innovation-view">
+      ${truthBanner()}
+      <section class="metrics-grid">
+        ${metricCard("Research programs", String(data.programs.length), "Circularity, learner support, inclusive careers and food science.", "Portfolio")}
+        ${metricCard("Engineer promptlets", String(data.promptlets.length), `${p0Count} are foundation-stage P0 investigations.`, "Backlog")}
+        ${metricCard("Measured waste baseline", "0", "No factory waste volumes have been supplied; measurement comes first.", "Truth", true)}
+        ${metricCard("Evidence gates", "4", "Technical, regulatory, ethics and community-governance approval.", "Controls")}
+      </section>
+      <section class="application-banner innovation-hero">
+        <div><span>Research portfolio thesis</span><h3>${escapeHtml(data.thesis)}</h3><p>Four linked programs turn operational questions into measurable research, paid learning and stage-gated innovation.</p></div>
+        <div><span>Truth boundary</span><p>${escapeHtml(data.disclaimer)}</p><p><strong>Research sequence:</strong> baseline → co-design → experiment → independent validation → approval → pilot → scale.</p></div>
+      </section>
+      <div class="section-title"><div><h3>Four mission-led research programs</h3><p>Each program has a thesis, measurable outcomes, unresolved questions and a next evidence gate.</p></div><span class="source-chip">Refreshed ${escapeHtml(data.refreshedAt)}</span></div>
+      <section class="research-program-grid" aria-label="Innovation research programs">
+        ${programs.map((program) => `
+          <article class="research-card">
+            <div class="research-card__top"><span class="research-index">${escapeHtml(program.code)}</span><div><p class="eyebrow">${escapeHtml(program.theme)}</p><h4>${escapeHtml(program.title)}</h4></div>${statusBadge(program.stage)}</div>
+            <p class="research-thesis">${escapeHtml(program.thesis)}</p>
+            <div class="research-card__split">
+              <div><h5>Research goals</h5><ul>${program.goals.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul></div>
+              <div><h5>Questions to answer</h5><ul>${program.questions.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}</ul></div>
+            </div>
+            <div class="research-measures"><span>Outcome measures</span>${program.measures.map((item) => `<strong>${escapeHtml(item)}</strong>`).join("")}</div>
+            <div class="callout"><strong>Next evidence gate</strong>${escapeHtml(program.nextGate)}</div>
+            <div class="research-card__footer"><span>${escapeHtml(program.evidenceState)}</span><div>${program.sources.map((source) => `<a class="plain-link" href="${escapeHtml(source.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(source.label)}</a>`).join("")}</div></div>
+          </article>`).join("") || emptyState("No matching research programs", "Clear the search to restore the four-program portfolio.")}
+      </section>
+      <section class="panel panel--flush">
+        <div class="panel-heading"><div><h3>Factory food-waste stream register</h3><p>Prevention and safe human-food recovery outrank energy recovery. Biogas applies only to unavoidable, segregated and technically suitable residuals.</p></div>${statusBadge("Baseline required")}</div>
+        <div class="table-wrap">
+          <table class="data-table research-table">
+            <caption class="sr-only">Proposed factory food-waste streams and the measurements required before selecting a recovery route</caption>
+            <thead><tr><th>Waste stream</th><th>Source point</th><th>Baseline</th><th>Preferred hierarchy route</th><th>Biogas fit</th><th>Data required</th><th>Next research action</th></tr></thead>
+            <tbody>${streams.map((item) => `<tr><td><strong>${escapeHtml(item.stream)}</strong></td><td>${escapeHtml(item.source)}</td><td>${statusBadge(item.baseline)}</td><td>${escapeHtml(item.preferredRoute)}</td><td>${escapeHtml(item.biogasFit)}</td><td>${escapeHtml(item.dataNeeded)}</td><td>${escapeHtml(item.nextAction)}</td></tr>`).join("") || `<tr><td colspan="7">${emptyState("No matching waste streams", "Clear the search to restore the proposed register.")}</td></tr>`}</tbody>
+          </table>
+        </div>
+      </section>
+      <section class="panel">
+        <div class="panel-heading"><div><h3>Inclusive employment pathway</h3><p>Voluntary and paid by design; sensitive referral data remains with the originating organization unless the participant explicitly consents.</p></div>${typeBadge("Service blueprint")}</div>
+        <div class="pathway-map">${data.pathway.map((item) => `<article class="pathway-step"><span>${escapeHtml(item.step)}</span><h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(item.detail)}</p></article>`).join("")}</div>
+        <div class="callout u-mt-12"><strong>Ethics gate</strong>Participation must never be a condition of a family’s school, CFS, EIA, corrections or community service. Use informed consent, minimal data, participant-defined goals and a clear withdrawal route.</div>
+      </section>
+      <section class="panel panel--flush">
+        <div class="panel-heading"><div><h3>Nutrition-forward preservation experiment matrix</h3><p>Candidate ingredients are not approved formulations or shelf-life claims. Product-specific Canadian permissions and validation control every decision.</p></div>${statusBadge("Research only")}</div>
+        <div class="table-wrap">
+          <table class="data-table research-table preservation-table">
+            <caption class="sr-only">Natural and nutrition-forward preservation candidates requiring regulatory and laboratory validation</caption>
+            <thead><tr><th>Candidate family</th><th>Intended value</th><th>Nutrition angle</th><th>Required tests</th><th>Approval gate</th><th>State</th></tr></thead>
+            <tbody>${experiments.map((item) => `<tr><td><strong>${escapeHtml(item.candidate)}</strong></td><td>${escapeHtml(item.intendedValue)}</td><td>${escapeHtml(item.nutritionAngle)}</td><td>${escapeHtml(item.requiredTests)}</td><td>${escapeHtml(item.gate)}</td><td>${statusBadge(item.state)}</td></tr>`).join("") || `<tr><td colspan="6">${emptyState("No matching experiments", "Clear the search to restore the experiment matrix.")}</td></tr>`}</tbody>
+          </table>
+        </div>
+      </section>
+      <div class="section-title"><div><h3>Engineer promptlets</h3><p>Copy-ready research assignments with a defined discipline, priority and concrete deliverable.</p></div><span class="source-chip">${promptlets.length} shown</span></div>
+      <section class="promptlet-grid" aria-label="Research engineering promptlets">
+        ${promptlets.map((item) => `<article class="promptlet-card"><div class="promptlet-card__top"><span>${escapeHtml(item.id)}</span>${statusBadge(item.priority)}</div><p class="eyebrow">${escapeHtml(item.discipline)}</p><h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(item.prompt)}</p><div><strong>Deliverable</strong><span>${escapeHtml(item.deliverable)}</span></div></article>`).join("") || emptyState("No matching promptlets", "Clear the search to restore the research backlog.")}
+      </section>
+      <div class="callout callout--danger"><strong>Do not claim implementation</strong>This tab is an engineered research portfolio. It does not establish a zero-waste operation, biogas output, scholarship fund, referral partnership, employment placement, safe preservative system or validated shelf life.</div>
     </div>`;
 }
 

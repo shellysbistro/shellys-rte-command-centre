@@ -41,6 +41,7 @@ Open a pull request on GitHub and have another teammate review it before merging
 - Published task chart, global search, funding and budget views, a live list of available project-fit funding, meeting schedule, contact/outreach controls and an email follow-up queue.
 - Equipment & prices tab with the complete 22-category / 64-machine sourcing register, original USD FOB figures, supplemental Canadian landed-cost items, procurement waves and the CA$1.6–1.8M equipment-scope budget.
 - Production flow tab with the quantified one-million-meal/day model, 38/62 hot-cold flow, chilling constraint, space impact and scaling rule.
+- Research & innovation tab with four mission-led programs: prevention-first factory waste and biogas research, scholarships/bursaries, voluntary inclusive employment pathways, and nutrition-forward preservation experiments. It includes seven unmeasured waste streams, a six-stage service blueprint and twelve engineer promptlets with evidence gates.
 - Market & LOI targets tab with a 52-category national produce inventory summary, 20 sourcing priorities linked to the attached 45-item school menu, transparent estimated daily-use figures and all 56 Manitoba LOI/MOU targets across eight tiers.
 - People & outreach includes a 23-row sent-mail tracker covering 13 Manitoba ministerial portfolios, two provincial program/department relationships, seven school divisions and MFNERC.
 - Pending source-review controls remain internal and are intentionally absent from the main navigation and workplan table.
@@ -65,6 +66,8 @@ The user also supplied `41_Paquin_Contractor_Tracker.xlsx`. Its 11 unique contra
 `Shellys_Bistro_Canada_Produce_Data.xlsx` and `Shellys_LOI_MOU_Target_List_Expanded.xlsx` were imported on August 15, 2026 and preserved under `sources/` with SHA-256 fingerprints. The produce source mixes CAD and USD bases for specified rows, and some HS categories cover multiple products. Blank status cells in the LOI/MOU source are treated as not started unless a matching sent-mail thread supplies contact evidence.
 
 `Shellys School Nutrition Menu.pdf` was imported on August 15, 2026 and preserved under `sources/` with its SHA-256 fingerprint. Its 45 menu items now supply the ingredient evidence shown beside each produce priority. The expected-daily-use column is a capacity-planning scenario: one million meals are split evenly across the 45 items and multiplied by planning portions; side-choice and generic-fruit allocation rules are shown in the app. It excludes trim, spoilage, cooking loss and actual menu popularity, so it is not a purchasing forecast.
+
+The Research & innovation portfolio uses current official Canadian and Manitoba sources as precedents and regulatory anchors. It does not claim that a factory waste baseline, anaerobic digester, scholarship fund, referral partnership, employment placement, preservative system or shelf-life extension exists. Each program remains behind measurement, ethics, technical, regulatory and community-governance gates.
 
 Current project leadership is Vince Bignell and Cat only. Cat’s formal title and contact details were not supplied and are therefore left missing. Richard Chimebele remains identified only as the authenticated Gmail mailbox profile and in historical source notes—not as current leadership.
 
