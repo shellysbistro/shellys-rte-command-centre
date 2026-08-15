@@ -1,6 +1,6 @@
 "use strict";
 
-const STORAGE_KEY = "shellys-rte-command-centre-v7";
+const STORAGE_KEY = "shellys-rte-command-centre-v8";
 const SOURCE_DB = "shellys-rte-source-vault-v1";
 
 const seedState = {
@@ -8,7 +8,7 @@ const seedState = {
   metadata: {
     projectName: "Shelly’s Bistro — RTE Project Command Centre",
     seededFrom: "Master build prompt supplied in this build session",
-    importedAt: "2026-08-11",
+    importedAt: "2026-08-15",
     note: "The supplied prompt ended after the first row of the twelve-activity budget table. No missing values were inferred.",
   },
   sources: [
@@ -56,9 +56,9 @@ const seedState = {
       id: "workplan-sheet",
       name: "Richard Project Management Google Sheet",
       type: "Live workplan",
-      declaredDate: "Snapshot imported August 12, 2026",
+      declaredDate: "Snapshot refreshed August 15, 2026",
       state: "Connected",
-      detail: "Read-only import of the General assignment register and Richard Workplan tabs. The project hub reflects the current Google Sheet snapshot and links back to the live source for changes after the import time.",
+      detail: "Read-only import of the General assignment register and Richard Workplan tabs. Refreshed August 15, 2026; the sheet contained the same 23 assignments and six-week workplan as the prior snapshot.",
       reference: "docs.google.com/spreadsheets/d/1gqojEjzs8s99tcJHS9bwhLfvhzeSxCaXauj2-oFf1E8 · General gid 613747079 · Richard Workplan gid 1493963392",
     },
     {
@@ -67,17 +67,17 @@ const seedState = {
       type: "Email evidence",
       declaredDate: "Ongoing",
       state: "Connected",
-      detail: "Secure Gmail OAuth connection verified August 12, 2026. A full matching project scan covered 410 messages across 184 threads from March 19 to August 11, 2026. Selected funding evidence and follow-up metadata were imported; no mailbox password or bulk message body archive is stored in this application.",
+      detail: "Secure Gmail OAuth connection verified August 15, 2026. The March 19–August 11 baseline covered 410 messages across 184 threads; an incremental August 12–15 review added current funding, Food Development Centre and school-division actions. No mailbox password or bulk message body archive is stored in this application.",
       reference: "Gmail OAuth profile · account ID 110400205241251263409",
     },
     {
       id: "calendar",
       name: "Richard Chimebele primary Google Calendar",
       type: "Meeting schedule",
-      declaredDate: "Snapshot imported August 12, 2026",
+      declaredDate: "Snapshot refreshed August 15, 2026",
       state: "Connected",
-      detail: "Read-only schedule snapshot from the connected primary calendar. The connected calendar account is richardc@yensbooks.com, which differs from the Shelly’s Bistro Gmail account; likely work meetings are marked for confirmation before being treated as project meetings.",
-      reference: "Google Calendar OAuth profile · account ID 107228696880710450688",
+      detail: "Read-only schedule snapshot from richardc@shellysbistro.com. No saved upcoming events were found for August 15–September 15, 2026; one email-derived FPEGF lunch proposal is shown separately and remains unconfirmed.",
+      reference: "Google Calendar OAuth profile · account ID 110400205241251263409",
     },
     {
       id: "contractor-tracker",
@@ -763,7 +763,7 @@ const seedState = {
     { id: "grant", label: "Grant / contribution", amount: 15250000, percent: 61, status: "Proposed allocation", detail: "Includes the user-directed CA$5.25M reallocation. No award is implied." },
   ],
   equipmentData: {
-    importedAt: "August 12, 2026",
+    importedAt: "August 15, 2026",
     sourceDate: "Revision 2 · July 20, 2026",
     categories: 22,
     machineCount: 64,
@@ -909,13 +909,13 @@ const seedState = {
       pipeline: "Eligibility screening",
       availability: "Available now",
       fitLevel: "Strong workforce fit",
-      status: "More information requested",
+      status: "Eligibility clarification sent — awaiting response",
       amount: "50% cost share · up to CA$10K per employee / CA$25K HR strategy · CA$100K total maximum",
       intake: "Continuous intake; activities must finish within the April 1–March 31 fiscal year",
-      fit: "A Manitoba consultant asked Shelly’s Bistro to explain training outcomes, trainees, curriculum and/or the external HR-strategy deliverable before a meeting is booked.",
-      nextAction: "Vince to answer Monique Leclerc directly. Resolve the external-provider ownership conflict and quantify jobs, wage changes, training participants, curriculum and measurable outcomes.",
-      source: "Government of Manitoba email · August 5, 2026",
-      sourceUrl: "https://mail.google.com/mail/#all/19fd296c4be13ac5",
+      fit: "The program is a live 50% cost share for eligible Manitoba employers. A clarification was sent August 13 asking whether AIMA and Shelly’s may apply separately as distinct employers under common ownership.",
+      nextAction: "Wait for Monique Leclerc’s eligibility answer. If eligible, Vince must contact the program directly as Shelly’s authorized representative and submit the employer’s own intake.",
+      source: "Government of Manitoba email thread · updated August 13, 2026",
+      sourceUrl: "https://mail.google.com/mail/#all/19ffbd3043721510",
       programUrl: "https://www.gov.mb.ca/jec/busdev/financial/bump/index.html",
       verification: "Official email and program page reviewed",
     },
@@ -926,13 +926,13 @@ const seedState = {
       pipeline: "Lender evaluation",
       availability: "Available now",
       fitLevel: "Strong financing fit",
-      status: "In discussion — no approval",
+      status: "Vince contact supplied — discovery scheduling pending",
       amount: "No amount committed; proposed debt layer is CA$8.75M",
       intake: "Relationship-led evaluation",
       fit: "FCC is evaluating the building/equipment request and may require a partner lender. Accountant-prepared statements and revenue-support documents are prerequisites for serious consideration.",
-      nextAction: "Vince to send accountant-prepared statements, then signed LOIs/MOUs and contract evidence as available.",
-      source: "FCC email thread · August 6–11, 2026",
-      sourceUrl: "https://mail.google.com/mail/#all/19ff139fb4f49d1a",
+      nextAction: "Vince to provide accountant-prepared statements, then signed LOIs/MOUs and contract evidence. Follow up if FCC does not propose a discovery-call time.",
+      source: "FCC email thread · updated August 13, 2026",
+      sourceUrl: "https://mail.google.com/mail/#all/19ffbc15cd6d0585",
       programUrl: "https://www.fcc-fac.ca/en/financing/agriculture/indigenous",
       verification: "Official lender email reviewed",
     },
@@ -940,16 +940,16 @@ const seedState = {
       id: "opp-ic-canada",
       name: "FCC / IC Canada advisory cost share",
       category: "Subsidized advisory support",
-      pipeline: "Discovery call pending",
+      pipeline: "Discovery scheduling",
       availability: "Available through FCC",
       fitLevel: "Support fit",
-      status: "Accessible through FCC — not yet enrolled",
+      status: "Vince email supplied — awaiting call time",
       amount: "FCC states an 85% subsidy; typical participant cost about CA$2K, subject to confirmed scope and pricing",
       intake: "Discovery call awaiting confirmation",
       fit: "FCC proposed advisory support for financial management, strategic planning, operational efficiency and scaling food production.",
-      nextAction: "Send Vince’s email to Nicholas Boucher and confirm Vince will attend the discovery call. Confirm final scope, hours and price before enrolment.",
-      source: "FCC email thread · August 10–11, 2026",
-      sourceUrl: "https://mail.google.com/mail/#all/19ff139fb4f49d1a",
+      nextAction: "Follow up with Nicholas Boucher if no call time arrives. Vince should confirm final scope, hours, subsidy and participant cost before enrolment.",
+      source: "FCC email thread · updated August 13, 2026",
+      sourceUrl: "https://mail.google.com/mail/#all/19ffbc15cd6d0585",
       programUrl: "https://www.fcc-fac.ca/en/knowledge/work-with-business-advisors",
       verification: "Official lender email reviewed",
     },
@@ -957,16 +957,16 @@ const seedState = {
       id: "opp-fpegf",
       name: "First Peoples Economic Growth Fund",
       category: "First Nations financing / contribution",
-      pipeline: "Introduced",
+      pipeline: "Contact established",
       availability: "Available now",
       fitLevel: "Strong ownership fit",
-      status: "Follow-up pending — no offer",
+      status: "Lunch proposed — awaiting Clayton confirmation",
       amount: "Program-dependent; individual-owner Business Contribution Fund maximum is CA$99,999",
       intake: "Contact-led screening",
-      fit: "FCC introduced Shelly’s Bistro to FPEGF. The official Business Contribution Fund supports eligible First Nations business expansion but requires minimum equity, commercial financing and viability evidence.",
-      nextAction: "Vince to contact Clayton Burka and ask which FPEGF financing/contribution program fits the ownership and project scale, then request the exact document list.",
-      source: "FCC/FPEGF introduction thread · August 4–5, 2026",
-      sourceUrl: "https://mail.google.com/mail/#all/19fcda70489342a9",
+      fit: "Clayton Burka spoke with Richard after the FCC introduction. The official Business Contribution Fund supports eligible First Nations business expansion but requires minimum equity, commercial financing and viability evidence.",
+      nextAction: "Confirm the proposed August 18 lunch, decide the Vince/Cat attendee, and prepare a concise project, ownership, financing and document-readiness package.",
+      source: "FCC/FPEGF thread · updated August 14, 2026",
+      sourceUrl: "https://mail.google.com/mail/#all/1a002137493af5f1",
       programUrl: "https://firstpeoplesfund.ca/summary-of-programs/business-contribution-fund/",
       verification: "Introduction email and official program page reviewed",
     },
@@ -982,10 +982,27 @@ const seedState = {
       intake: "Continuous two-stage intake",
       fit: "Food and beverage processing is eligible and preferred; manufacturing-capacity equipment can qualify. Land acquisition is not eligible, and at least 50% confirmed non-government funding is required.",
       nextAction: "Contact a PrairiesCan officer before an EOI. Test equipment-only scope and assemble two years of statements, interim statements and confirmed non-government funding evidence.",
-      source: "Official Canada.ca pages reviewed August 12, 2026; Manitoba email noted a PrairiesCan discussion",
+      source: "Official Canada.ca page rechecked August 15, 2026; Manitoba email noted a PrairiesCan discussion",
       sourceUrl: "https://mail.google.com/mail/#all/19fa49e77d799116",
       programUrl: "https://www.canada.ca/en/prairies-economic-development/services/funding/business-scale-up-productivity/application-process.html",
       verification: "Official program page reviewed · mailbox has no application confirmation",
+    },
+    {
+      id: "opp-mb-ag-fdc",
+      name: "Manitoba Agriculture / Food Development Centre",
+      category: "Technical commercialization support",
+      pipeline: "Referral and tour offered",
+      availability: "Available through referral",
+      fitLevel: "Strong readiness fit",
+      status: "Resources received — tour not booked",
+      amount: "Fee-for-service technical and research support; no cash award is implied",
+      intake: "Contact-led service access",
+      fit: "The provincial Food Development Centre provides laboratory trials, scale-up, shelf-life, sensory, regulatory and commercialization support that fits an RTE food-processing project.",
+      nextAction: "Ask Karen Walker-Tibble to arrange the FDC tour and identify the exact testing, scale-up and regulatory services needed for the RTE plan.",
+      source: "Manitoba Agriculture email · August 12–13, 2026",
+      sourceUrl: "https://mail.google.com/mail/#all/19ff7e2959dff65d",
+      programUrl: "https://www.gov.mb.ca/agriculture/food-and-ag-processing/starting-a-food-business/food-development-centre/index.html",
+      verification: "Official provincial email and service page reviewed",
     },
   ],
   fundingOutcomes: [
@@ -1004,8 +1021,10 @@ const seedState = {
   ],
   emailScan: {
     mailbox: "richardc@shellysbistro.com",
-    scannedAt: "August 12, 2026",
-    queryWindow: "March 19–August 11, 2026",
+    scannedAt: "August 15, 2026",
+    queryWindow: "March 19–August 11 baseline",
+    refreshWindow: "August 12–15, 2026",
+    incrementalMessages: 11,
     messages: 410,
     threads: 184,
     categories: [
@@ -1015,7 +1034,7 @@ const seedState = {
       { label: "Funding", count: 13 },
       { label: "Other project correspondence", count: 48 },
     ],
-    note: "The all-time mailbox scan matched Shelly’s/Shelley Bistro, Paquin Road, SIB RTE and Ready To Eat terms. Follow-ups below prioritize current actionable threads and are not a bulk copy of private message bodies.",
+    note: "The baseline scan matched Shelly’s/Shelley Bistro, Paquin Road, SIB RTE and Ready To Eat terms. The August 15 refresh separately reviewed 11 clearly project-relevant messages from August 12–15; no new project email arrived on August 15. Follow-ups summarize actions without storing bulk private message bodies.",
   },
   followUps: [
     {
@@ -1023,24 +1042,24 @@ const seedState = {
       priority: "Now",
       organization: "Farm Credit Canada / IC Canada",
       subject: "Financing documents and advisory discovery call",
-      lastDate: "August 11, 2026",
-      status: "Action required",
+      lastDate: "August 13, 2026",
+      status: "Waiting on FCC scheduling",
       owner: "Vince",
-      nextAction: "Send Vince’s email and confirm participation. Provide accountant-prepared statements, then forward each signed LOI/MOU or contract support as it becomes available.",
-      evidence: "FCC is waiting to arrange the IC Canada call and cannot seriously consider financing before reviewing statements and revenue support.",
-      sourceUrl: "https://mail.google.com/mail/#all/19ff139fb4f49d1a",
+      nextAction: "Follow up if Nicholas Boucher does not propose a call time. Provide accountant-prepared statements, then forward signed LOIs/MOUs or contract support as they become available.",
+      evidence: "Richard supplied Vince’s email and confirmed interest on August 13. FCC still needs statements and revenue support before serious financing consideration.",
+      sourceUrl: "https://mail.google.com/mail/#all/19ffbc15cd6d0585",
     },
     {
       id: "follow-bump",
       priority: "Now",
       organization: "Government of Manitoba — BUMP",
-      subject: "Additional information requested",
-      lastDate: "August 10, 2026",
-      status: "Response incomplete",
+      subject: "Separate-employer eligibility clarification",
+      lastDate: "August 13, 2026",
+      status: "Awaiting Manitoba response",
       owner: "Vince",
-      nextAction: "Respond directly to Monique Leclerc with the training/HR scope, participants, provider, curriculum, outcomes and measurement plan. Address the related-party provider conflict before proposing AIMA.",
-      evidence: "The official August 5 request says a meeting can be booked after the additional information is received; the latest thread message only discusses the conflict internally.",
-      sourceUrl: "https://mail.google.com/mail/#all/19fd296c4be13ac5",
+      nextAction: "Wait for Monique Leclerc’s ruling on AIMA and Shelly’s as separate employers. If eligible, Vince should contact BUMP directly for Shelly’s and submit the employer’s own intake.",
+      evidence: "Trisha Sinclair asked Manitoba on August 13 whether two separately registered employers under the same owner may each apply for their own employees. The program does not accept third-party applications.",
+      sourceUrl: "https://mail.google.com/mail/#all/19ffbd3043721510",
     },
     {
       id: "follow-srf",
@@ -1058,25 +1077,25 @@ const seedState = {
       id: "follow-fpegf",
       priority: "This week",
       organization: "First Peoples Economic Growth Fund",
-      subject: "FCC introduction requires direct follow-up",
-      lastDate: "August 5, 2026",
-      status: "Waiting on outreach",
+      subject: "Proposed August 18 lunch with Clayton Burka",
+      lastDate: "August 14, 2026",
+      status: "Awaiting meeting confirmation",
       owner: "Vince",
-      nextAction: "Call or email Clayton Burka, confirm ownership structure and project cost, and request the program recommendation and document checklist.",
-      evidence: "The introduction and outbound project summary are present; no FPEGF response or offer was found in the scan.",
-      sourceUrl: "https://mail.google.com/mail/#all/19fcda70489342a9",
+      nextAction: "Confirm whether Clayton accepts Tuesday, August 18 at noon, choose the Vince/Cat attendee and prepare the ownership, financing and document-readiness package.",
+      evidence: "After a phone call with Clayton, Richard proposed lunch at Pho Kim Tuong. No confirmation was found by the August 15 refresh.",
+      sourceUrl: "https://mail.google.com/mail/#all/1a002137493af5f1",
     },
     {
       id: "follow-manitoba-meeting",
       priority: "This week",
       organization: "Manitoba Agriculture / Agri-Food",
-      subject: "Shelly’s Bistro expansion meeting recap",
-      lastDate: "August 11, 2026",
-      status: "Meeting held or scheduled — outcome not captured",
+      subject: "Food Development Centre tour and technical support",
+      lastDate: "August 13, 2026",
+      status: "Referral offered — tour not booked",
       owner: "Vince",
-      nextAction: "Record the August 11 meeting outcome, send a concise recap and assign any documents or introductions promised in the meeting.",
-      evidence: "Karen Walker-Tibble sent a same-day calendar invitation; no later outcome email was found in the scanned window.",
-      sourceUrl: "https://mail.google.com/mail/#all/19f8f92828cc2200",
+      nextAction: "Ask Karen Walker-Tibble to arrange the Food Development Centre tour and identify priority testing, scale-up, shelf-life and regulatory-support needs.",
+      evidence: "Karen sent CFIA, preventive-control and pricing resources and offered to arrange an FDC tour. Richard thanked her and shared the equipment list; no tour date is on the calendar.",
+      sourceUrl: "https://mail.google.com/mail/#all/19ff7e2959dff65d",
     },
     {
       id: "follow-winnipeg-edt",
@@ -1130,13 +1149,13 @@ const seedState = {
       id: "follow-pembina",
       priority: "Date-based",
       organization: "Pembina Trails School Division",
-      subject: "Universal nutrition program follow-up",
-      lastDate: "August 6, 2026",
-      status: "Follow up late August / early September",
+      subject: "Nutrition-program meeting request",
+      lastDate: "August 13, 2026",
+      status: "Outbound request — no response found",
       owner: "Vince",
-      nextAction: "Contact the division’s nutrition-program leaders when they return in late August or early September, using the corrected Pembina Trails context.",
-      evidence: "The superintendent said key leaders resume work in late August/early September and would receive the information.",
-      sourceUrl: "https://mail.google.com/mail/#all/19f29ac50d0e44d6",
+      nextAction: "Track the meeting request and follow up when the division’s nutrition-program leaders return in late August or early September.",
+      evidence: "A Shelly’s Pembina Trails brief and meeting request were sent August 13. No reply was found by the August 15 refresh.",
+      sourceUrl: "https://mail.google.com/mail/#all/19ffcf8e206a1e59",
     },
     {
       id: "follow-low-carbon",
@@ -1164,15 +1183,13 @@ const seedState = {
     },
   ],
   calendarSnapshot: {
-    account: "richardc@yensbooks.com",
-    importedAt: "August 12, 2026",
-    note: "This is the currently connected primary calendar, not the richardc@shellysbistro.com mailbox account. Events are read-only snapshots and should be confirmed as Shelly’s project meetings.",
+    account: "richardc@shellysbistro.com",
+    importedAt: "August 15, 2026",
+    savedCount: 0,
+    proposedCount: 1,
+    note: "The Shelly’s Bistro primary calendar is now connected. No saved upcoming events were found from August 15 through September 15, 2026. The email-derived FPEGF lunch below is only a proposal and has not been added to the calendar.",
     events: [
-      { id: "cal-cameron", title: "Meeting with Cameron — marketing", schedule: "Thu, Aug 13 · 8:00–9:00 AM", cadence: "One-time", relevance: "Likely work meeting · project relevance to confirm", location: "Not supplied", url: "https://www.google.com/calendar/event?eid=MGVrOHNxaHB1bHVkOXFhYXFvdXVuazA5dGIgcmljaGFyZGNAeWVuc2Jvb2tzLmNvbQ&ctz=America/Winnipeg" },
-      { id: "cal-scrum", title: "Scrum meeting", schedule: "Next: Thu, Aug 13 · 6:00–7:00 AM", cadence: "Recurring weekdays", relevance: "Work cadence · project relevance to confirm", location: "Online / not supplied", url: "https://www.google.com/calendar/event?eid=MmxsaXM0YmZibDZhdGRodmhpMTBhbW02aDJfMjAyNjA4MTNUMTEwMDAwWiByaWNoYXJkY0B5ZW5zYm9va3MuY29t&ctz=America/Winnipeg" },
-      { id: "cal-task-management", title: "15-minute task management", schedule: "Next: Mon, Aug 17 · 11:00–11:15 AM", cadence: "Recurring", relevance: "Work cadence · project relevance to confirm", location: "Online / not supplied", url: "https://www.google.com/calendar/event?eid=MDZmZDE4c281YjZwYWZoMXFtcDRxNGxtNTBfMjAyNjA4MTdUMTYwMDAwWiByaWNoYXJkY0B5ZW5zYm9va3MuY29t&ctz=America/Winnipeg" },
-      { id: "cal-updates", title: "Paul & Richard updates", schedule: "Mon, Aug 17 · 10:00–10:30 AM", cadence: "Recurring weekly", relevance: "Work meeting · project relevance to confirm", location: "Online / not supplied", url: "https://www.google.com/calendar/event?eid=MjBpZzlxbWd0cThsNWY4MmkxazZ0YmU1NGVfMjAyNjA4MTdUMTUwMDAwWiByaWNoYXJkY0B5ZW5zYm9va3MuY29t&ctz=America/Winnipeg" },
-      { id: "cal-cat-marketing", title: "Marketing review with Cat", schedule: "Tue, Aug 18 · 5:00–6:00 AM", cadence: "Recurring weekly", relevance: "Likely Shelly’s work meeting · confirm scope", location: "Online / not supplied", url: "https://www.google.com/calendar/event?eid=MmpzYTJmYzN1Ymg2bmsyYTg5bXRtazU1dXBfMjAyNjA4MThUMTAwMDAwWiByaWNoYXJkY0B5ZW5zYm9va3MuY29t&ctz=America/Winnipeg" },
+      { id: "email-fpegf-lunch", title: "Proposed lunch with Clayton Burka — FPEGF", schedule: "Tue, Aug 18 · 12:00 PM", cadence: "Email proposal", relevance: "Awaiting Clayton confirmation · not saved to Google Calendar", location: "Pho Kim Tuong · 856 Ellice Avenue, Winnipeg", url: "https://mail.google.com/mail/#all/1a002137493af5f1", actionLabel: "Open email" },
     ],
   },
   budget: [
@@ -1466,7 +1483,7 @@ function truthBanner() {
     <section class="sync-banner" aria-label="Connected data status">
       <div>
         <strong>Connected operational snapshot</strong>
-        <p>Google Sheet workplan and project mailbox data refreshed August 12, 2026. Use the source links to see changes made after this snapshot.</p>
+        <p>Google Sheet, Shelly’s calendar and project mailbox data refreshed August 15, 2026. No workplan rows changed and no new project email arrived on August 15.</p>
       </div>
       <span class="sync-pill"><i></i> Synced</span>
     </section>`;
@@ -1949,25 +1966,24 @@ function renderFundingOpportunities() {
 
 function renderCalendar() {
   const events = state.calendarSnapshot.events.filter((item) => !ui.search || Object.values(item).join(" ").toLowerCase().includes(ui.search.toLowerCase()));
-  const recurring = state.calendarSnapshot.events.filter((item) => item.cadence.toLowerCase().includes("recurring")).length;
   return `
     <div class="content-stack">
       <section class="metrics-grid">
-        ${metricCard("Schedule entries", String(state.calendarSnapshot.events.length), "Likely work meetings selected from the connected calendar.", "Snapshot")}
-        ${metricCard("Recurring", String(recurring), "Recurring work cadences shown once with their next occurrence.", "Series")}
-        ${metricCard("Calendar account", "Yens Books", "Connected as richardc@yensbooks.com.", "Account")}
-        ${metricCard("Imported", "Aug 12", "Read-only snapshot; no calendar events were changed.", "2026", true)}
+        ${metricCard("Saved meetings", String(state.calendarSnapshot.savedCount), "Upcoming events found in the Shelly’s primary calendar.", "Calendar")}
+        ${metricCard("Email proposals", String(state.calendarSnapshot.proposedCount), "Meeting signals that still require confirmation.", "Pending")}
+        ${metricCard("Calendar account", "Shelly’s", state.calendarSnapshot.account, "Connected")}
+        ${metricCard("Refreshed", "Aug 15", "Read-only snapshot; no calendar events were changed.", "2026", true)}
       </section>
-      <div class="callout callout--danger"><strong>Account check</strong>${escapeHtml(state.calendarSnapshot.note)} No future event explicitly titled Shelly’s, Paquin, FCC, BUMP or SRF was found; likely work events below remain marked for confirmation.</div>
+      <div class="callout"><strong>Schedule check</strong>${escapeHtml(state.calendarSnapshot.note)}</div>
       <section class="panel panel--flush">
-        <div class="panel-heading"><div><h3>Upcoming meeting schedule</h3><p>America/Winnipeg · recurring series are consolidated to their next occurrence.</p></div></div>
+        <div class="panel-heading"><div><h3>Upcoming schedule signals</h3><p>America/Winnipeg · proposed meetings remain visibly separate from saved calendar events.</p></div></div>
         <div class="schedule-list">
           ${events.map((item) => `
             <article class="schedule-row">
               <div class="schedule-date"><strong>${escapeHtml(item.schedule.split("·")[0].trim())}</strong><span>${escapeHtml(item.schedule.includes("·") ? item.schedule.split("·").slice(1).join("·").trim() : item.schedule)}</span></div>
               <div><h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(item.relevance)}</p><div class="row-meta"><span>${escapeHtml(item.cadence)}</span><span>${escapeHtml(item.location)}</span></div></div>
-              <a class="button button--ghost" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">Open calendar</a>
-            </article>`).join("") || emptyState("No matching meetings", "Clear the search to restore the calendar snapshot.")}
+              <a class="button button--ghost" href="${escapeHtml(item.url)}" target="_blank" rel="noopener noreferrer">${escapeHtml(item.actionLabel || "Open calendar")}</a>
+            </article>`).join("") || emptyState("No matching schedule signals", "Clear the search to restore the refreshed schedule snapshot.")}
         </div>
       </section>
     </div>`;
@@ -1980,14 +1996,15 @@ function renderFollowUps() {
   return `
     <div class="content-stack">
       <section class="metrics-grid">
-        ${metricCard("Messages scanned", String(state.emailScan.messages), `${state.emailScan.queryWindow} · connected project mailbox.`, "Email")}
-        ${metricCard("Unique threads", String(state.emailScan.threads), "Deduplicated project-related conversations.", "Threads")}
+        ${metricCard("Baseline messages", String(state.emailScan.messages), `${state.emailScan.queryWindow} · connected project mailbox.`, "Email")}
+        ${metricCard("Baseline threads", String(state.emailScan.threads), "Deduplicated project-related conversations.", "Threads")}
+        ${metricCard("Refresh review", String(state.emailScan.incrementalMessages), `${state.emailScan.refreshWindow} · clearly project-relevant messages.`, "New scan")}
         ${metricCard("Act now", String(urgent), "Funding and governance responses requiring immediate handling.", "Now", true)}
         ${metricCard("This week", String(thisWeek), "Meetings, quotes and referrals needing follow-up.", "Queue")}
       </section>
       <div class="callout"><strong>Mailbox coverage</strong>${escapeHtml(state.emailScan.note)}</div>
       <section class="panel panel--flush">
-        <div class="panel-heading"><div><h3>Email coverage by subject</h3><p>All ${state.emailScan.threads} matching threads were classified; the action queue below highlights current follow-up work.</p></div></div>
+        <div class="panel-heading"><div><h3>Baseline email coverage by subject</h3><p>The ${state.emailScan.threads} baseline threads were classified; the August 15 refresh is reflected in the action queue below.</p></div></div>
         <div class="email-coverage">
           ${state.emailScan.categories.map((item) => `<div><span>${escapeHtml(item.label)}</span><strong>${item.count}</strong></div>`).join("")}
         </div>
