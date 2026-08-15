@@ -7,7 +7,7 @@
     <meta name="referrer" content="no-referrer" />
     <meta
       http-equiv="Content-Security-Policy"
-      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'none'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"
+      content="default-src 'self'; script-src 'self'; style-src 'self'; img-src 'self' data:; connect-src 'self'; worker-src 'self'; object-src 'none'; base-uri 'none'; form-action 'self'; frame-ancestors 'none'"
     />
     <title>Shelly’s Bistro — RTE Project Command Centre</title>
     <link rel="stylesheet" href="styles.css" />
@@ -27,7 +27,7 @@
 
         <div class="confidential-chip">
           <span class="status-dot"></span>
-          Confidential · local workspace
+          Confidential · private workspace
         </div>
 
         <nav class="nav-list" id="primaryNav">
@@ -35,50 +35,55 @@
             <span class="nav-icon" aria-hidden="true">01</span>
             <span>Overview</span>
           </button>
-          <button class="nav-item" data-view="workplan" type="button">
+          <button class="nav-item" data-view="tasks" type="button">
             <span class="nav-icon" aria-hidden="true">02</span>
+            <span>Task assignments</span>
+            <span class="nav-count nav-count--alert" id="taskAssignmentCount">0</span>
+          </button>
+          <button class="nav-item" data-view="workplan" type="button">
+            <span class="nav-icon" aria-hidden="true">03</span>
             <span>Workplan</span>
             <span class="nav-count" id="workplanCount">0</span>
           </button>
           <button class="nav-item" data-view="equipment" type="button">
-            <span class="nav-icon" aria-hidden="true">03</span>
+            <span class="nav-icon" aria-hidden="true">04</span>
             <span>Equipment &amp; prices</span>
             <span class="nav-count" id="equipmentCount">0</span>
           </button>
           <button class="nav-item" data-view="production" type="button">
-            <span class="nav-icon" aria-hidden="true">04</span>
+            <span class="nav-icon" aria-hidden="true">05</span>
             <span>Production flow</span>
           </button>
           <button class="nav-item" data-view="innovation" type="button">
-            <span class="nav-icon" aria-hidden="true">05</span>
+            <span class="nav-icon" aria-hidden="true">06</span>
             <span>Research &amp; innovation</span>
             <span class="nav-count" id="innovationCount">0</span>
           </button>
           <button class="nav-item" data-view="market" type="button">
-            <span class="nav-icon" aria-hidden="true">06</span>
+            <span class="nav-icon" aria-hidden="true">07</span>
             <span>Market &amp; LOI targets</span>
             <span class="nav-count" id="targetCount">0</span>
           </button>
           <button class="nav-item" data-view="funding" type="button">
-            <span class="nav-icon" aria-hidden="true">07</span>
+            <span class="nav-icon" aria-hidden="true">08</span>
             <span>Funding &amp; budget</span>
           </button>
           <button class="nav-item" data-view="opportunities" type="button">
-            <span class="nav-icon" aria-hidden="true">08</span>
+            <span class="nav-icon" aria-hidden="true">09</span>
             <span>Live funding</span>
             <span class="nav-count" id="fundingOpportunityCount">0</span>
           </button>
           <button class="nav-item" data-view="calendar" type="button">
-            <span class="nav-icon" aria-hidden="true">09</span>
+            <span class="nav-icon" aria-hidden="true">10</span>
             <span>Meeting schedule</span>
             <span class="nav-count" id="calendarCount">0</span>
           </button>
           <button class="nav-item" data-view="stakeholders" type="button">
-            <span class="nav-icon" aria-hidden="true">10</span>
+            <span class="nav-icon" aria-hidden="true">11</span>
             <span>People &amp; outreach</span>
           </button>
           <button class="nav-item" data-view="followups" type="button">
-            <span class="nav-icon" aria-hidden="true">11</span>
+            <span class="nav-icon" aria-hidden="true">12</span>
             <span>Email follow-ups</span>
             <span class="nav-count nav-count--alert" id="followUpCount">0</span>
           </button>
@@ -86,7 +91,7 @@
 
         <div class="sidebar-footer">
           <p>Connected workspace</p>
-          <span>Workplan, funding, meetings and follow-ups in one place.</span>
+          <span>Shared tasks, workplan, funding, meetings and follow-ups in one place.</span>
           <button class="text-button" id="resetDataBtn" type="button">Restore seeded workspace</button>
         </div>
       </aside>
@@ -132,62 +137,54 @@
       <form method="dialog" id="recordForm">
         <div class="dialog-header">
           <div>
-            <p class="eyebrow">Manual project entry</p>
-            <h2>Add a project record</h2>
+            <p class="eyebrow">Shared assignment</p>
+            <h2>Assign a task</h2>
           </div>
           <button class="icon-button" type="button" data-close-dialog="recordDialog" aria-label="Close">Close</button>
         </div>
 
-        <p class="form-note">New entries are saved as drafts. A source reference is required before approval.</p>
+        <p class="form-note">The task is added to the shared task list immediately. Richard receives a push notification after notifications are enabled on his device.</p>
 
         <div class="form-grid">
           <label class="field field--wide">
-            <span>Record title</span>
-            <input name="title" required maxlength="120" placeholder="e.g. Fire-suppression design quote received" />
+            <span>Task</span>
+            <input name="title" required maxlength="140" placeholder="e.g. Confirm the fire-suppression design quote" />
           </label>
           <label class="field">
-            <span>Record type</span>
-            <select name="type" required>
-              <option value="Task">Task</option>
-              <option value="Decision">Decision</option>
-              <option value="Risk">Risk / blocker</option>
-              <option value="Outreach">Outreach</option>
-              <option value="Evidence">Evidence</option>
+            <span>Assigned to</span>
+            <select name="assignee" required>
+              <option value="Richard">Richard</option>
+              <option value="Cat">Cat</option>
             </select>
           </label>
           <label class="field">
-            <span>Truth state</span>
-            <select name="status" required>
-              <option value="Proposed">Proposed / planned</option>
-              <option value="Identified">Identified, not contacted</option>
-              <option value="In discussion">In discussion, not committed</option>
-              <option value="Applied">Submitted / applied, not approved</option>
-              <option value="In progress">In progress</option>
-              <option value="Completed">Completed action</option>
-              <option value="Missing information">Missing information</option>
+            <span>Assigned by</span>
+            <select name="createdBy" required>
+              <option value="Cat">Cat</option>
+              <option value="Richard">Richard</option>
             </select>
           </label>
           <label class="field">
-            <span>Owner</span>
-            <input name="owner" maxlength="80" placeholder="Unassigned" />
+            <span>Priority</span>
+            <select name="priority" required>
+              <option value="High">High</option>
+              <option value="Normal" selected>Normal</option>
+              <option value="Low">Low</option>
+            </select>
           </label>
           <label class="field">
-            <span>Source name</span>
-            <input name="source" maxlength="120" placeholder="Document, email, call note…" />
+            <span>Due date</span>
+            <input name="dueDate" type="date" />
           </label>
           <label class="field field--wide">
-            <span>Source locator</span>
-            <input name="locator" maxlength="160" placeholder="Page, section, sheet tab/row, message date…" />
-          </label>
-          <label class="field field--wide">
-            <span>Notes</span>
-            <textarea name="notes" rows="4" maxlength="1000" placeholder="State what is known without implying a commitment or completion."></textarea>
+            <span>Details</span>
+            <textarea name="details" rows="5" maxlength="2000" placeholder="Add the outcome, links, context, or next step Richard needs."></textarea>
           </label>
         </div>
 
         <div class="dialog-actions">
           <button class="button button--ghost" type="button" data-close-dialog="recordDialog">Cancel</button>
-          <button class="button button--primary" type="submit" value="save">Save draft</button>
+          <button class="button button--primary" type="submit" value="save">Assign task</button>
         </div>
       </form>
     </dialog>

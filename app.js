@@ -2,6 +2,26 @@
 
 const STORAGE_KEY = "shellys-rte-command-centre-v11";
 const SOURCE_DB = "shellys-rte-source-vault-v1";
+const TASK_USER_KEY = "shellys-rte-task-user-v1";
+const TASK_PUSH_PERSON_KEY = "shellys-rte-push-person-v1";
+
+function savedTaskUser() {
+  try {
+    const saved = localStorage.getItem(TASK_USER_KEY);
+    return ["Cat", "Richard"].includes(saved) ? saved : "Cat";
+  } catch (_error) {
+    return "Cat";
+  }
+}
+
+function savedPushPerson() {
+  try {
+    const saved = localStorage.getItem(TASK_PUSH_PERSON_KEY);
+    return ["Cat", "Richard"].includes(saved) ? saved : "";
+  } catch (_error) {
+    return "";
+  }
+}
 
 const seedState = {
   version: 1,
@@ -1503,11 +1523,24 @@ const seedState = {
 };
 
 const ui = {
-  view: "overview",
+  view: new URLSearchParams(window.location.search).get("view") === "tasks" ? "tasks" : "overview",
   workplanFilter: "All",
   search: "",
   activeRecordId: null,
   pendingSourceId: null,
+  taskTargetId: new URLSearchParams(window.location.search).get("task") || "",
+};
+
+const taskHub = {
+  tasks: [],
+  loading: true,
+  error: "",
+  currentUser: savedTaskUser(),
+  pushPerson: savedPushPerson(),
+  pushSubscribed: false,
+  pushBusy: false,
+  stream: null,
+  serviceWorker: null,
 };
 
 let state = loadState();
@@ -1541,6 +1574,160 @@ function loadState() {
 function saveState() {
   localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
   updateNavCounts();
+}
+
+async function taskApi(path, options = {}) {
+  const response = await fetch(path, {
+    ...options,
+    headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+  });
+  const payload = await response.json().catch(() => ({}));
+  if (!response.ok) throw new Error(payload.error || "The shared task service could not complete the request.");
+  return payload;
+}
+
+function sortSharedTasks() {
+  const priority = { High: 0, Normal: 1, Low: 2 };
+  taskHub.tasks.sort((left, right) => {
+    const completionDifference = Number(left.status === "Completed") - Number(right.status === "Completed");
+    if (completionDifference) return completionDifference;
+    const priorityDifference = (priority[left.priority] ?? 1) - (priority[right.priority] ?? 1);
+    if (priorityDifference) return priorityDifference;
+    if (left.dueDate && right.dueDate && left.dueDate !== right.dueDate) return left.dueDate.localeCompare(right.dueDate);
+    if (left.dueDate !== right.dueDate) return left.dueDate ? -1 : 1;
+    return String(right.createdAt).localeCompare(String(left.createdAt));
+  });
+}
+
+function upsertSharedTask(task) {
+  const index = taskHub.tasks.findIndex((item) => item.id === task.id);
+  if (index >= 0) taskHub.tasks[index] = task;
+  else taskHub.tasks.push(task);
+  sortSharedTasks();
+}
+
+async function loadSharedTasks() {
+  try {
+    const payload = await taskApi("/api/tasks");
+    taskHub.tasks = Array.isArray(payload.tasks) ? payload.tasks : [];
+    sortSharedTasks();
+    taskHub.error = "";
+  } catch (error) {
+    taskHub.error = error.message;
+  } finally {
+    taskHub.loading = false;
+    render();
+  }
+}
+
+function connectTaskStream() {
+  if (!("EventSource" in window) || taskHub.stream) return;
+  taskHub.stream = new EventSource("/api/tasks/events");
+  ["task-created", "task-updated"].forEach((eventName) => {
+    taskHub.stream.addEventListener(eventName, (event) => {
+      const task = JSON.parse(event.data);
+      const isNewForThisUser = eventName === "task-created" && task.assignee === taskHub.currentUser;
+      upsertSharedTask(task);
+      render();
+      if (isNewForThisUser) showToast(`New task from ${task.createdBy}: ${task.title}`);
+    });
+  });
+}
+
+function urlBase64ToUint8Array(value) {
+  const padding = "=".repeat((4 - (value.length % 4)) % 4);
+  const base64 = (value + padding).replaceAll("-", "+").replaceAll("_", "/");
+  const raw = window.atob(base64);
+  return Uint8Array.from([...raw].map((character) => character.charCodeAt(0)));
+}
+
+async function prepareTaskPush() {
+  if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) return;
+  try {
+    taskHub.serviceWorker = await navigator.serviceWorker.register("/service-worker.js");
+    const subscription = await taskHub.serviceWorker.pushManager.getSubscription();
+    taskHub.pushSubscribed = Boolean(subscription && taskHub.pushPerson === taskHub.currentUser);
+  } catch (_error) {
+    taskHub.pushSubscribed = false;
+  }
+  if (ui.view === "tasks") render();
+}
+
+async function enablePushForCurrentUser() {
+  if (taskHub.pushBusy) return;
+  if (!("serviceWorker" in navigator) || !("PushManager" in window) || !("Notification" in window)) {
+    showToast("This browser does not support push notifications.");
+    return;
+  }
+  if (!window.isSecureContext) {
+    showToast("Push notifications require HTTPS or localhost.");
+    return;
+  }
+  taskHub.pushBusy = true;
+  render();
+  try {
+    const permission = await Notification.requestPermission();
+    if (permission !== "granted") throw new Error("Notifications were not enabled in this browser.");
+    taskHub.serviceWorker ||= await navigator.serviceWorker.register("/service-worker.js");
+    const { publicKey } = await taskApi("/api/push/config");
+    let subscription = await taskHub.serviceWorker.pushManager.getSubscription();
+    if (!subscription) {
+      subscription = await taskHub.serviceWorker.pushManager.subscribe({
+        userVisibleOnly: true,
+        applicationServerKey: urlBase64ToUint8Array(publicKey),
+      });
+    }
+    await taskApi("/api/push/subscribe", {
+      method: "POST",
+      body: JSON.stringify({ person: taskHub.currentUser, subscription: subscription.toJSON() }),
+    });
+    taskHub.pushPerson = taskHub.currentUser;
+    taskHub.pushSubscribed = true;
+    localStorage.setItem(TASK_PUSH_PERSON_KEY, taskHub.currentUser);
+    showToast(`${taskHub.currentUser} will receive task notifications on this device.`);
+  } catch (error) {
+    showToast(error.message);
+  } finally {
+    taskHub.pushBusy = false;
+    render();
+  }
+}
+
+function setTaskUser(person) {
+  if (!["Cat", "Richard"].includes(person)) return;
+  taskHub.currentUser = person;
+  taskHub.pushSubscribed = taskHub.pushPerson === person && "Notification" in window && Notification.permission === "granted";
+  localStorage.setItem(TASK_USER_KEY, person);
+  render();
+}
+
+function openTaskDialog() {
+  ui.view = "tasks";
+  render();
+  const form = document.querySelector("#recordForm");
+  form.elements.createdBy.value = taskHub.currentUser;
+  form.elements.assignee.value = taskHub.currentUser === "Cat" ? "Richard" : "Cat";
+  recordDialog.showModal();
+  form.elements.title.focus();
+}
+
+async function updateSharedTaskStatus(taskId, status) {
+  try {
+    const payload = await taskApi(`/api/tasks/${encodeURIComponent(taskId)}`, {
+      method: "PATCH",
+      body: JSON.stringify({ status }),
+    });
+    upsertSharedTask(payload.task);
+    render();
+    showToast(`Task marked ${status.toLowerCase()}.`);
+  } catch (error) {
+    showToast(error.message);
+  }
+}
+
+async function initializeTaskCentre() {
+  connectTaskStream();
+  await Promise.all([loadSharedTasks(), prepareTaskPush()]);
 }
 
 function openSourceVault() {
@@ -1714,6 +1901,7 @@ function contractorRecords() {
 }
 
 function updateNavCounts() {
+  document.querySelector("#taskAssignmentCount").textContent = taskHub.tasks.filter((task) => task.assignee === "Richard" && task.status !== "Completed").length;
   document.querySelector("#workplanCount").textContent = projectAssignments().length;
   document.querySelector("#equipmentCount").textContent = state.equipmentData.categories;
   document.querySelector("#innovationCount").textContent = state.innovationData.programs.length;
@@ -1737,6 +1925,7 @@ function render() {
   document.querySelectorAll(".nav-item").forEach((item) => item.classList.toggle("is-active", item.dataset.view === ui.view));
   const views = {
     overview: { title: "Expansion overview", eyebrow: "Project controls", render: renderOverview },
+    tasks: { title: "Task assignments", eyebrow: "Cat → Richard shared queue", render: renderTaskAssignments },
     workplan: { title: "Google Sheet workplan", eyebrow: "Connected delivery plan", render: renderWorkplan },
     equipment: { title: "Equipment & prices", eyebrow: "64-machine procurement plan", render: renderEquipment },
     production: { title: "Production breakdown", eyebrow: "One-million-meal flow", render: renderProduction },
@@ -1936,6 +2125,124 @@ function fundingBar() {
         ${state.funding.map((item) => `<div class="funding-segment funding-segment--${escapeHtml(item.id)}"><div><strong>${item.percent}% · ${escapeHtml(item.label)}</strong><span>${formatMoney(item.amount, true)}</span></div></div>`).join("")}
       </div>
       <div class="callout"><strong>Corrected financing allocation</strong>Owner equity totals CA$1.0M, proposed debt is CA$8.75M and the proposed grant/contribution layer is CA$15.25M. The stack reconciles to CA$25.0M; only the allocation is confirmed, not availability or approval.</div>
+    </div>`;
+}
+
+function localIsoDate(date = new Date()) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return `${year}-${month}-${day}`;
+}
+
+function formatTaskDate(value) {
+  if (!value) return "No due date";
+  return new Intl.DateTimeFormat("en-CA", { month: "short", day: "numeric", year: "numeric" }).format(new Date(`${value}T12:00:00`));
+}
+
+function sharedTaskMatchesSearch(task) {
+  return !ui.search || Object.values(task).join(" ").toLocaleLowerCase().includes(ui.search.toLocaleLowerCase());
+}
+
+function taskNotificationSummary() {
+  if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) {
+    return { state: "Unavailable", detail: "This browser does not support web push." };
+  }
+  if (Notification.permission === "denied") {
+    return { state: "Blocked", detail: "Allow notifications in the browser’s site settings, then try again." };
+  }
+  if (taskHub.pushSubscribed) {
+    return { state: "Enabled", detail: `${taskHub.currentUser} receives new-task alerts on this device.` };
+  }
+  return { state: "Not enabled", detail: `Enable alerts while this device is set to ${taskHub.currentUser}.` };
+}
+
+function renderSharedTaskCard(task) {
+  const overdue = task.dueDate && task.dueDate < localIsoDate() && task.status !== "Completed";
+  const isTarget = task.id === ui.taskTargetId;
+  const nextAction = task.status === "Assigned"
+    ? { label: "Start task", status: "In progress" }
+    : task.status === "In progress"
+      ? { label: "Mark complete", status: "Completed" }
+      : { label: "Reopen", status: "Assigned" };
+
+  return `
+    <article class="shared-task-card${isTarget ? " is-target" : ""}${task.status === "Completed" ? " is-complete" : ""}">
+      <div class="shared-task-card__top">
+        <span class="task-priority" data-priority="${escapeHtml(task.priority)}">${escapeHtml(task.priority)} priority</span>
+        ${statusBadge(task.status)}
+      </div>
+      <div>
+        <h4>${escapeHtml(task.title)}</h4>
+        <p>${escapeHtml(task.details || "No additional details supplied.")}</p>
+      </div>
+      <div class="shared-task-card__meta">
+        <span><strong>Assigned to</strong>${escapeHtml(task.assignee)}</span>
+        <span><strong>Assigned by</strong>${escapeHtml(task.createdBy)}</span>
+        <span class="${overdue ? "is-overdue" : ""}"><strong>Due</strong>${escapeHtml(formatTaskDate(task.dueDate))}${overdue ? " · overdue" : ""}</span>
+      </div>
+      <div class="shared-task-card__actions">
+        <small>Updated ${escapeHtml(new Intl.DateTimeFormat("en-CA", { month: "short", day: "numeric", hour: "numeric", minute: "2-digit" }).format(new Date(task.updatedAt)))}</small>
+        <button class="button button--ghost" type="button" data-task-id="${escapeHtml(task.id)}" data-task-status="${escapeHtml(nextAction.status)}">${escapeHtml(nextAction.label)}</button>
+      </div>
+    </article>`;
+}
+
+function renderTaskAssignments() {
+  const tasks = taskHub.tasks.filter(sharedTaskMatchesSearch);
+  const richardTasks = taskHub.tasks.filter((task) => task.assignee === "Richard");
+  const openRichardTasks = richardTasks.filter((task) => task.status !== "Completed");
+  const dueLimit = new Date();
+  dueLimit.setDate(dueLimit.getDate() + 7);
+  const dueLimitIso = localIsoDate(dueLimit);
+  const dueSoon = openRichardTasks.filter((task) => task.dueDate && task.dueDate <= dueLimitIso).length;
+  const highPriority = openRichardTasks.filter((task) => task.priority === "High").length;
+  const completed = richardTasks.filter((task) => task.status === "Completed").length;
+  const notification = taskNotificationSummary();
+
+  return `
+    <div class="content-stack task-centre-view">
+      <section class="task-centre-hero">
+        <div>
+          <p class="eyebrow">Cat → Richard</p>
+          <h3>Assign the next move. Keep Richard’s list current.</h3>
+          <p>New tasks are saved to the shared task service, appear here in real time, and trigger a browser push after Richard enables notifications on his device.</p>
+        </div>
+        <button class="button button--primary" type="button" data-open-task-dialog>Assign a task</button>
+      </section>
+
+      <section class="metrics-grid" aria-label="Shared task metrics">
+        ${metricCard("Richard open", String(openRichardTasks.length), "Assigned or in-progress tasks in the shared queue.", "Live")}
+        ${metricCard("High priority", String(highPriority), "Open Richard tasks marked high priority.", "Attention")}
+        ${metricCard("Due within 7 days", String(dueSoon), "Includes overdue tasks that remain open.", "Due")}
+        ${metricCard("Completed", String(completed), "Richard assignments marked complete.", "Done", true)}
+      </section>
+
+      <section class="task-setup-grid">
+        <article class="panel task-device-panel">
+          <div class="panel-heading"><div><h3>Who is using this device?</h3><p>This controls whose alerts are registered here.</p></div></div>
+          <div class="task-user-switch" role="group" aria-label="Current task user">
+            ${["Cat", "Richard"].map((person) => `<button class="task-user-button${taskHub.currentUser === person ? " is-active" : ""}" type="button" data-task-user="${person}">${person}</button>`).join("")}
+          </div>
+          <p class="task-device-note">Current device: <strong>${escapeHtml(taskHub.currentUser)}</strong>. Cat can assign through <strong>Add record</strong>; Richard can update task status here.</p>
+        </article>
+        <article class="panel task-notification-panel">
+          <div class="notification-state"><span class="notification-state__icon" aria-hidden="true">${taskHub.pushSubscribed ? "✓" : "!"}</span><div><strong>Push ${escapeHtml(notification.state.toLowerCase())}</strong><p>${escapeHtml(notification.detail)}</p></div></div>
+          ${taskHub.currentUser === "Richard" && !taskHub.pushSubscribed ? `<button class="button button--primary" type="button" data-enable-push ${taskHub.pushBusy ? "disabled" : ""}>${taskHub.pushBusy ? "Enabling…" : "Enable Richard notifications"}</button>` : ""}
+          ${taskHub.currentUser === "Cat" ? '<span class="task-notification-hint">Switch this device to Richard before enabling his alerts.</span>' : ""}
+        </article>
+      </section>
+
+      <div class="section-title">
+        <div><h3>Shared task list</h3><p>${tasks.length} shown · ${taskHub.tasks.length} total. Status changes sync to every connected app.</p></div>
+        <button class="button button--primary" type="button" data-open-task-dialog>New task</button>
+      </div>
+
+      ${taskHub.loading ? '<section class="panel">Loading shared tasks…</section>' : ""}
+      ${taskHub.error ? `<section class="callout callout--danger"><strong>Shared task service unavailable</strong>${escapeHtml(taskHub.error)}</section>` : ""}
+      <section class="shared-task-grid" aria-label="Shared task list">
+        ${tasks.map(renderSharedTaskCard).join("") || (!taskHub.loading ? emptyState("No shared tasks yet", "Use Add record or Assign a task to send Richard the first assignment.") : "")}
+      </section>
     </div>`;
 }
 
@@ -2729,6 +3036,7 @@ function exportSnapshot() {
     confidentiality: "Confidential internal project information",
     warning: "Verification states must be read with every record. Proposed, researched, applied or discussed items are not secured facts.",
     data: state,
+    sharedTasks: taskHub.tasks,
   };
   const blob = new Blob([JSON.stringify(snapshot, null, 2)], { type: "application/json" });
   const url = URL.createObjectURL(blob);
@@ -2773,7 +3081,15 @@ document.addEventListener("click", (event) => {
     render();
   }
 
-  if (event.target.closest("[data-open-record-dialog]")) recordDialog.showModal();
+  if (event.target.closest("[data-open-record-dialog], [data-open-task-dialog]")) openTaskDialog();
+
+  const taskUserButton = event.target.closest("[data-task-user]");
+  if (taskUserButton) setTaskUser(taskUserButton.dataset.taskUser);
+
+  if (event.target.closest("[data-enable-push]")) enablePushForCurrentUser();
+
+  const taskStatusButton = event.target.closest("[data-task-status]");
+  if (taskStatusButton) updateSharedTaskStatus(taskStatusButton.dataset.taskId, taskStatusButton.dataset.taskStatus);
 
   const closeDialogButton = event.target.closest("[data-close-dialog]");
   if (closeDialogButton) document.querySelector(`#${closeDialogButton.dataset.closeDialog}`).close();
@@ -2792,7 +3108,7 @@ scrim.addEventListener("click", () => {
 });
 
 document.querySelector("#closeDrawerBtn").addEventListener("click", closeDrawer);
-document.querySelector("#addRecordBtn").addEventListener("click", () => recordDialog.showModal());
+document.querySelector("#addRecordBtn").addEventListener("click", openTaskDialog);
 document.querySelector("#exportBtn").addEventListener("click", exportSnapshot);
 
 document.querySelector("#globalSearch").addEventListener("input", (event) => {
@@ -2808,38 +3124,37 @@ document.querySelector("#sourceFileInput").addEventListener("change", (event) =>
   if (sourceId && file) registerSourceOriginal(sourceId, file);
 });
 
-document.querySelector("#recordForm").addEventListener("submit", (event) => {
+document.querySelector("#recordForm").addEventListener("submit", async (event) => {
   event.preventDefault();
   const data = new FormData(event.currentTarget);
   const title = String(data.get("title") || "").trim();
   if (!title) return;
-  const source = String(data.get("source") || "").trim();
-  const type = String(data.get("type") || "Task");
-  const record = {
-    id: `manual-${Date.now()}`,
-    title,
-    type,
-    status: String(data.get("status") || "Proposed"),
-    owner: String(data.get("owner") || "").trim() || "Unassigned",
-    sourceId: "manual",
-    sourceName: source || "Source not supplied",
-    locator: String(data.get("locator") || "").trim() || "Source locator missing",
-    sourceDate: "Not supplied",
-    notes: String(data.get("notes") || "").trim() || "No notes supplied.",
-    verification: source ? "Pending manual review" : "Missing source",
-    confidence: "Not assessed",
-    official: false,
-    importedAt: new Date().toISOString(),
-    nextAction: source ? "Review against the cited original before approval." : "Attach a source and locator before approval.",
-  };
-  state.records.unshift(record);
-  saveState();
-  event.currentTarget.reset();
-  recordDialog.close();
-  if (["Task", "Milestone"].includes(type)) ui.view = "workplan";
-  if (type === "Outreach") ui.view = "stakeholders";
-  render();
-  showToast("Draft saved locally. It is not part of the official project record yet.");
+  const submitButton = event.currentTarget.querySelector('[type="submit"]');
+  submitButton.disabled = true;
+  try {
+    const payload = await taskApi("/api/tasks", {
+      method: "POST",
+      body: JSON.stringify({
+        title,
+        assignee: String(data.get("assignee") || "Richard"),
+        createdBy: String(data.get("createdBy") || "Cat"),
+        priority: String(data.get("priority") || "Normal"),
+        dueDate: String(data.get("dueDate") || ""),
+        details: String(data.get("details") || "").trim(),
+      }),
+    });
+    upsertSharedTask(payload.task);
+    event.currentTarget.reset();
+    recordDialog.close();
+    ui.view = "tasks";
+    render();
+    const delivery = payload.notification?.delivered || 0;
+    showToast(delivery ? "Task assigned and push notification delivered." : "Task assigned. Richard’s list is updated; enable push on his device for alerts.");
+  } catch (error) {
+    showToast(error.message);
+  } finally {
+    submitButton.disabled = false;
+  }
 });
 
 document.querySelector("#approvalForm").addEventListener("submit", (event) => {
@@ -2894,3 +3209,4 @@ document.addEventListener("keydown", (event) => {
 });
 
 render();
+initializeTaskCentre();

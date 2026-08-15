@@ -1,6 +1,6 @@
 # Shelly’s Bistro — RTE Project Command Centre
 
-A responsive, local-first project-controls application for the proposed institutional ready-to-eat production expansion.
+A responsive, private-first project-controls application for the proposed institutional ready-to-eat production expansion.
 
 The current canonical implementation brief is [MASTER_BUILD_PROMPT.md](MASTER_BUILD_PROMPT.md). Keep it synchronized with approved project corrections, new source imports and material application changes.
 
@@ -11,12 +11,21 @@ Install [Node.js 20+](https://nodejs.org), clone the private repository, and run
 ```powershell
 git clone <private-repository-url>
 Set-Location shellys-rte-command-centre
+npm install
 npm start
 ```
 
 Then open [http://127.0.0.1:4173](http://127.0.0.1:4173). The server binds only to the local computer.
 
 Windows teammates can also run `.\start-app.ps1` after cloning.
+
+## Shared task assignments and push
+
+The **Task assignments** tab adds a server-backed Cat → Richard queue. **Add record** is a shortcut to the assignment form. New tasks appear immediately in every connected app through a live event stream, and Richard can mark them in progress or complete.
+
+For notifications, Richard opens the Task assignments tab on his device, selects **Richard**, and chooses **Enable Richard notifications**. Browser push works on localhost for testing and on HTTPS deployments. The server generates a local VAPID key pair and stores tasks, push subscriptions and keys under the ignored `.data/` directory. Production deployments can instead supply `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` and a durable `SHELLYS_DATA_DIR`.
+
+The default server remains bound to `127.0.0.1`. Cat and Richard can only share the queue when both clients reach the same running server. A real cross-device deployment therefore needs HTTPS, durable storage and organization authentication before use; do not expose the unauthenticated server directly to the public internet.
 
 ## Team workflow
 
@@ -37,6 +46,7 @@ Open a pull request on GitHub and have another teammate review it before merging
 ## What works
 
 - Branded floral interface built from the supplied Shelly’s Bistro logo, with responsive desktop and mobile layouts.
+- Shared Cat → Richard task assignments with live list updates, due dates, priorities, status controls and opt-in browser push notifications.
 - Connected Google Sheet workplan with 18 Shelly’s Bistro assignment rows, Richard’s three assigned items, and the complete six-week `Richard Workplan` tab.
 - Published task chart, global search, funding and budget views, a live list of available project-fit funding, meeting schedule, contact/outreach controls and an email follow-up queue.
 - Equipment & prices tab with the complete 22-category / 64-machine sourcing register, original USD FOB figures, supplemental Canadian landed-cost items, procurement waves and the CA$1.6–1.8M equipment-scope budget.
@@ -47,7 +57,7 @@ Open a pull request on GitHub and have another teammate review it before merging
 - Pending source-review controls remain internal and are intentionally absent from the main navigation and workplan table.
 - Source provenance remains attached to individual records and exports. The dedicated Sources, conflicts and review-queue tabs were removed at the user’s request.
 - Confidential JSON snapshot export with truth and verification state retained on every record.
-- Browser-local persistence; no analytics, trackers, external API calls or public indexing.
+- Browser-local evidence persistence plus server-backed shared tasks; no analytics, trackers or public indexing.
 
 ## Important source limitation
 
@@ -75,4 +85,4 @@ The pasted prompt also ends after the first row of the requested twelve-activity
 
 ## Security boundary
 
-This is a local operational prototype. It includes restrictive browser/server headers, local-only binding, no external connections, and no password collection. Before multi-user or hosted deployment, add organization authentication, role-based permissions, server-side encrypted storage, audit logging, backups, retention rules and approved OAuth integrations for Google Workspace/email. Do not expose this build directly to the public internet.
+This is a private operational prototype. It includes restrictive browser/server headers, local-only binding by default and no password collection. Shared task notifications use the browser push service selected by the user’s browser. Before multi-user or hosted deployment, add organization authentication, role-based permissions, server-side encrypted storage, audit logging, backups, retention rules and approved OAuth integrations for Google Workspace/email. Do not expose this build directly to the public internet.
