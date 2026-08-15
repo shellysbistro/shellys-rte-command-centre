@@ -2,6 +2,8 @@
 
 A responsive, local-first project-controls application for the proposed institutional ready-to-eat production expansion.
 
+The current canonical implementation brief is [MASTER_BUILD_PROMPT.md](MASTER_BUILD_PROMPT.md). Keep it synchronized with approved project corrections, new source imports and material application changes.
+
 ## Run it
 
 Install [Node.js 20+](https://nodejs.org), clone the private repository, and run:
