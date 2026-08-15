@@ -2168,7 +2168,7 @@ function renderInnovation() {
       ${truthBanner()}
       <section class="metrics-grid">
         ${metricCard("Research programs", String(data.programs.length), "Circularity, learner support, inclusive careers and food science.", "Portfolio")}
-        ${metricCard("Engineer promptlets", String(data.promptlets.length), `${p0Count} are foundation-stage P0 investigations.`, "Backlog")}
+        ${metricCard("Research Pipeline", String(data.promptlets.length), `${p0Count} are foundation-stage P0 investigations.`, "Backlog")}
         ${metricCard("Measured waste baseline", "0", "No factory waste volumes have been supplied; measurement comes first.", "Truth", true)}
         ${metricCard("Evidence gates", "4", "Technical, regulatory, ethics and community-governance approval.", "Controls")}
       </section>
@@ -2216,9 +2216,9 @@ function renderInnovation() {
           </table>
         </div>
       </section>
-      <div class="section-title"><div><h3>Engineer promptlets</h3><p>Copy-ready research assignments with a defined discipline, priority and concrete deliverable.</p></div><span class="source-chip">${promptlets.length} shown</span></div>
-      <section class="promptlet-grid" aria-label="Research engineering promptlets">
-        ${promptlets.map((item) => `<article class="promptlet-card"><div class="promptlet-card__top"><span>${escapeHtml(item.id)}</span>${statusBadge(item.priority)}</div><p class="eyebrow">${escapeHtml(item.discipline)}</p><h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(item.prompt)}</p><div><strong>Deliverable</strong><span>${escapeHtml(item.deliverable)}</span></div></article>`).join("") || emptyState("No matching promptlets", "Clear the search to restore the research backlog.")}
+      <div class="section-title"><div><h3>Research Pipeline</h3><p>Copy-ready research assignments with a defined discipline, priority and concrete deliverable.</p></div><span class="source-chip">${promptlets.length} shown</span></div>
+      <section class="promptlet-grid" aria-label="Research Pipeline assignments">
+        ${promptlets.map((item) => `<article class="promptlet-card"><div class="promptlet-card__top"><span>${escapeHtml(item.id)}</span>${statusBadge(item.priority)}</div><p class="eyebrow">${escapeHtml(item.discipline)}</p><h4>${escapeHtml(item.title)}</h4><p>${escapeHtml(item.prompt)}</p><div><strong>Deliverable</strong><span>${escapeHtml(item.deliverable)}</span></div></article>`).join("") || emptyState("No matching research assignments", "Clear the search to restore the Research Pipeline.")}
       </section>
       <div class="callout callout--danger"><strong>Do not claim implementation</strong>This tab is an engineered research portfolio. It does not establish a zero-waste operation, biogas output, scholarship fund, referral partnership, employment placement, safe preservative system or validated shelf life.</div>
     </div>`;

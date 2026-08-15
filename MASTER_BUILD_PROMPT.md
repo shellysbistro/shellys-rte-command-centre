@@ -176,9 +176,9 @@ Create an innovative researcher workspace containing four linked, stage-gated pr
 - As a learner or research partner, I want transparent paid-placement and award concepts so that I can see the support, governance and expected outputs.
 - As a community referral partner, I want a voluntary minimal-data service blueprint so that participants are supported without exposing sensitive case information.
 - As a food scientist or regulator, I want candidate interventions tied to validation gates so that no unsafe formula or shelf-life claim enters production.
-- As a project leader, I want copy-ready engineering promptlets and concrete deliverables so that research can be commissioned and reviewed consistently.
+- As a project leader, I want a copy-ready Research Pipeline with concrete deliverables so that research can be commissioned and reviewed consistently.
 
-**P0 requirements:** four program cards; explicit stage and truth boundary; seven-stream waste register; six-stage employment pathway; four-family preservation matrix; twelve engineer promptlets; official-source links; responsive search; and mobile-contained tables.
+**P0 requirements:** four program cards; explicit stage and truth boundary; seven-stream waste register; six-stage employment pathway; four-family preservation matrix; a twelve-assignment Research Pipeline; official-source links; responsive search; and mobile-contained tables.
 
 **P1 requirements:** editable owners, milestones, study status, attachments, decisions and outcome data after a server-side multi-user data layer exists.
 
@@ -232,11 +232,11 @@ Create an innovative researcher workspace containing four linked, stage-gated pr
 - Track Listeria growth potential, spoilage counts, validated shelf-life days, nutrient retention, sensory acceptance and cost per meal.
 - Cite Health Canada’s permitted-preservatives list and CFIA’s Listeria-control and shelf-life-study guidance.
 
-#### Engineer promptlet backlog
+#### Research Pipeline
 
-Display twelve copy-ready promptlets with priority, discipline, full research assignment and concrete deliverable:
+Display twelve copy-ready research assignments with priority, discipline, full research brief and concrete deliverable:
 
-| ID | Discipline | Promptlet | Required deliverable |
+| ID | Discipline | Research assignment | Required deliverable |
 |---|---|---|---|
 | R01 | Data engineering | Factory material-mass balance | Data dictionary, event model, validation rules and dashboard measures |
 | R02 | Process engineering | Four-week waste characterization | Sampling protocol, station layout, training sheet and QA checks |
@@ -390,7 +390,7 @@ The build is acceptable only when:
 3. Current leadership shows Vince and Cat only.
 4. Workplan reflects the Google Sheet snapshot and publishes the six-week task chart.
 5. Equipment and production views retain source quantities, prices, constraints and uncertainty labels.
-6. Research & innovation displays four research programs, seven unmeasured waste streams, a six-stage voluntary employment pathway, four preservation experiment families and twelve engineer promptlets.
+6. Research & innovation displays four research programs, seven unmeasured waste streams, a six-stage voluntary employment pathway, four preservation experiment families and a twelve-assignment Research Pipeline.
 7. Market displays 20 produce priorities, 56 LOI/MOU targets, PDF-backed menu evidence and the expected-daily-use column.
 8. The produce model shows its assumptions and the approximately 73.64-tonne/day result as an estimate.
 9. People & outreach displays 23 evidence-backed government and education rows.
