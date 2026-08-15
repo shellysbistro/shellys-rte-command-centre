@@ -39,6 +39,8 @@ Open a pull request on GitHub and have another teammate review it before merging
 - Published task chart, global search, funding and budget views, a live list of available project-fit funding, meeting schedule, contact/outreach controls and an email follow-up queue.
 - Equipment & prices tab with the complete 22-category / 64-machine sourcing register, original USD FOB figures, supplemental Canadian landed-cost items, procurement waves and the CA$1.6–1.8M equipment-scope budget.
 - Production flow tab with the quantified one-million-meal/day model, 38/62 hot-cold flow, chilling constraint, space impact and scaling rule.
+- Market & LOI targets tab with a 52-category national produce inventory summary, 20 menu-linked sourcing priorities and all 56 Manitoba LOI/MOU targets across eight tiers.
+- People & outreach includes a 23-row sent-mail tracker covering 13 Manitoba ministerial portfolios, two provincial program/department relationships, seven school divisions and MFNERC.
 - Pending source-review controls remain internal and are intentionally absent from the main navigation and workplan table.
 - Source provenance remains attached to individual records and exports. The dedicated Sources, conflicts and review-queue tabs were removed at the user’s request.
 - Confidential JSON snapshot export with truth and verification state retained on every record.
@@ -46,17 +48,19 @@ Open a pull request on GitHub and have another teammate review it before merging
 
 ## Important source limitation
 
-The four named project documents from the original build brief remain unattached. The Google Sheet is now connected: a read-only snapshot of `Richard Project Management` was imported on August 12, 2026 from the `General` and `Richard Workplan` tabs. The application links back to the live Sheet; changes made there after the snapshot require a refresh/import before they appear locally.
+The four named project documents from the original build brief remain unattached. The Google Sheet is connected: a read-only snapshot of `Richard Project Management` was refreshed on August 15, 2026 from the `General` and `Richard Workplan` tabs. The application links back to the live Sheet; changes made there after the snapshot require a refresh/import before they appear locally.
 
 `Equipment_Report_v2.docx` and `PRODUCTION LOGISTICS BREAKDOWN.docx` were attached and imported on August 12, 2026. Immutable copies are included under `sources/` with their SHA-256 fingerprints. Prices remain in the source currencies and retain approximation/quote labels. A source-level conflict between the blast-chiller landed unit price (~CA$17,000) and the later incremental-unit statement (~CA$6,500) is displayed rather than silently resolved.
 
 On August 12, 2026, the user corrected total owner equity to **CA$1.0M** and directed that the prior CA$5.25M gap be added to grants. The command centre now shows CA$1.0M / 4% owner equity, CA$8.75M / 35% proposed debt and **CA$15.25M / 61% proposed grant/contribution funding**. These are financing-plan allocations, not evidence of awards or lender approval.
 
-Secure Gmail OAuth is connected for `richardc@shellysbistro.com`; the Gmail profile confirms Richard Chimebele. On August 12, 2026, an all-time matching project scan reviewed 410 messages across 184 threads dated March 19–August 11, 2026. Selected funding evidence and current follow-up metadata are included; the application does not store a bulk mailbox copy or any password.
+Secure Gmail OAuth is connected for `richardc@shellysbistro.com`; the Gmail profile confirms Richard Chimebele. The August 11 baseline covered 410 messages across 184 threads, followed by an incremental review through August 15. Selected funding, ministry, school-division and follow-up metadata are included; the application does not store a bulk mailbox copy or any password.
 
-The Meeting schedule is a read-only snapshot of the currently connected primary Google Calendar, which is `richardc@yensbooks.com` rather than the Shelly’s Bistro Gmail account. Likely work meetings are marked for project-relevance confirmation, and no calendar event was created or changed.
+The Meeting schedule is a read-only snapshot of the `richardc@shellysbistro.com` primary Google Calendar. No saved upcoming event was found in the August 15–September 15 search window. One FPEGF lunch proposal is shown from email but is explicitly marked unconfirmed and was not added to Calendar.
 
 The user also supplied `41_Paquin_Contractor_Tracker.xlsx`. Its 11 unique contractor engagements are imported with exact sheet/row provenance, tracker status, quoted ranges, dates and flags. These extracted records remain pending review, and the source workbook is preserved as a read-only copy with its SHA-256 fingerprint. Two internal tracker contradictions are flagged rather than silently resolved.
+
+`Shellys_Bistro_Canada_Produce_Data.xlsx` and `Shellys_LOI_MOU_Target_List_Expanded.xlsx` were imported on August 15, 2026 and preserved under `sources/` with SHA-256 fingerprints. The produce source mixes CAD and USD bases for specified rows, and some HS categories cover multiple products. Blank status cells in the LOI/MOU source are treated as not started unless a matching sent-mail thread supplies contact evidence.
 
 Current project leadership is Vince Bignell and Cat only. Cat’s formal title and contact details were not supplied and are therefore left missing. Richard Chimebele remains identified only as the authenticated Gmail mailbox profile and in historical source notes—not as current leadership.
 

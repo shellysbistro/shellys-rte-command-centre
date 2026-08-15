@@ -1031,6 +1031,47 @@ a:focus-visible {
   min-width: 180px;
 }
 
+.market-table {
+  min-width: 1500px;
+}
+
+.target-table {
+  min-width: 2050px;
+}
+
+.outreach-table {
+  min-width: 1850px;
+}
+
+.market-table td:first-child,
+.target-table td:nth-child(2),
+.outreach-table td:first-child {
+  min-width: 190px;
+}
+
+.market-table td:last-child,
+.target-table td:nth-child(9),
+.outreach-table td:nth-child(7) {
+  min-width: 270px;
+}
+
+.data-table th:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 2;
+}
+
+.data-table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  background: var(--surface, #fff);
+}
+
+.data-table tbody tr:hover td:first-child {
+  background: #fbfaf5;
+}
+
 .cell-subtext {
   display: block;
   margin-top: 4px;

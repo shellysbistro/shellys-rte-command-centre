@@ -1,6 +1,6 @@
 "use strict";
 
-const STORAGE_KEY = "shellys-rte-command-centre-v8";
+const STORAGE_KEY = "shellys-rte-command-centre-v9";
 const SOURCE_DB = "shellys-rte-source-vault-v1";
 
 const seedState = {
@@ -89,6 +89,28 @@ const seedState = {
       reference: "Contractor Tracker!A1:L21 and Sheet1!A1:C23 · imported August 12, 2026 · SHA-256 6395F01FA0FD4B636F4E2D8CF608051FF4F3D9E11E4098B50E28F3171C845A9F",
       relativePath: "sources/41_Paquin_Contractor_Tracker.xlsx",
       sha256: "6395F01FA0FD4B636F4E2D8CF608051FF4F3D9E11E4098B50E28F3171C845A9F",
+    },
+    {
+      id: "produce-data",
+      name: "Shellys_Bistro_Canada_Produce_Data.xlsx",
+      type: "Produce market and supply data",
+      declaredDate: "Data cutoff August 13, 2026",
+      state: "Available",
+      detail: "Seven-sheet workbook with a 52-category Canadian produce inventory, supplier and consumption detail, and 20 Shelly’s priority ingredients with supply-risk and sourcing actions.",
+      reference: "Shellys Priorities!A1:V21 and Master Inventory!A1:M53 · imported August 15, 2026 · SHA-256 8CA9AAED8B79D0638D659EAE99BD526196CFF2E15B2CBE249A9830DB20015B60",
+      relativePath: "sources/Shellys_Bistro_Canada_Produce_Data.xlsx",
+      sha256: "8CA9AAED8B79D0638D659EAE99BD526196CFF2E15B2CBE249A9830DB20015B60",
+    },
+    {
+      id: "loi-targets",
+      name: "Shellys_LOI_MOU_Target_List_Expanded.xlsx",
+      type: "LOI / MOU target pipeline",
+      declaredDate: "Imported August 15, 2026",
+      state: "Available",
+      detail: "Eight-tier Manitoba target list containing 56 institutional, Indigenous, emergency, commercial and supply-chain relationship targets. Blank workbook statuses remain shown as not started unless sent-mail evidence establishes contact.",
+      reference: "LOI-MOU Targets!A4:H68 · imported August 15, 2026 · SHA-256 7C15464EAB9A61475503C656E7AA36416E9813861D07652A5D90C5087233C31E",
+      relativePath: "sources/Shellys_LOI_MOU_Target_List_Expanded.xlsx",
+      sha256: "7C15464EAB9A61475503C656E7AA36416E9813861D07652A5D90C5087233C31E",
     },
     {
       id: "manual",
@@ -884,6 +906,117 @@ const seedState = {
       { week: "Week 6", focus: "Commitment finalization and reporting", objective: "Secure funding commitments.", actions: "Review final responses, calculate projected revenue and grants, and finalize funding commitments for Phase 2 scaling.", deliverable: "Six-week outreach and funding final report." },
     ],
   },
+  marketData: {
+    importedAt: "August 15, 2026",
+    produceSource: "sources/Shellys_Bistro_Canada_Produce_Data.xlsx",
+    targetSource: "sources/Shellys_LOI_MOU_Target_List_Expanded.xlsx",
+    produceInventoryCount: 52,
+    producePriorities: [
+      { produce: "Lettuce", category: "Vegetable/herb", dataYear: "2025", importValue: 682433000, unitValue: 2.7108, importDependence: "High", supplyRisk: "High", season: "MB Jun–Sep; imports dominate Oct–May", menuImportance: "Critical", menuUse: "Bannock taco, veggie burgers and wraps; likely deluxe burgers", attentionScore: 17, action: "Dual-source Canadian greenhouse/field and Mexico/US; quote weekly and keep menu substitution rules." },
+      { produce: "Tomatoes", category: "Vegetable/herb", dataYear: "2025", importValue: 198398000, unitValue: 1.7737, importDependence: "Medium", supplyRisk: "Medium", season: "MB field Aug–Sep; Canadian greenhouse broader season; imports peak winter", menuImportance: "Critical", menuUse: "Bannock taco, taco poutine/rice, burgers and wraps", attentionScore: 15, action: "Dual-source Canadian greenhouse/field and Mexico/US; quote weekly and keep menu substitution rules." },
+      { produce: "White potatoes", category: "Vegetable/herb", dataYear: "2024/25", importValue: 82103900, unitValue: 0.7169, importDependence: "Low/Medium", supplyRisk: "Low", season: "MB harvest Aug–Oct; storage supply most/all year", menuImportance: "Critical", menuUse: "Fries, poutines and combo sides", attentionScore: 13, action: "Prioritize Manitoba/Canadian potatoes or a domestic fry supplier; contract volume and quality specs." },
+      { produce: "Celery", category: "Vegetable/herb", dataYear: "2025", importValue: 98407000, unitValue: 1.3581, importDependence: "High", supplyRisk: "High", season: "Limited local Jul–Sep; imports most of year", menuImportance: "Medium", menuUse: "Likely soup and salad prep", attentionScore: 13, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
+      { produce: "Onions and shallots", category: "Vegetable/herb", dataYear: "2025", importValue: 292812000, unitValue: 1.1536, importDependence: "Low/Medium", supplyRisk: "Medium", season: "MB harvest Aug–Sep; storage into winter; imports bridge gaps", menuImportance: "High", menuUse: "Likely soup, burger and sauce prep; onion rings are prepared", attentionScore: 12, action: "Buy Manitoba/Canadian in season and storage crop; set grade/yield specs and monitor shrink." },
+      { produce: "Cabbage / kale", category: "Vegetable/herb", dataYear: "2025", importValue: 269920000, unitValue: 2.3365, importDependence: "Low/Medium", supplyRisk: "Medium", season: "MB Jul–Oct; storage cabbage into winter", menuImportance: "High", menuUse: "Coleslaw served with burger and wrap combos", attentionScore: 12, action: "Buy Manitoba/Canadian in season and storage crop; set grade/yield specs and monitor shrink." },
+      { produce: "Dill / mixed herbs", category: "Vegetable/herb", dataYear: "2024", currency: "USD", importValue: 215177377, unitValue: 1.7855, importDependence: "Medium", supplyRisk: "Medium", season: "MB Jun–Sep; greenhouse/imported or frozen/dried off-season", menuImportance: "High", menuUse: "Honey-dill sauce; repeated chicken/poutine application", attentionScore: 12, action: "Standardize the honey-dill recipe; trial frozen/local dill and track sauce yield." },
+      { produce: "Garlic", category: "Vegetable/herb", dataYear: "2025", importValue: 97200000, unitValue: 3.3610, importDependence: "High", supplyRisk: "Medium", season: "Canadian harvest Jul–Aug; stored; imports year-round", menuImportance: "Medium", menuUse: "Likely sauces, soup and savoury prep", attentionScore: 12, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
+      { produce: "Blueberries / cranberries", category: "Fruit", dataYear: "2024", currency: "USD", importValue: 401753762, unitValue: 4.9184, importDependence: "Low/Medium", supplyRisk: "Medium", season: "Canadian berries summer/fall; frozen Canadian year-round", menuImportance: "High", menuUse: "Citrus blueberry spread and cheesecake; Indigenous seasonal opportunity", attentionScore: 11, action: "Use Canadian frozen berries for spreads/desserts; reserve fresh imports for garnish." },
+      { produce: "Carrots and turnips", category: "Vegetable/herb", dataYear: "2025", importValue: 180020000, unitValue: 1.6334, importDependence: "Low/Medium", supplyRisk: "Low", season: "MB Jul–Oct; storage supply through winter", menuImportance: "High", menuUse: "Taco rice; likely soup and fried-rice prep", attentionScore: 11, action: "Buy Manitoba/Canadian in season and storage crop; set grade/yield specs and monitor shrink." },
+      { produce: "Avocados", category: "Fruit", dataYear: "2024", importValue: 420684000, unitValue: 3.7250, importDependence: "High", supplyRisk: "High", season: "Imported year-round", menuImportance: "Low", menuUse: "Potential wraps, tacos and specials", attentionScore: 11, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
+      { produce: "Peppers", category: "Vegetable/herb", dataYear: "2025", importValue: 225422000, unitValue: 2.6232, importDependence: "Medium", supplyRisk: "Medium", season: "MB Aug–Sep; Canadian greenhouse broader; imports winter", menuImportance: "Medium", menuUse: "Likely fried rice, salsa and rotating specials", attentionScore: 11, action: "Dual-source Canadian greenhouse/field and Mexico/US; quote weekly and keep menu substitution rules." },
+      { produce: "Cucumbers", category: "Vegetable/herb", dataYear: "2025", importValue: 34489000, unitValue: 2.1811, importDependence: "Medium", supplyRisk: "Medium", season: "MB Jul–Sep; Canadian greenhouse broader; imports winter", menuImportance: "Medium", menuUse: "Likely salads, pickles and garnish", attentionScore: 11, action: "Dual-source Canadian greenhouse/field and Mexico/US; quote weekly and keep menu substitution rules." },
+      { produce: "Strawberries", category: "Fruit", dataYear: "2024", importValue: 734907000, unitValue: 4.6794, importDependence: "High", supplyRisk: "Medium", season: "MB Jun–Jul; imports most of year", menuImportance: "Low", menuUse: "Potential desserts and catering", attentionScore: 10, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
+      { produce: "Lemons and limes", category: "Fruit", dataYear: "2024", importValue: 213235000, unitValue: 1.7866, importDependence: "High", supplyRisk: "Medium", season: "Imported year-round", menuImportance: "Medium", menuUse: "Citrus blueberry spread/cheesecake; sauces and drinks", attentionScore: 10, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
+      { produce: "Bananas", category: "Fruit", dataYear: "2024", importValue: 711938000, unitValue: 1.1287, importDependence: "High", supplyRisk: "Medium", season: "Imported year-round", menuImportance: "Low", menuUse: "Potential breakfast, dessert or catering fruit", attentionScore: 9, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
+      { produce: "Broccoli and cauliflower", category: "Vegetable/herb", dataYear: "2025", importValue: 311205000, unitValue: 2.1014, importDependence: "Medium", supplyRisk: "Medium", season: "MB/Canada Jul–Oct; imports mainly Nov–Jun", menuImportance: "Low", menuUse: "Likely vegetable sides and soup rotation", attentionScore: 9, action: "Buy seasonally; track case price, usable yield and waste before changing suppliers." },
+      { produce: "Peas", category: "Vegetable/herb", dataYear: "2025", importValue: 82179000, unitValue: 4.2238, importDependence: "Medium", supplyRisk: "Medium", season: "MB fresh Jun–Aug; frozen year-round", menuImportance: "Medium", menuUse: "Taco rice and fried-rice mix", attentionScore: 9, action: "Buy seasonally; track case price, usable yield and waste before changing suppliers." },
+      { produce: "Grapes", category: "Fruit", dataYear: "2024", importValue: 913605000, unitValue: 4.3118, importDependence: "High", supplyRisk: "Medium", season: "Imported year-round; Canadian late summer/fall", menuImportance: "Low", menuUse: "Potential catering fruit trays", attentionScore: 8, action: "Use at least two distributors/origins and avoid fixed menu reliance during supply spikes." },
+      { produce: "Apples", category: "Fruit", dataYear: "2024", importValue: 269485000, unitValue: 1.6347, importDependence: "Low/Medium", supplyRisk: "Low", season: "Canadian Aug–Nov; controlled storage year-round", menuImportance: "Low", menuUse: "Potential catering, dessert and seasonal specials", attentionScore: 7, action: "Buy Manitoba/Canadian in season and storage crop; set grade/yield specs and monitor shrink." },
+    ],
+    loiTargets: [
+      { tier: 1, organization: "Winnipeg School Division", sector: "School nutrition", offer: "Breakfast, lunch and snack", angle: "Largest division in Manitoba; delivers the nutrition program directly.", contactRole: "Superintendent / nutrition lead", indigFit: "Strong" },
+      { tier: 1, organization: "Frontier School Division", sector: "School nutrition", offer: "RTE meals for remote schools", angle: "Remote and northern schools with limited kitchen capacity.", contactRole: "Superintendent / Secretary-Treasurer", indigFit: "Strong" },
+      { tier: 1, organization: "River East Transcona School Division", sector: "School nutrition", offer: "Breakfast, lunch and snack", angle: "Large Winnipeg-metro division.", contactRole: "Nutrition coordinator", indigFit: "Strong" },
+      { tier: 1, organization: "Pembina Trails School Division", sector: "School nutrition", offer: "Breakfast, lunch and snack", angle: "Already runs a Universal Nutrition Program.", contactRole: "Nutrition coordinator", indigFit: "Strong" },
+      { tier: 1, organization: "Seven Oaks School Division", sector: "School nutrition", offer: "Breakfast, lunch and snack", angle: "Winnipeg-metro division with a strong equity focus.", contactRole: "Secretary-Treasurer", indigFit: "Strong" },
+      { tier: 1, organization: "Louis Riel School Division", sector: "School nutrition", offer: "Breakfast, lunch and snack", angle: "Large southeast Winnipeg division.", contactRole: "Nutrition coordinator", indigFit: "Strong" },
+      { tier: 1, organization: "St. James-Assiniboia School Division", sector: "School nutrition", offer: "Breakfast, lunch and snack", angle: "West Winnipeg division.", contactRole: "Secretary-Treasurer", indigFit: "Strong" },
+      { tier: 1, organization: "Division scolaire franco-manitobaine", sector: "School nutrition", offer: "Breakfast, lunch and snack", angle: "Province-wide French division; French menus can differentiate.", contactRole: "Direction / nutrition", indigFit: "Strong" },
+      { tier: 1, organization: "Sunrise / Lord Selkirk / Interlake school divisions", sector: "School nutrition", offer: "Breakfast, lunch and snack", angle: "Divisions surrounding Winnipeg and deliverable from day one.", contactRole: "Secretary-Treasurer for each", indigFit: "Strong" },
+      { tier: 1, organization: "Hanover / Seine River / Red River Valley / Garden Valley school divisions", sector: "School nutrition", offer: "Breakfast, lunch and snack", angle: "Southern Manitoba divisions within delivery range.", contactRole: "Secretary-Treasurer for each", indigFit: "Strong" },
+      { tier: 1, organization: "Brandon / Rolling River / Southwest Horizon school divisions", sector: "School nutrition", offer: "Breakfast, lunch and snack", angle: "Western Manitoba cluster supporting a Brandon distribution route.", contactRole: "Secretary-Treasurer for each", indigFit: "Medium" },
+      { tier: 1, organization: "Kelsey / Flin Flon / Mystery Lake / Swan Valley school divisions", sector: "School nutrition", offer: "Northern RTE meals", angle: "Northern divisions with higher food costs and access gaps.", contactRole: "Superintendent for each", indigFit: "Strong" },
+      { tier: 1, organization: "MFNERC / band-operated First Nations schools", sector: "School nutrition", offer: "RTE school meals", angle: "Direct Indigenous education and on-reserve school fit.", contactRole: "MFNERC nutrition / education", indigFit: "Strong" },
+      { tier: 1, organization: "Child Nutrition Council of Manitoba", sector: "School nutrition", offer: "Program partnership", angle: "A province-wide MOU could strengthen credibility and channel access.", contactRole: "Executive Director", indigFit: "Strong" },
+      { tier: 1, organization: "Manitoba Justice — Corrections", sector: "Correctional food", offer: "Daily facility meals", angle: "Year-round institutional volume; convert prior proposal into an LOI.", contactRole: "ADM Corrections / procurement", indigFit: "Strong" },
+      { tier: 2, organization: "Shared Health Manitoba", sector: "Health", offer: "Patient and cafeteria meals", angle: "Provincial body coordinating hospital food services.", contactRole: "Provincial food services", indigFit: "Medium" },
+      { tier: 2, organization: "Winnipeg Regional Health Authority", sector: "Health", offer: "Facility meals", angle: "Hospitals and health facilities across Winnipeg.", contactRole: "Support / food services", indigFit: "Medium" },
+      { tier: 2, organization: "Prairie Mountain / Interlake-Eastern / Southern / Northern health regions", sector: "Regional health", offer: "Facility meals", angle: "Four regional health authorities outside Winnipeg.", contactRole: "Food services for each", indigFit: "Medium" },
+      { tier: 2, organization: "HSC / St. Boniface / Grace / Concordia / Seven Oaks / Victoria hospitals", sector: "Hospitals", offer: "Patient and retail meals", angle: "Major Winnipeg hospitals with large daily volumes.", contactRole: "Food services director", indigFit: "Medium" },
+      { tier: 2, organization: "Actionmarguerite / Misericordia / Riverview / Deer Lodge", sector: "Long-term care", offer: "Resident meals and diets", angle: "Diet-compliant daily meals; allergen and texture control fit RTE.", contactRole: "Food services / operations", indigFit: "Medium" },
+      { tier: 2, organization: "Extendicare / Revera / Donwood / Holy Family / Bethania / Fred Douglas", sector: "Long-term care", offer: "Resident meals", angle: "Personal-care-home operators across Winnipeg.", contactRole: "Operations director", indigFit: "Medium" },
+      { tier: 3, organization: "University of Manitoba", sector: "Post-secondary", offer: "Campus food service", angle: "Largest Manitoba campus food operation with reconciliation commitments.", contactRole: "Ancillary / food services", indigFit: "Medium" },
+      { tier: 3, organization: "University of Winnipeg", sector: "Post-secondary", offer: "Campus food service", angle: "Downtown campus with a strong Indigenous-inclusion mandate.", contactRole: "Food services / procurement", indigFit: "Medium" },
+      { tier: 3, organization: "Red River College Polytechnic", sector: "Post-secondary", offer: "Campus meals and training", angle: "Offtake plus culinary and food-processing training partnership.", contactRole: "Food services / Indigenous education", indigFit: "Strong" },
+      { tier: 3, organization: "Assiniboine Community College", sector: "Post-secondary", offer: "Campus meals and training", angle: "Brandon campus with culinary and food programs.", contactRole: "Food services", indigFit: "Medium" },
+      { tier: 3, organization: "University College of the North", sector: "Post-secondary", offer: "Northern campus meals", angle: "The Pas and Thompson campuses serving northern Indigenous students.", contactRole: "Food services / Indigenous office", indigFit: "Strong" },
+      { tier: 3, organization: "Brandon U / CMU / Booth UC / MITT / Yellowquill UC", sector: "Post-secondary", offer: "Campus meals", angle: "Smaller campuses; Yellowquill is Indigenous-governed.", contactRole: "Food services / administration", indigFit: "Medium" },
+      { tier: 4, organization: "Mathias Colomb Cree Nation", sector: "First Nation", offer: "Community and school meals", angle: "Vince’s home community and a strong ownership connection.", contactRole: "Chief and Council / EDO", indigFit: "Strong" },
+      { tier: 4, organization: "Assembly of Manitoba Chiefs", sector: "Indigenous organization", offer: "Endorsement / framework", angle: "A network-level letter could strengthen multiple funding relationships.", contactRole: "Grand Chief’s office / ED", indigFit: "Strong" },
+      { tier: 4, organization: "Manitoba Keewatinowi Okimakanak", sector: "Northern First Nations", offer: "Northern community food", angle: "Represents northern First Nations with major food-access gaps.", contactRole: "Grand Chief’s office / health", indigFit: "Strong" },
+      { tier: 4, organization: "Southern Chiefs’ Organization", sector: "Southern First Nations", offer: "Community and program meals", angle: "Represents southern First Nations, programs and events.", contactRole: "Grand Chief’s office / programs", indigFit: "Strong" },
+      { tier: 4, organization: "Manitoba Métis Federation", sector: "Métis government", offer: "Program and event meals", angle: "Province-wide community programming.", contactRole: "Health and wellness / procurement", indigFit: "Strong" },
+      { tier: 4, organization: "Manitoba tribal councils", sector: "Tribal councils", offer: "Community and program meals", angle: "One MOU per council can cover several member nations.", contactRole: "ED / health director for each", indigFit: "Strong" },
+      { tier: 4, organization: "First Nations Health & Social Secretariat of Manitoba", sector: "Indigenous health", offer: "Program and health meals", angle: "Coordinates First Nations health programming province-wide.", contactRole: "Executive Director", indigFit: "Strong" },
+      { tier: 4, organization: "Ma Mawi / Ka Ni Kanichihk / Aboriginal Health & Wellness Centre", sector: "Urban Indigenous", offer: "Program and daily meals", angle: "High-volume Indigenous programming in Winnipeg.", contactRole: "Executive Director for each", indigFit: "Strong" },
+      { tier: 4, organization: "Manitoba Association of Friendship Centres", sector: "Indigenous organization", offer: "Program and event meals", angle: "Urban Indigenous programming across Manitoba.", contactRole: "Executive Director", indigFit: "Strong" },
+      { tier: 5, organization: "Manitoba Emergency Management Organization", sector: "Emergency", offer: "Evacuation and surge feeding", angle: "Potential standing supplier for wildfire and flood evacuations.", contactRole: "Manitoba EMO / MNR", indigFit: "Medium" },
+      { tier: 5, organization: "Indigenous Services Canada — Emergency Management", sector: "Federal emergency", offer: "On-reserve evacuation feeding", angle: "Coordinates large on-reserve evacuation volumes.", contactRole: "Regional emergency management", indigFit: "Strong" },
+      { tier: 5, organization: "Harvest Manitoba", sector: "Food security", offer: "Bulk prepared meals", angle: "Provincial food-bank network with rising prepared-food demand.", contactRole: "Executive / operations", indigFit: "Medium" },
+      { tier: 5, organization: "Siloam Mission / Main Street Project / Agape Table", sector: "Shelters and meals", offer: "Daily prepared meals", angle: "High-volume daily meal programs with kitchen constraints.", contactRole: "Operations director for each", indigFit: "Medium" },
+      { tier: 5, organization: "Salvation Army / Union Gospel / Lighthouse Mission", sector: "Shelters and meals", offer: "Daily prepared meals", angle: "Faith-based meal programs across Winnipeg.", contactRole: "Operations for each", indigFit: "Medium" },
+      { tier: 5, organization: "Bear Clan Patrol", sector: "Community", offer: "Prepared meals / hampers", angle: "Indigenous-led community outreach with food distribution.", contactRole: "Coordinator", indigFit: "Strong" },
+      { tier: 6, organization: "YMCA-YWCA of Winnipeg", sector: "Childcare", offer: "Child meals and snacks", angle: "Multi-site licensed childcare with limited kitchens.", contactRole: "Childcare operations", indigFit: "Medium" },
+      { tier: 6, organization: "Manitoba Child Care Association member centres", sector: "Childcare", offer: "Child meals and snacks", angle: "Large network of licensed centres needing compliant meals.", contactRole: "Individual operators", indigFit: "Medium" },
+      { tier: 6, organization: "City of Winnipeg", sector: "Municipal", offer: "Community-centre and seniors meals", angle: "Recreation, community-centre and seniors programming.", contactRole: "Community services / procurement", indigFit: "Medium" },
+      { tier: 6, organization: "Brandon / Thompson / Steinbach / Portage la Prairie", sector: "Municipal", offer: "Program meals", angle: "Regional municipalities with recreation and seniors programs.", contactRole: "Community services for each", indigFit: "Weak" },
+      { tier: 6, organization: "Manitoba Hydro / Canada Life / IG / NFI / Boeing / Magellan", sector: "Workplace", offer: "Cafeteria / catering", angle: "Large employers with steady weekday volume.", contactRole: "Facilities / HR for each", indigFit: "Weak" },
+      { tier: 6, organization: "Vale / Hudbay", sector: "Mining camps", offer: "Camp catering", angle: "Remote work-camp feeding with high per-site volume.", contactRole: "Site services / procurement", indigFit: "Medium" },
+      { tier: 6, organization: "South Beach / Aseneskak / Sand Hills casinos", sector: "Indigenous gaming", offer: "Venue food service", angle: "First Nations-owned venues with a natural supplier fit.", contactRole: "Food and beverage manager", indigFit: "Strong" },
+      { tier: 6, organization: "True North / RBC Convention Centre / Assiniboine Park", sector: "Venues", offer: "Event and concession meals", angle: "High-volume venues with occasional large orders.", contactRole: "Food and beverage / catering", indigFit: "Weak" },
+      { tier: 7, organization: "Red River Co-op / Federated Co-operatives", sector: "Retail", offer: "Packaged retail meals", angle: "Community-oriented grocery network with an Indigenous supplier story.", contactRole: "Category buyer", indigFit: "Medium" },
+      { tier: 7, organization: "Loblaw / Sobeys / Save-On-Foods / Costco", sector: "Retail", offer: "Packaged retail meals", angle: "National grocers with Manitoba stores; Phase 2 after CFIA registration.", contactRole: "Category / procurement buyer", indigFit: "Weak" },
+      { tier: 7, organization: "Sysco Canada / Gordon Food Service", sector: "Distribution", offer: "Wholesale distribution", angle: "A route to many institutional buyers at once.", contactRole: "Supplier onboarding", indigFit: "Weak" },
+      { tier: 8, organization: "Maple Leaf Foods / HyLife", sector: "Protein", offer: "Ingredient supply / co-manufacturing", angle: "Manitoba processors for input supply or co-manufacturing MOUs.", contactRole: "Procurement / partnerships", indigFit: "Weak" },
+      { tier: 8, organization: "Manitoba Harvest / Roquette / Simplot", sector: "Ingredients", offer: "Ingredient supply", angle: "Domestic hemp, pea-protein and potato supply story.", contactRole: "Sales / partnerships", indigFit: "Weak" },
+      { tier: 8, organization: "Manitoba producers and agricultural co-ops", sector: "Agriculture", offer: "Contracted offtake supply", angle: "Canadian-content and Indigenous-grower supply agreements.", contactRole: "Co-op / producer group", indigFit: "Strong" },
+    ],
+  },
+  outreachTracker: [
+    { id: "out-min-education", organization: "Manitoba Education and Early Childhood Learning", type: "Provincial ministry", contact: "Minister Tracy Schmidt / Indigenous Excellence ADM", lastDate: "July 24, 2026", purpose: "Universal School Nutrition Program production capacity", status: "Response received — office aware", nextAction: "Reconnect with a concrete school-division pilot and request the relevant provincial program contact.", owner: "Vince & Cat", sourceUrl: "https://mail.google.com/mail/#all/19f9515afe3e0b09" },
+    { id: "out-min-agriculture", organization: "Manitoba Agriculture", type: "Provincial ministry", contact: "Minister Ron Kostyshyn / Karen Walker-Tibble", lastDate: "August 13, 2026", purpose: "Value-added agri-food infrastructure and Food Development Centre support", status: "Meeting held — resources and tour offered", nextAction: "Ask Karen to arrange the Food Development Centre tour and define testing, scale-up and regulatory-support needs.", owner: "Vince & Cat", sourceUrl: "https://mail.google.com/mail/#all/19ffc9a11f1c6746" },
+    { id: "out-min-bmtjc", organization: "Manitoba Business, Mining, Trade and Job Creation", type: "Provincial ministry", contact: "Minister Jamie Moses", lastDate: "July 3, 2026", purpose: "Employment, investment and Manitoba growth case", status: "Referred to Investment & Trade", nextAction: "Keep the Minister’s office updated with financing progress, confirmed LOIs and the equipment-only funding scope.", owner: "Vince & Cat", sourceUrl: "https://mail.google.com/mail/#all/19f2984c5790533c" },
+    { id: "out-min-finance", organization: "Manitoba Finance", type: "Provincial ministry", contact: "Minister Adrien Sala / Deputy Minister", lastDate: "July 3, 2026", purpose: "Projected fiscal return and provincial investment request", status: "Sent — no response found", nextAction: "Send a concise follow-up tied to verified financial assumptions and the corrected CA$1M owner-equity structure.", owner: "Vince & Cat", sourceUrl: "https://mail.google.com/mail/#all/19f298ada014df4b" },
+    { id: "out-min-health", organization: "Manitoba Health, Seniors and Long-Term Care", type: "Provincial ministry", contact: "Minister Uzoma Asagwara / Deputy Minister", lastDate: "July 3, 2026", purpose: "Institutional meal production for the health system", status: "Sent — no response found", nextAction: "Follow up with a health-specific capability sheet covering diet, allergen, texture, traceability and pilot volumes.", owner: "Vince & Cat", sourceUrl: "https://mail.google.com/mail/#all/19f2992518d531bc" },
+    { id: "out-min-labour", organization: "Manitoba Labour and Immigration", type: "Provincial ministry", contact: "Minister Malaya Marcelino / Vicky Molina", lastDate: "July 14, 2026", purpose: "1,500+ jobs and food-manufacturing training pipeline", status: "Response received — no meeting booked", nextAction: "Reconnect when a phased hiring plan and BUMP-eligible training outcomes are ready.", owner: "Vince & Cat", sourceUrl: "https://mail.google.com/mail/#all/19f61958fcfc8080" },
+    { id: "out-min-families", organization: "Manitoba Families", type: "Provincial ministry", contact: "Minister Nahanni Fontaine / Michel Trudel / Julie Kentner / Rachael Howgate", lastDate: "July 29, 2026", purpose: "Food-security infrastructure for Manitoba families", status: "Meeting held — materials with Minister’s office", nextAction: "Complete the NDA step and request the proposed site visit; provide only current, reconciled financial materials.", owner: "Vince & Cat", sourceUrl: "https://mail.google.com/mail/#all/19faf20dfd6823ae" },
+    { id: "out-min-innovation", organization: "Manitoba Innovation and New Technology", type: "Provincial ministry", contact: "Minister Mike Moroz", lastDate: "August 10, 2026", purpose: "Technology-enabled food manufacturing", status: "Meeting held — thank-you sent", nextAction: "Send the agreed technical follow-up: automation, traceability, equipment plan and requested provincial introductions.", owner: "Vince & Cat", sourceUrl: "https://mail.google.com/mail/#all/19fec465be463d2c" },
+    { id: "out-min-public-service", organization: "Manitoba Public Service Delivery", type: "Provincial ministry", contact: "Minister Mintu Sandhu / Sughra Wali / Procurement ADM", lastDate: "July 15, 2026", purpose: "Indigenous procurement for provincial food services", status: "Meeting arranged — outcome not captured", nextAction: "Record the meeting outcome and request the correct procurement onboarding path and category contact.", owner: "Vince & Cat", sourceUrl: "https://mail.google.com/mail/#all/19f66b708e7345f3" },
+    { id: "out-min-nrif", organization: "Manitoba Northern Relations and Indigenous Futures", type: "Provincial ministry", contact: "Minister Ian Bushie / Deputy Minister", lastDate: "July 8, 2026", purpose: "Indigenous-led food-production hub and northern food access", status: "Sent — no response found", nextAction: "Follow up with the northern-community delivery case and one specific partnership request.", owner: "Vince & Cat", sourceUrl: "https://mail.google.com/mail/#all/19f437dc994a02e9" },
+    { id: "out-min-housing", organization: "Manitoba Housing, Addictions and Homelessness", type: "Provincial ministry", contact: "Minister Bernadette Smith / Deputy Minister", lastDate: "July 8, 2026", purpose: "Food capacity for Your Way Home and employment pathways", status: "Sent — no response found", nextAction: "Follow up with a shelter/supportive-housing meal pilot and an employment-pathway proposal.", owner: "Vince & Cat", sourceUrl: "https://mail.google.com/mail/#all/19f43818fcb80356" },
+    { id: "out-min-justice", organization: "Manitoba Justice", type: "Provincial ministry", contact: "Minister Matt Wiebe / Deputy Minister", lastDate: "July 27, 2026", purpose: "Corrections food supply and reintegration employment", status: "Sent — no response found", nextAction: "Follow up with procurement requirements, secure-delivery capability and a phased corrections pilot ask.", owner: "Vince & Cat", sourceUrl: "https://mail.google.com/mail/#all/19fa57ea0f122afa" },
+    { id: "out-min-environment", organization: "Manitoba Environment and Climate Change", type: "Provincial ministry", contact: "Minister Mike Moyes / Deputy Minister", lastDate: "August 5, 2026", purpose: "Low-carbon Indigenous food-manufacturing partnership", status: "Sent — no response found", nextAction: "Follow up with a one-page 90-day partnership request and quantified energy, waste and local-sourcing outcomes.", owner: "Vince & Cat", sourceUrl: "https://mail.google.com/mail/#all/19fd2720167eb5ab" },
+    { id: "out-dept-investment", organization: "Manitoba Investment & Trade Division", type: "Provincial department", contact: "Berenise Zavala / Jill Falloon", lastDate: "July 29, 2026", purpose: "Investment concierge, FCC and PrairiesCan navigation", status: "Active relationship — referrals made", nextAction: "Update Berenise after the FCC discovery call and request a PrairiesCan officer introduction for the equipment scope.", owner: "Vince", sourceUrl: "https://mail.google.com/mail/#all/19faee7080a79819" },
+    { id: "out-program-tgif", organization: "Manitoba Trade Growth Investment Financing", type: "Provincial program", contact: "Adefolakemi Gbiri / Loans Program", lastDate: "July 22, 2026", purpose: "TGIF fit and eligibility discussion", status: "Screened out — not a fit", nextAction: "Close as screened out and preserve the rationale; do not count it as a live funding path.", owner: "Vince", sourceUrl: "https://mail.google.com/mail/#all/19f8b4fdece44ba0" },
+    { id: "out-school-wsd", organization: "Winnipeg School Division", type: "School division", contact: "Matt Henderson / Clayton Bodkyn / Board", lastDate: "July 14, 2026", purpose: "Universal Nutrition Program meal-production partnership", status: "Response received — no current requirement", nextAction: "Keep on a low-frequency nurture list and reconnect only with a specific pilot, tender or capacity gap.", owner: "Vince", sourceUrl: "https://mail.google.com/mail/#all/19f61977f16ec152" },
+    { id: "out-school-frontier", organization: "Frontier School Division", type: "School division", contact: "Tyson MacGillivray", lastDate: "August 6, 2026", purpose: "RTE meals for remote and northern schools", status: "Follow-up sent — outcome not found", nextAction: "Confirm whether the August 6 contact reached the right decision-maker and request a pilot-volume discovery call.", owner: "Vince", sourceUrl: "https://mail.google.com/mail/#all/19fd8042c9b49865" },
+    { id: "out-school-retsd", organization: "River East Transcona School Division", type: "School division", contact: "Shelley Herbst / Edward Downey", lastDate: "July 3, 2026", purpose: "Universal Nutrition Program meal-production partnership", status: "Sent — no response found", nextAction: "Follow up with a concise pilot menu, price range and delivery model; verify the correct nutrition-program contact.", owner: "Vince", sourceUrl: "https://mail.google.com/mail/#all/19f292e6f07b5157" },
+    { id: "out-school-pembina", organization: "Pembina Trails School Division", type: "School division", contact: "Leadership and nutrition-program team", lastDate: "August 13, 2026", purpose: "Universal Nutrition Program partnership", status: "Meeting request sent — no response found", nextAction: "Follow up when program leaders return in late August or early September and request a pilot discussion.", owner: "Vince", sourceUrl: "https://mail.google.com/mail/#all/19ffcf8e206a1e59" },
+    { id: "out-school-seven-oaks", organization: "Seven Oaks School Division", type: "School division", contact: "Tony Kreml / Jennifer West / Information office", lastDate: "July 8, 2026", purpose: "Universal Nutrition Program meal-production partnership", status: "Sent — no response found", nextAction: "Verify the correct nutrition contact and send one targeted follow-up; do not reuse the misaddressed Pembina message.", owner: "Vince", sourceUrl: "https://mail.google.com/mail/#all/19f4316ecdab978b" },
+    { id: "out-school-louis-riel", organization: "Louis Riel School Division", type: "School division", contact: "Christian Michalik / Jamie Rudnicki / Communications", lastDate: "July 3, 2026", purpose: "School meal-production capacity support", status: "Sent — no response found", nextAction: "Follow up with the nutrition lead using a short pilot proposal and current menu/pricing package.", owner: "Vince", sourceUrl: "https://mail.google.com/mail/#all/19f28e25fd19f98c" },
+    { id: "out-school-sjasd", organization: "St. James-Assiniboia School Division", type: "School division", contact: "Yvonne Perry / Jenness Moffatt / Kim Kummen", lastDate: "August 11, 2026", purpose: "Universal Nutrition Program menu, pricing and partnership", status: "Meeting held — menu shared", nextAction: "Send the meeting recap, confirm requested pricing/volume assumptions and ask for the next decision point or pilot step.", owner: "Vince", sourceUrl: "https://mail.google.com/mail/#all/19ff14f555d98034" },
+    { id: "out-education-mfnerc", organization: "Manitoba First Nations Education Resource Centre", type: "Education organization", contact: "Charles Cochrane", lastDate: "July 24, 2026", purpose: "Indigenous-led school meal production for First Nations schools", status: "Sent — no response found", nextAction: "Follow up with a specific First Nations school pilot ask, logistics coverage and an LOI template.", owner: "Vince", sourceUrl: "https://mail.google.com/mail/#all/19f953dcb3fe3376" },
+  ],
   fundingOpportunities: [
     {
       id: "opp-srf",
@@ -1389,10 +1522,16 @@ function escapeHtml(value = "") {
 }
 
 function formatMoney(value, compact = false) {
-  if (compact) {
-    return new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD", notation: "compact", maximumFractionDigits: 2 }).format(value);
-  }
-  return new Intl.NumberFormat("en-CA", { style: "currency", currency: "CAD", maximumFractionDigits: 0 }).format(value);
+  return formatCurrency(value, "CAD", compact);
+}
+
+function formatCurrency(value, currency = "CAD", compact = false) {
+  return new Intl.NumberFormat("en-CA", {
+    style: "currency",
+    currency,
+    notation: compact ? "compact" : "standard",
+    maximumFractionDigits: compact ? 2 : 0,
+  }).format(value);
 }
 
 function formatQuoteRange(low, high) {
@@ -1441,6 +1580,7 @@ function contractorRecords() {
 function updateNavCounts() {
   document.querySelector("#workplanCount").textContent = projectAssignments().length;
   document.querySelector("#equipmentCount").textContent = state.equipmentData.categories;
+  document.querySelector("#targetCount").textContent = state.marketData.loiTargets.length;
   document.querySelector("#fundingOpportunityCount").textContent = state.fundingOpportunities.filter((item) => item.availability !== "Submitted application").length;
   document.querySelector("#calendarCount").textContent = state.calendarSnapshot.events.length;
   document.querySelector("#followUpCount").textContent = state.followUps.filter((item) => ["Now", "This week"].includes(item.priority)).length;
@@ -1463,6 +1603,7 @@ function render() {
     workplan: { title: "Google Sheet workplan", eyebrow: "Connected delivery plan", render: renderWorkplan },
     equipment: { title: "Equipment & prices", eyebrow: "64-machine procurement plan", render: renderEquipment },
     production: { title: "Production breakdown", eyebrow: "One-million-meal flow", render: renderProduction },
+    market: { title: "Market & LOI targets", eyebrow: "Supply intelligence and demand pipeline", render: renderMarket },
     funding: { title: "Funding & budget", eyebrow: "Financial readiness", render: renderFunding },
     opportunities: { title: "Live funding", eyebrow: "Available project-fit programs", render: renderFundingOpportunities },
     calendar: { title: "Meeting schedule", eyebrow: "Calendar snapshot", render: renderCalendar },
@@ -1483,7 +1624,7 @@ function truthBanner() {
     <section class="sync-banner" aria-label="Connected data status">
       <div>
         <strong>Connected operational snapshot</strong>
-        <p>Google Sheet, Shelly’s calendar and project mailbox data refreshed August 15, 2026. No workplan rows changed and no new project email arrived on August 15.</p>
+        <p>Google Sheet, Shelly’s calendar and project mailbox data refreshed August 15, 2026. Produce-market and LOI/MOU workbooks were imported the same day with sent-mail outreach evidence.</p>
       </div>
       <span class="sync-pill"><i></i> Synced</span>
     </section>`;
@@ -1875,6 +2016,80 @@ function renderProduction() {
     </div>`;
 }
 
+function renderMarket() {
+  const data = state.marketData;
+  const query = ui.search.toLowerCase();
+  const produce = data.producePriorities.filter((item) => !query || Object.values(item).join(" ").toLowerCase().includes(query));
+  const targets = data.loiTargets.filter((item) => !query || Object.values(item).join(" ").toLowerCase().includes(query));
+  const outreachByTarget = {
+    "Winnipeg School Division": "out-school-wsd",
+    "Frontier School Division": "out-school-frontier",
+    "River East Transcona School Division": "out-school-retsd",
+    "Pembina Trails School Division": "out-school-pembina",
+    "Seven Oaks School Division": "out-school-seven-oaks",
+    "Louis Riel School Division": "out-school-louis-riel",
+    "St. James-Assiniboia School Division": "out-school-sjasd",
+    "MFNERC / band-operated First Nations schools": "out-education-mfnerc",
+    "Manitoba Justice — Corrections": "out-min-justice",
+  };
+  const tierNames = { 1: "Schools", 2: "Health & long-term care", 3: "Post-secondary", 4: "Indigenous organizations", 5: "Emergency & food security", 6: "Childcare, municipal & workplace", 7: "Retail & distribution", 8: "Supply chain & co-manufacturing" };
+  const linkedOutreach = (target) => state.outreachTracker.find((item) => item.id === outreachByTarget[target.organization]);
+  const highDependence = data.producePriorities.filter((item) => item.importDependence === "High").length;
+  const strongTargets = data.loiTargets.filter((item) => item.indigFit === "Strong").length;
+  return `
+    <div class="content-stack">
+      <section class="metrics-grid">
+        ${metricCard("National categories", String(data.produceInventoryCount), "Produce categories in the source workbook’s master inventory.", "Market")}
+        ${metricCard("Shelly’s priorities", String(data.producePriorities.length), "Menu-linked produce priorities with sourcing actions.", "Supply")}
+        ${metricCard("High import dependence", String(highDependence), "Priority ingredients marked High in the source analysis.", "Risk", true)}
+        ${metricCard("LOI / MOU targets", String(data.loiTargets.length), `${strongTargets} have a Strong Indigenous-fit rating.`, "Pipeline")}
+      </section>
+      <section class="panel panel--flush">
+        <div class="panel-heading"><div><h3>Shelly’s produce priorities</h3><p>Attention scores and recommended actions come from the attached August 13 produce workbook. Import values use each row’s stated CAD or USD source basis; open the workbook for full currency, HS-code and supplier detail.</p></div><a class="plain-link" href="${escapeHtml(data.produceSource)}" download>Download produce workbook</a></div>
+        <div class="table-wrap">
+          <table class="data-table market-table">
+            <thead><tr><th>Produce</th><th>Menu importance & use</th><th>Import value</th><th>Unit value</th><th>Dependence / risk</th><th>Canadian / local season</th><th>Score</th><th>Recommended sourcing action</th></tr></thead>
+            <tbody>${produce.map((item) => `<tr>
+              <td><strong>${escapeHtml(item.produce)}</strong><span class="cell-subtext">${escapeHtml(item.category)} · ${escapeHtml(item.dataYear)}</span></td>
+              <td>${statusBadge(item.menuImportance)}<span class="cell-subtext">${escapeHtml(item.menuUse)}</span></td>
+              <td class="money">${escapeHtml(formatCurrency(item.importValue, item.currency || "CAD", true))}</td>
+              <td class="money">${escapeHtml(item.currency === "USD" ? "US$" : "CA$")}${item.unitValue.toFixed(2)}/kg</td>
+              <td>${escapeHtml(item.importDependence)} dependence<span class="cell-subtext">${escapeHtml(item.supplyRisk)} supply risk</span></td>
+              <td>${escapeHtml(item.season)}</td>
+              <td><strong>${item.attentionScore}</strong><span class="cell-subtext">attention</span></td>
+              <td>${escapeHtml(item.action)}</td>
+            </tr>`).join("") || `<tr><td colspan="8">${emptyState("No matching produce rows", "Clear the search to restore the priority list.")}</td></tr>`}</tbody>
+          </table>
+        </div>
+      </section>
+      <section class="panel panel--flush">
+        <div class="panel-heading"><div><h3>LOI / MOU target tracker</h3><p>All 56 workbook targets are included. Sent-mail evidence upgrades matched rows from “Not started”; no blank workbook status is treated as contact.</p></div><a class="plain-link" href="${escapeHtml(data.targetSource)}" download>Download target workbook</a></div>
+        <div class="table-wrap">
+          <table class="data-table target-table">
+            <thead><tr><th>Tier</th><th>Organization</th><th>Sector / offer</th><th>Fit angle</th><th>Contact target</th><th>Indigenous fit</th><th>Current status</th><th>Last contact</th><th>Next action</th><th>Evidence</th></tr></thead>
+            <tbody>${targets.map((item) => {
+              const outreach = linkedOutreach(item);
+              const nextAction = outreach ? outreach.nextAction : item.tier >= 7 ? "Hold for Phase 2 readiness, then identify the named buyer or partnership lead." : "Identify the named decision-maker, tailor the LOI ask and begin outreach.";
+              return `<tr>
+                <td><strong>${item.tier}</strong><span class="cell-subtext">${escapeHtml(tierNames[item.tier])}</span></td>
+                <td><strong>${escapeHtml(item.organization)}</strong></td>
+                <td>${escapeHtml(item.sector)}<span class="cell-subtext">${escapeHtml(item.offer)}</span></td>
+                <td>${escapeHtml(item.angle)}</td>
+                <td>${escapeHtml(item.contactRole)}</td>
+                <td>${typeBadge(item.indigFit)}</td>
+                <td>${statusBadge(outreach ? outreach.status : "Not started")}</td>
+                <td>${escapeHtml(outreach ? outreach.lastDate : "No sent-mail evidence")}</td>
+                <td>${escapeHtml(nextAction)}</td>
+                <td>${outreach ? `<a class="plain-link" href="${escapeHtml(outreach.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open email</a>` : "Workbook only"}</td>
+              </tr>`;
+            }).join("") || `<tr><td colspan="10">${emptyState("No matching targets", "Clear the search to restore the LOI / MOU pipeline.")}</td></tr>`}</tbody>
+          </table>
+        </div>
+      </section>
+      <div class="callout"><strong>Source controls</strong>The produce workbook uses mixed CAD and USD source bases, and some HS categories cover more than one product. The target workbook is a planning list, not evidence of contact or commitment; Gmail evidence is linked only where a sent thread was found.</div>
+    </div>`;
+}
+
 function renderFunding() {
   const fundingRecords = state.records.filter((record) => record.type === "Funding").filter(matchesSearch);
   const fundingAmounts = { "fund-owner-equity": 1000000, "fund-debt": 8750000, "fund-grants": 15250000 };
@@ -2029,9 +2244,13 @@ function renderFollowUps() {
 }
 
 function renderStakeholders() {
-  const outreach = state.records.filter((record) => record.type === "Outreach").filter(matchesSearch);
+  const manualOutreach = state.records.filter((record) => record.type === "Outreach").filter(matchesSearch);
+  const trackedOutreach = state.outreachTracker.filter((item) => !ui.search || Object.values(item).join(" ").toLowerCase().includes(ui.search.toLowerCase()));
   const contractors = contractorRecords().filter(matchesSearch);
   const visiblePeople = state.people.filter((person) => !ui.search || Object.values(person).join(" ").toLowerCase().includes(ui.search.toLowerCase()));
+  const ministryCount = state.outreachTracker.filter((item) => item.type === "Provincial ministry").length;
+  const educationCount = state.outreachTracker.filter((item) => ["School division", "Education organization"].includes(item.type)).length;
+  const responseCount = state.outreachTracker.filter((item) => !item.status.includes("no response found") && !item.status.includes("outcome not found")).length;
   return `
     <div class="content-stack">
       ${truthBanner()}
@@ -2047,6 +2266,31 @@ function renderStakeholders() {
             <p>${escapeHtml(person.evidence)}</p>
             <div class="person-card__footer"><span>${escapeHtml(person.contact)}</span></div>
           </article>`).join("") || emptyState("No matching people", "Clear the search to see identified project leadership.")}
+      </section>
+      <section class="metrics-grid">
+        ${metricCard("Ministerial portfolios", String(ministryCount), "Provincial ministries with direct sent-mail evidence.", "Government")}
+        ${metricCard("Provincial programs", "2", "Investment & Trade and TGIF relationships tracked separately.", "Programs")}
+        ${metricCard("Education organizations", String(educationCount), "Seven school divisions plus MFNERC found in sent mail.", "Schools")}
+        ${metricCard("Responses / meetings", String(responseCount), "Rows with a response, meeting, referral or closed outcome.", "Evidence", true)}
+      </section>
+      <section class="panel panel--flush">
+        <div class="panel-heading"><div><h3>Government and school outreach tracker</h3><p>Sent-mail evidence from richardc@shellysbistro.com, deduplicated by organization. Leadership accountability remains with Vince and Cat.</p></div><span class="record-count">${trackedOutreach.length} shown · ${state.outreachTracker.length} total</span></div>
+        <div class="table-wrap">
+          <table class="data-table outreach-table">
+            <thead><tr><th>Organization</th><th>Type</th><th>Contact / recipient</th><th>Last sent</th><th>Purpose</th><th>Tracking status</th><th>Next action</th><th>Owner</th><th>Email</th></tr></thead>
+            <tbody>${trackedOutreach.map((item) => `<tr>
+              <td><strong>${escapeHtml(item.organization)}</strong></td>
+              <td>${typeBadge(item.type)}</td>
+              <td>${escapeHtml(item.contact)}</td>
+              <td>${escapeHtml(item.lastDate)}</td>
+              <td>${escapeHtml(item.purpose)}</td>
+              <td>${statusBadge(item.status)}</td>
+              <td>${escapeHtml(item.nextAction)}</td>
+              <td><strong>${escapeHtml(item.owner)}</strong></td>
+              <td><a class="plain-link" href="${escapeHtml(item.sourceUrl)}" target="_blank" rel="noopener noreferrer">Open sent thread</a></td>
+            </tr>`).join("") || `<tr><td colspan="9">${emptyState("No matching outreach rows", "Clear the search to restore the sent-mail tracker.")}</td></tr>`}</tbody>
+          </table>
+        </div>
       </section>
       <section class="metrics-grid">
         ${metricCard("Contractor engagements", String(contractorRecords().length), "Unique contractor/scope records across both workbook sheets.", "Tracker")}
@@ -2074,10 +2318,10 @@ function renderStakeholders() {
       </section>
       <section class="panel">
         <div class="panel-heading"><div><h3>Additional outreach evidence</h3><p>Approved communications are required before a party can be described as contacted outside the tracker’s dated record.</p></div></div>
-        ${outreach.length ? `<div class="evidence-list">${outreach.map(evidenceRow).join("")}</div>` : emptyState("No separate outreach records", "The contractor tracker is imported above. Add newer emails, call notes or meeting records separately so July status is not presented as current.")}
+        ${manualOutreach.length ? `<div class="evidence-list">${manualOutreach.map(evidenceRow).join("")}</div>` : emptyState("No separate manual outreach records", "Sent-mail relationships are tracked in the table above. Add call notes, letters or offline meetings separately so the evidence trail remains clear.")}
       </section>
       <section class="grid-equal">
-        <article class="panel"><div class="panel-heading"><div><h3>Email evidence connection</h3><p>Secure mailbox source.</p></div></div><div class="callout"><strong>Gmail OAuth connected</strong>The authenticated profile confirms richardc@shellysbistro.com. Funding evidence and action metadata from 410 matching messages across 184 threads were reviewed; mailbox ownership does not create a leadership role.</div></article>
+        <article class="panel"><div class="panel-heading"><div><h3>Email evidence connection</h3><p>Secure mailbox source.</p></div></div><div class="callout"><strong>Gmail OAuth connected</strong>The authenticated profile confirms richardc@shellysbistro.com. The 23-row government and education tracker uses sent-message evidence; mailbox ownership does not create a leadership role.</div></article>
         <article class="panel"><div class="panel-heading"><div><h3>Customers & offtake</h3><p>Commercial commitments for the expansion.</p></div></div><div class="callout callout--danger"><strong>No signed offtake contracts documented</strong>Current institutional customers do not automatically become committed expansion customers.</div></article>
       </section>
     </div>`;
