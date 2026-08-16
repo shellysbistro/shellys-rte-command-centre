@@ -23,7 +23,7 @@ Windows teammates can also run `.\start-app.ps1` after cloning.
 
 The **Task assignments** tab provides one server-backed queue for Cat, Vince and Richard. Cat and Vince can assign through **Add record**, all three people can be assignees, and each selected user can move work from Assigned to In progress to Completed. New tasks appear immediately in every connected app through a live event stream.
 
-The server can route a new-task alert to Slack, email and optional browser push after the task is safely stored. At the project owner’s direction, the Windows local launcher and private-deployment example turn the outbound routing switch on. A thread heartbeat named **Shelly task email dispatcher** checks the local task store every five minutes and sends each previously unseen task ID once through connected Gmail. Its deduplication state remains under the ignored `.data/` directory. Direct webhook email and Slack delivery remain unavailable until their private provider credentials are configured. Browser push works on localhost for testing and on HTTPS deployments; each person must opt in on their own device.
+Task alerts are email-only. A thread heartbeat named **Shelly task email dispatcher** checks the local task store every five minutes and sends each previously unseen task ID once through connected Gmail. Its deduplication state remains under the ignored `.data/` directory. An approved email webhook can be added later for instant server-side delivery, but Slack and browser-push task routing are not used.
 
 Notification contacts supplied by the project owner are:
 
@@ -31,30 +31,25 @@ Notification contacts supplied by the project owner are:
 - Richard task alerts: `richardc@shellysbistro.com`
 - Vince: `vince@shellysbistro.com`
 
-The connected Slack workspace is **Aimadvisors** (`aimadvisors.slack.com`). Its member directory was verified on August 15, 2026: Cat maps to `catherine@aimadvisors.ca`, Richard maps to `richardc@aimadvisors.ca`, and Vince maps to `vince@shellysbistro.com`. These Slack lookup addresses are distinct from email-alert recipients where noted; membership verification does not by itself configure automated delivery.
+The Aimadvisors Slack account may remain connected for other collaboration, but it is excluded from task-alert routing.
 
-On August 15, 2026, the project owner corrected Richard’s task-alert recipient to the authenticated Gmail/Calendar address `richardc@shellysbistro.com`. Richard’s separate Slack lookup identity remains `richardc@aimadvisors.ca`. Three previously missed task notifications were sent manually from Cat Lee at `catherine@aimadvisors.ca` to the corrected Richard address. The five-minute connector dispatcher now supplies local automatic email recovery; instant server-side email delivery still requires the approved webhook.
+On August 15, 2026, the project owner corrected Richard’s task-alert recipient to the authenticated Gmail/Calendar address `richardc@shellysbistro.com`. Three previously missed task notifications were sent manually from Cat Lee at `catherine@aimadvisors.ca` to the corrected Richard address. The five-minute connector dispatcher now supplies local automatic email recovery; instant server-side email delivery still requires the approved webhook.
 
 Configure private deployment variables without committing a `.env` file:
 
 ```text
 TASK_NOTIFICATIONS_ENABLED=true
 TASK_APP_BASE_URL=https://private-project-host.example
-SLACK_BOT_TOKEN=xoxb-...
-SLACK_WORKSPACE_DOMAIN=aimadvisors.slack.com
 TASK_EMAIL_WEBHOOK_URL=https://approved-private-email-gateway.example/task-alert
 CAT_TASK_EMAIL=catherine@aimadvisors.ca
 RICHARD_TASK_EMAIL=richardc@shellysbistro.com
 VINCE_TASK_EMAIL=vince@shellysbistro.com
-CAT_SLACK_EMAIL=catherine@aimadvisors.ca
-RICHARD_SLACK_EMAIL=richardc@aimadvisors.ca
-VINCE_SLACK_EMAIL=vince@shellysbistro.com
-TASK_NOTIFICATION_CHANNELS_CAT=slack,email
-TASK_NOTIFICATION_CHANNELS_RICHARD=slack,email
-TASK_NOTIFICATION_CHANNELS_VINCE=slack,email
+TASK_NOTIFICATION_CHANNELS_CAT=email
+TASK_NOTIFICATION_CHANNELS_RICHARD=email
+TASK_NOTIFICATION_CHANNELS_VINCE=email
 ```
 
-The Slack app needs `users:read.email`, `im:write` and `chat:write`. The email webhook receives a least-data JSON task alert and must return an HTTP success response. Real tokens and webhook URLs belong only in deployment secrets.
+The email webhook receives a least-data JSON task alert and must return an HTTP success response. Real webhook URLs belong only in deployment secrets.
 
 The default server remains bound to `127.0.0.1`. Team members can only share the queue when their clients reach the same running server. A real cross-device deployment therefore needs HTTPS, durable storage and organization authentication before use; do not expose the unauthenticated server directly to the public internet.
 
@@ -77,7 +72,7 @@ Open a pull request on GitHub and have another teammate review it before merging
 ## What works
 
 - Branded floral interface built from the supplied Shelly’s Bistro logo, with responsive desktop and mobile layouts.
-- Shared Cat/Vince/Richard task assignments with live list updates, due dates, priorities, status controls, server-side Slack/email routing and opt-in browser push.
+- Shared Cat/Vince/Richard task assignments with live list updates, due dates, priorities, status controls and email-only alerts through the connected Gmail dispatcher.
 - Connected Google Sheet workplan with 18 Shelly’s Bistro assignment rows, Richard’s three assigned items, and the complete six-week `Richard Workplan` tab.
 - Published task chart, global search, funding and budget views, a live list of available project-fit funding, meeting schedule, contact/outreach controls and an email follow-up queue.
 - Equipment & prices tab with the complete 22-category / 64-machine sourcing register, original USD FOB figures, supplemental Canadian landed-cost items, procurement waves and the CA$1.6–1.8M equipment-scope budget.
@@ -116,4 +111,4 @@ The pasted prompt also ends after the first row of the requested twelve-activity
 
 ## Security boundary
 
-This is a private operational prototype. It includes restrictive browser/server headers, local-only binding by default and no password collection. Slack/email task delivery has its server switch enabled in the local launcher, but it still requires private provider credentials; browser push remains opt-in. Before multi-user or hosted deployment, add organization authentication, role-based permissions, server-side encrypted storage, delivery audit logs, backups, retention rules and approved OAuth/provider integrations. Do not expose this build directly to the public internet.
+This is a private operational prototype. It includes restrictive browser/server headers, local-only binding by default and no password collection. Task alerts use the connected Gmail dispatcher only; a direct email webhook would still require private provider credentials. Before multi-user or hosted deployment, add organization authentication, role-based permissions, server-side encrypted storage, delivery audit logs, backups, retention rules and approved OAuth/provider integrations. Do not expose this build directly to the public internet.

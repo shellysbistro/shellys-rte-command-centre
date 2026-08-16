@@ -1636,13 +1636,11 @@ async function loadTaskNotificationConfig() {
   } catch (_error) {
     taskHub.notificationConfig = {
       outboundEnabled: false,
-      browserPushAvailable: false,
       emailDispatcher: { active: false },
-      slackWorkspace: { name: "Aimadvisors", domain: "aimadvisors.slack.com", membershipVerifiedAt: "2026-08-15", automationConfigured: false },
       people: [
-        { person: "Cat", email: "catherine@aimadvisors.ca", slackEmail: "catherine@aimadvisors.ca", slackMemberVerified: true, channels: ["slack", "email"], slackConfigured: false, emailConfigured: false },
-        { person: "Richard", email: "richardc@shellysbistro.com", slackEmail: "richardc@aimadvisors.ca", slackMemberVerified: true, channels: ["slack", "email"], slackConfigured: false, emailConfigured: false, note: "Email alerts use the connected Gmail address; Slack uses the separate verified Aimadvisors identity." },
-        { person: "Vince", email: "vince@shellysbistro.com", slackEmail: "vince@shellysbistro.com", slackMemberVerified: true, channels: ["slack", "email"], slackConfigured: false, emailConfigured: false },
+        { person: "Cat", email: "catherine@aimadvisors.ca", channels: ["email"], emailConfigured: false },
+        { person: "Richard", email: "richardc@shellysbistro.com", channels: ["email"], emailConfigured: false, note: "Task alerts use email only at the connected Gmail address." },
+        { person: "Vince", email: "vince@shellysbistro.com", channels: ["email"], emailConfigured: false },
       ],
     };
   }
@@ -1756,7 +1754,7 @@ async function updateSharedTaskStatus(taskId, status) {
 
 async function initializeTaskCentre() {
   connectTaskStream();
-  await Promise.all([loadSharedTasks(), prepareTaskPush(), loadTaskNotificationConfig()]);
+  await Promise.all([loadSharedTasks(), loadTaskNotificationConfig()]);
 }
 
 function openSourceVault() {
@@ -2191,10 +2189,9 @@ function taskNotificationSummary() {
 
 function renderTaskNotificationRoutes() {
   const config = taskHub.notificationConfig;
-  if (!config) return '<section class="panel">Loading Slack and email routing…</section>';
-  const workspace = config.slackWorkspace || {};
+  if (!config) return '<section class="panel">Loading email routing…</section>';
   const dispatcher = config.emailDispatcher || { active: false };
-  const hasProviderRoute = config.people.some((contact) => contact.slackConfigured || contact.emailConfigured);
+  const hasProviderRoute = config.people.some((contact) => contact.emailConfigured);
   const hasReadyRoute = hasProviderRoute || dispatcher.active;
   const routingStatus = !config.outboundEnabled
     ? "Off"
@@ -2204,22 +2201,21 @@ function renderTaskNotificationRoutes() {
   const routingMessage = !config.outboundEnabled
     ? '<div class="callout u-mt-12"><strong>Outbound routing is off</strong>Shared tasks and live updates continue to work. Enable the private deployment switch before adding provider credentials.</div>'
     : dispatcher.active && !hasProviderRoute
-      ? `<div class="callout u-mt-12"><strong>Email dispatcher active</strong>New task IDs are checked every ${escapeHtml(dispatcher.cadenceMinutes)} minutes through ${escapeHtml(dispatcher.provider)} and sent once. Slack and the direct email webhook remain unconfigured.</div>`
+      ? `<div class="callout u-mt-12"><strong>Email dispatcher active</strong>New task IDs are checked every ${escapeHtml(dispatcher.cadenceMinutes)} minutes through ${escapeHtml(dispatcher.provider)} and sent once. The direct email webhook remains optional for instant delivery.</div>`
       : hasReadyRoute
-      ? '<div class="callout u-mt-12"><strong>Outbound routing is ready</strong>New assignments will attempt the configured private Slack and email routes after each task is saved.</div>'
-      : '<div class="callout u-mt-12"><strong>Outbound routing is on</strong>Add the private Slack bot token and/or approved email webhook to deliver real alerts. No Slack or email alert is sent while both routes show “not configured.”</div>';
+      ? '<div class="callout u-mt-12"><strong>Email routing is ready</strong>New assignments will use the configured private email route after each task is saved.</div>'
+      : '<div class="callout u-mt-12"><strong>Email routing is on</strong>Add the approved email webhook or activate the connected Gmail dispatcher to deliver alerts.</div>';
   return `
     <section class="panel notification-routing-panel">
       <div class="panel-heading">
-        <div><h3>Slack & email routing</h3><p><a href="https://${escapeHtml(workspace.domain || "aimadvisors.slack.com")}" target="_blank" rel="noopener">${escapeHtml(workspace.name || "Aimadvisors")} Slack</a> membership was verified ${escapeHtml(workspace.membershipVerifiedAt || "2026-08-15")}. Automated delivery still uses private deployment credentials.</p></div>
+        <div><h3>Email alert routing</h3><p>Task alerts are email-only. The connected Gmail dispatcher sends each new task ID once without exposing account credentials in the hub.</p></div>
         ${statusBadge(routingStatus)}
       </div>
       <div class="notification-route-grid">
         ${config.people.map((contact) => `
           <article class="notification-route-card">
-            <div><span class="eyebrow">${escapeHtml(contact.person)}</span><strong>Email alert · ${escapeHtml(contact.email)}</strong><p>Slack member · ${escapeHtml(contact.slackEmail || contact.email)}${contact.slackMemberVerified ? " · verified" : ""}</p></div>
+            <div><span class="eyebrow">${escapeHtml(contact.person)}</span><strong>Email alert · ${escapeHtml(contact.email)}</strong></div>
             <div class="notification-channel-list">
-              <span class="notification-channel" data-ready="${contact.slackConfigured}">Slack · ${contact.slackConfigured ? "ready" : "not configured"}</span>
               <span class="notification-channel" data-ready="${contact.emailConfigured || dispatcher.active}">Email · ${contact.emailConfigured ? "direct webhook ready" : dispatcher.active ? `dispatcher active · up to ${escapeHtml(dispatcher.cadenceMinutes)} min` : "not configured"}</span>
             </div>
             ${contact.note ? `<p>${escapeHtml(contact.note)}</p>` : ""}
@@ -2278,7 +2274,7 @@ function renderTaskAssignments() {
         <div>
           <p class="eyebrow">Cat · Vince · Richard</p>
           <h3>Assign the next move. Keep the whole team current.</h3>
-          <p>New tasks are saved to the shared service, appear in real time, and route through configured Slack, email and optional browser notifications without blocking the assignment.</p>
+          <p>New tasks are saved to the shared service, appear in real time, and route through the email dispatcher without blocking the assignment.</p>
         </div>
         <button class="button button--primary" type="button" data-open-task-dialog>Assign a task</button>
       </section>
@@ -2292,15 +2288,11 @@ function renderTaskAssignments() {
 
       <section class="task-setup-grid">
         <article class="panel task-device-panel">
-          <div class="panel-heading"><div><h3>Who is using this device?</h3><p>This controls whose alerts are registered here.</p></div></div>
+          <div class="panel-heading"><div><h3>Who is using this device?</h3><p>This controls whose task view is shown here.</p></div></div>
           <div class="task-user-switch" role="group" aria-label="Current task user">
             ${TASK_PEOPLE.map((person) => `<button class="task-user-button${taskHub.currentUser === person ? " is-active" : ""}" type="button" data-task-user="${person}">${person}</button>`).join("")}
           </div>
           <p class="task-device-note">Current device: <strong>${escapeHtml(taskHub.currentUser)}</strong>. Cat and Vince can assign through <strong>Add record</strong>; each assignee can update task status here.</p>
-        </article>
-        <article class="panel task-notification-panel">
-          <div class="notification-state"><span class="notification-state__icon" aria-hidden="true">${taskHub.pushSubscribed ? "✓" : "!"}</span><div><strong>Push ${escapeHtml(notification.state.toLowerCase())}</strong><p>${escapeHtml(notification.detail)}</p></div></div>
-          ${!taskHub.pushSubscribed && taskHub.notificationConfig?.browserPushAvailable ? `<button class="button button--primary" type="button" data-enable-push ${taskHub.pushBusy ? "disabled" : ""}>${taskHub.pushBusy ? "Enabling…" : `Enable ${escapeHtml(taskHub.currentUser)} browser alerts`}</button>` : ""}
         </article>
       </section>
 

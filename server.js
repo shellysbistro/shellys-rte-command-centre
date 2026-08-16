@@ -9,7 +9,7 @@ let webPush = null;
 try {
   webPush = require("web-push");
 } catch (_error) {
-  // Browser push is optional. The task service and Slack/email routes still run
+  // Browser push is optional. The task service and email route still run
   // when the package has not yet been installed.
 }
 
@@ -24,32 +24,19 @@ const vapidSubject = process.env.VAPID_SUBJECT || "mailto:notifications@shellysb
 const taskPeople = ["Cat", "Richard", "Vince"];
 const taskAppBaseUrl = cleanHttpUrl(process.env.TASK_APP_BASE_URL) || `http://${host}:${port}`;
 const outboundNotificationsEnabled = /^true$/i.test(process.env.TASK_NOTIFICATIONS_ENABLED || "");
-const slackBotToken = process.env.SLACK_BOT_TOKEN || "";
 const emailWebhookUrl = cleanHttpsUrl(process.env.TASK_EMAIL_WEBHOOK_URL);
-const slackWorkspace = {
-  id: process.env.SLACK_WORKSPACE_ID || "T0BQ8BVE4Q4",
-  name: process.env.SLACK_WORKSPACE_NAME || "Aimadvisors",
-  domain: process.env.SLACK_WORKSPACE_DOMAIN || "aimadvisors.slack.com",
-  membershipVerifiedAt: "2026-08-15",
-};
 const notificationContacts = {
   Cat: {
     email: process.env.CAT_TASK_EMAIL || "catherine@aimadvisors.ca",
-    slackEmail: process.env.CAT_SLACK_EMAIL || "catherine@aimadvisors.ca",
-    slackMemberVerified: true,
     channels: notificationChannels("Cat"),
   },
   Richard: {
     email: process.env.RICHARD_TASK_EMAIL || "richardc@shellysbistro.com",
-    slackEmail: process.env.RICHARD_SLACK_EMAIL || "richardc@aimadvisors.ca",
-    slackMemberVerified: true,
     channels: notificationChannels("Richard"),
-    note: "Email alerts use the connected Gmail address richardc@shellysbistro.com. Slack uses the separate verified Aimadvisors identity richardc@aimadvisors.ca.",
+    note: "Task alerts use email only at the connected Gmail address richardc@shellysbistro.com.",
   },
   Vince: {
     email: process.env.VINCE_TASK_EMAIL || "vince@shellysbistro.com",
-    slackEmail: process.env.VINCE_SLACK_EMAIL || "vince@shellysbistro.com",
-    slackMemberVerified: true,
     channels: notificationChannels("Vince"),
   },
 };
@@ -88,10 +75,10 @@ function cleanHttpsUrl(value) {
 
 function notificationChannels(person) {
   const key = `TASK_NOTIFICATION_CHANNELS_${person.toUpperCase()}`;
-  return String(process.env[key] || "slack,email")
+  return String(process.env[key] || "email")
     .split(",")
     .map((item) => item.trim().toLowerCase())
-    .filter((item, index, values) => ["slack", "email", "browser"].includes(item) && values.indexOf(item) === index);
+    .filter((item, index, values) => item === "email" && values.indexOf(item) === index);
 }
 
 function loadJson(filePath, fallback) {
@@ -255,41 +242,6 @@ async function notifyBrowserPush(task) {
   return channelResult("browser", matching.length ? "attempted" : "not-subscribed", matching.length, delivered);
 }
 
-async function slackApi(method, body) {
-  const response = await fetch(`https://slack.com/api/${method}`, {
-    method: "POST",
-    headers: {
-      Authorization: `Bearer ${slackBotToken}`,
-      "Content-Type": "application/json; charset=utf-8",
-    },
-    body: JSON.stringify(body),
-  });
-  if (!response.ok) throw new Error(`Slack ${method} returned HTTP ${response.status}.`);
-  const payload = await response.json();
-  if (!payload.ok) throw new Error(`Slack ${method} failed: ${payload.error || "unknown_error"}.`);
-  return payload;
-}
-
-async function notifySlack(task, contact) {
-  if (!contact.channels.includes("slack")) return channelResult("slack", "not-selected");
-  if (!outboundNotificationsEnabled) return channelResult("slack", "disabled", 0, 0, "Set TASK_NOTIFICATIONS_ENABLED=true after deployment approval.");
-  if (!slackBotToken) return channelResult("slack", "not-configured", 0, 0, "SLACK_BOT_TOKEN is missing.");
-  try {
-    const lookup = await slackApi("users.lookupByEmail", { email: contact.slackEmail });
-    const conversation = await slackApi("conversations.open", { users: lookup.user.id });
-    await slackApi("chat.postMessage", {
-      channel: conversation.channel.id,
-      text: taskNotificationText(task),
-      unfurl_links: false,
-      unfurl_media: false,
-    });
-    return channelResult("slack", "delivered", 1, 1);
-  } catch (error) {
-    console.warn(`Slack task alert failed for ${task.assignee}: ${error.message}`);
-    return channelResult("slack", "failed", 1, 0, error.message);
-  }
-}
-
 async function notifyEmail(task, contact) {
   if (!contact.channels.includes("email")) return channelResult("email", "not-selected");
   if (!outboundNotificationsEnabled) return channelResult("email", "disabled", 0, 0, "Set TASK_NOTIFICATIONS_ENABLED=true after deployment approval.");
@@ -324,11 +276,7 @@ async function notifyEmail(task, contact) {
 
 async function notifyAssignee(task) {
   const contact = notificationContacts[task.assignee];
-  const deliveries = await Promise.all([
-    notifyBrowserPush(task),
-    notifySlack(task, contact),
-    notifyEmail(task, contact),
-  ]);
+  const deliveries = [await notifyEmail(task, contact)];
   return {
     taskId: task.id,
     recipient: task.assignee,
@@ -350,23 +298,13 @@ function publicNotificationConfig() {
     : { active: false };
   return {
     outboundEnabled: outboundNotificationsEnabled,
-    browserPushAvailable: Boolean(webPush && vapidKeys),
     emailDispatcher,
-    slackWorkspace: {
-      name: slackWorkspace.name,
-      domain: slackWorkspace.domain,
-      membershipVerifiedAt: slackWorkspace.membershipVerifiedAt,
-      automationConfigured: outboundNotificationsEnabled && Boolean(slackBotToken),
-    },
     people: taskPeople.map((person) => {
       const contact = notificationContacts[person];
       return {
         person,
         email: contact.email,
-        slackEmail: contact.slackEmail,
-        slackMemberVerified: contact.slackMemberVerified,
         channels: contact.channels,
-        slackConfigured: outboundNotificationsEnabled && contact.channels.includes("slack") && Boolean(slackBotToken),
         emailConfigured: outboundNotificationsEnabled && contact.channels.includes("email") && Boolean(emailWebhookUrl),
         note: contact.note || "",
       };
@@ -398,7 +336,6 @@ async function handleApi(request, response, url) {
     sendJson(response, 200, {
       ok: true,
       taskCount: sharedState.tasks.length,
-      pushEnabled: Boolean(webPush && vapidKeys),
       outboundNotificationsEnabled,
     });
     return true;
@@ -571,7 +508,7 @@ heartbeat.unref();
 
 server.listen(port, host, () => {
   console.log(`Shelly’s RTE Command Centre: http://${host}:${port}`);
-  console.log(`Shared task updates are enabled. Browser push: ${webPush && vapidKeys ? "available" : "unavailable"}.`);
-  console.log(`Slack/email task delivery: ${outboundNotificationsEnabled ? "enabled by configuration" : "disabled by default"}.`);
+  console.log("Shared task updates and email-only alert routing are enabled.");
+  console.log(`Email task delivery: ${outboundNotificationsEnabled ? "enabled by configuration" : "disabled by default"}.`);
   console.log("Press Ctrl+C to stop the server.");
 });

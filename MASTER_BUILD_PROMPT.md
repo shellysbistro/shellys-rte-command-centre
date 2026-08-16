@@ -32,9 +32,9 @@ These direct project-owner instructions override older figures or roles in the o
 9. Do not show dedicated Sources, Conflicts or Pending Source Review tabs in the main navigation. Keep provenance and conflict controls in the data model and on relevant records.
 10. Do not show pending source-review clutter on the user’s operational tabs.
 11. Keep one shared **Task assignments** tab for Cat, Vince and Richard. Cat and Vince can assign work; **Add record** is a shortcut to this task form. Every connected list updates in real time.
-12. Route new-task alerts through server-side Slack and/or email delivery, with optional browser push as a fallback. Current email-alert contacts are Cat at `catherine@aimadvisors.ca`, Vince at `vince@shellysbistro.com` and Richard at the owner-confirmed address `richardc@shellysbistro.com`.
-13. Richard’s email-alert recipient now matches the connected Gmail/Calendar identity `richardc@shellysbistro.com`. His distinct Slack lookup identity is `richardc@aimadvisors.ca`; keep channel identities separate and labeled.
-14. The connected Slack workspace is Aimadvisors (`aimadvisors.slack.com`). Directory membership verified August 15, 2026 maps Cat to `catherine@aimadvisors.ca`, Richard to `richardc@aimadvisors.ca` and Vince to `vince@shellysbistro.com`. Keep these Slack lookup identities separate from email-alert recipients.
+12. Route new-task alerts by email only. Current recipients are Cat at `catherine@aimadvisors.ca`, Vince at `vince@shellysbistro.com` and Richard at the owner-confirmed address `richardc@shellysbistro.com`.
+13. Richard’s email-alert recipient matches the connected Gmail/Calendar identity `richardc@shellysbistro.com`.
+14. The Aimadvisors Slack account may remain connected for other collaboration, but exclude Slack from task-alert routing and from the alert setup view.
 15. On August 15, 2026, three missed Richard task notifications were manually sent from Cat Lee at `catherine@aimadvisors.ca` to the corrected recipient `richardc@shellysbistro.com`. Record this as a manual recovery action, not proof that the direct email webhook is configured.
 16. A local thread heartbeat named **Shelly task email dispatcher** checks for new task IDs every five minutes, sends each ID once through connected Gmail and records deduplication only after Gmail confirms SENT. Treat this as connector-based recovery, not instant server-side delivery.
 
@@ -159,38 +159,35 @@ Do not add Sources, Conflicts or Pending Review to the main navigation.
 - Allow task status changes between Assigned, In progress and Completed, and synchronize those changes to every connected client.
 - Show the selected person’s open, high-priority, due-soon and completed counts, with clear overdue treatment; keep the navigation badge as the total open shared queue.
 - Let each browser identify the current device as Cat, Vince or Richard.
-- Send task notifications from the server after the task is durably saved. A notification failure must never roll back or hide the task.
-- Support per-person Slack and email channel selection. Slack must identify the user by approved email, open/resume a direct-message conversation and send an accessible plain-text task alert. Email must use an explicitly configured HTTPS delivery webhook or an approved provider adapter.
-- Slack delivery requires a private bot token with only the needed scopes: `users:read.email`, `im:write` and `chat:write`. Keep the token in deployment secrets, never in the repository or client bundle.
-- Keep the local/private deployment routing switch on with `TASK_NOTIFICATIONS_ENABLED=true`, as directed by the project owner. Still require a private Slack token and/or approved email webhook before sending confidential task data externally, and show “credentials needed” until a provider route is actually ready.
+- Queue task notification work only after the task is durably saved. A notification failure must never roll back or hide the task.
+- Use email as the sole task-alert channel. Send through the idempotent connected Gmail dispatcher, with an explicitly configured HTTPS delivery webhook as an optional instant-delivery path.
+- Keep the local/private deployment routing switch on with `TASK_NOTIFICATIONS_ENABLED=true`, as directed by the project owner. Require an approved email webhook before claiming instant server delivery, and show the five-minute dispatcher cadence accurately.
 - Use these email notification-contact defaults, each overrideable by server environment variables: Cat `catherine@aimadvisors.ca`; Richard `richardc@shellysbistro.com`; Vince `vince@shellysbistro.com`.
-- Use separate Slack lookup defaults: Cat `catherine@aimadvisors.ca`; Richard `richardc@aimadvisors.ca`; Vince `vince@shellysbistro.com`. Slack membership verification is not the same as configuring the automation token.
-- Treat Richard’s corrected email notification address as the same authenticated Gmail and Calendar identity recorded under Connected sources. Preserve his different Aimadvisors Slack identity as a channel-specific lookup value.
-- Retain Service Worker, Push API and VAPID browser push as an optional device route for all three people. Never request notification permission automatically on page load.
-- Keep task data, delivery results, browser subscriptions and server configuration private. Do not expose tokens, webhook URLs, VAPID private keys or task-store files through static routes or Git.
-- A notification click should open the Task assignments tab and identify the related task.
+- Treat Richard’s corrected email notification address as the same authenticated Gmail and Calendar identity recorded under Connected sources.
+- Do not route task alerts through Slack or browser push.
+- Keep task data, delivery results and server configuration private. Do not expose email credentials, webhook URLs or task-store files through static routes or Git.
+- An email task link should open the Task assignments tab and identify the related task.
 - Keep shared assignments distinct from verified Google Sheet workplan facts unless an approved integration explicitly writes them back.
 - Keep the connector email dispatcher idempotent: never resend a recorded task ID, do not mark failures sent and keep its private state under the ignored `.data/` directory.
 
 #### Notification architecture decision
 
-- **Decision:** use a server-side notification orchestrator with independent browser, Slack and email adapters. Persist the task first, then attempt configured routes and return per-channel delivery states.
-- **Slack path:** `users.lookupByEmail` → `conversations.open` → `chat.postMessage`. Do not post tasks to a public or shared channel by default.
-- **Email path:** POST a least-data JSON payload to an approved HTTPS email webhook. Include task title, assignee, assigner, priority, due date and secure task URL; omit task details unless explicitly approved.
+- **Decision:** use email-only task alerts. Persist the task first, then let the five-minute connected Gmail dispatcher send each unseen task ID once; retain the optional server webhook for future instant delivery.
+- **Email path:** the dispatcher sends through connected Gmail with a private deduplication ledger. An optional direct path may POST a least-data JSON payload to an approved HTTPS email webhook. Include task title, assignee, assigner, priority, due date and secure task URL.
 - **Failure behavior:** keep the task and real-time update successful even when every notification route is disabled, unconfigured, rate-limited or unavailable. Show an honest delivery result instead of claiming that an alert was sent.
-- **Security boundary:** outbound notification setup is a deployment task. The prototype may show routing readiness, but it must not contain a real Slack token, email-provider secret or webhook credential.
+- **Security boundary:** the prototype may show email readiness, but it must not contain a Gmail credential, email-provider secret or webhook credential.
 
 #### Task and notification feature specification
 
-**Problem statement:** Cat and Vince need to assign accountable work to the team, while each assignee needs a timely alert through a channel they actually monitor. A browser-only Richard queue misses Vince, depends on per-device permission and cannot prove Slack or email delivery.
+**Problem statement:** Cat and Vince need to assign accountable work to the team, while each assignee needs a dependable email alert without exposing Gmail credentials in the local app.
 
-**P0 goals:** every valid task persists and live-syncs; Cat and Vince can assign; all three people can be assignees; configured Slack/email routes are attempted after persistence; channel results remain truthful; no credential reaches the client.
+**P0 goals:** every valid task persists and live-syncs; Cat and Vince can assign; all three people can be assignees; each new task ID is emailed once after persistence; delivery state remains truthful; no credential reaches the client.
 
-**Non-goals:** creating Slack accounts, changing workspace permissions, sending from a personal mailbox, assuming an email match proves Slack membership, or guaranteeing delivery when the provider rejects a message.
+**Non-goals:** Slack task alerts, browser-push task alerts, storing Gmail credentials in the app or guaranteeing receipt when the mail provider rejects or filters a message.
 
-**P1:** per-person channel preferences in an authenticated admin screen, retry queue with idempotency keys, delivery audit history and provider health monitoring.
+**P1:** retry visibility, delivery audit history, bounce tracking and provider health monitoring.
 
-**Future:** organization SSO/RBAC, approved Gmail or Microsoft Graph adapter, Slack interactive status buttons and escalation rules.
+**Future:** organization SSO/RBAC, an approved instant Gmail or Microsoft Graph adapter and email escalation rules.
 
 **Success measures:** 100% of accepted tasks persist even when notification delivery fails; 100% of outbound attempts record a channel state; zero secrets in API responses or repository history; and the selected person’s task counts update on every connected client.
 
@@ -434,9 +431,9 @@ Every notification attempt should support:
 - attempted and delivered counts;
 - provider-neutral state such as disabled, not configured, attempted, delivered or failed;
 - non-secret error summary and timestamp;
-- no access token, webhook credential, push endpoint or subscription encryption key in client-visible exports.
+- no access token, email credential or webhook credential in client-visible exports.
 
-Store task data, browser-push subscriptions and locally generated VAPID keys under an ignored private data directory. Keep Slack tokens and email webhook URLs in deployment secrets. Include shared tasks in confidential JSON snapshot exports, but never export tokens, webhook URLs, push endpoints, subscription encryption keys or the VAPID private key.
+Store task data and the email-dispatch deduplication ledger under an ignored private data directory. Keep email webhook URLs in deployment secrets. Include shared tasks in confidential JSON snapshot exports, but never export Gmail credentials, webhook URLs or dispatcher state.
 
 ## Security and deployment boundary
 
@@ -444,9 +441,8 @@ Store task data, browser-push subscriptions and locally generated VAPID keys und
 - Bind the development server to `127.0.0.1` by default.
 - Use restrictive browser/server headers and no analytics or trackers.
 - Do not collect passwords.
-- Block the private task-data directory, VAPID keys and push subscriptions from static HTTP access and Git tracking.
-- Browser push may run on localhost for testing. Cross-device browser delivery requires one shared HTTPS deployment, durable task and subscription storage, stable VAPID keys and each recipient’s explicit notification permission.
-- Slack/email delivery has explicit outbound enablement for this local/private build, but still requires verified recipient mappings, approved provider credentials and egress to those providers. Do not claim Slack or email delivery from an address or enabled switch alone.
+- Block the private task-data directory and email-dispatch ledger from static HTTP access and Git tracking.
+- Email delivery has explicit outbound enablement for this local/private build and requires verified recipient mappings plus an approved connector or webhook. Do not claim receipt from an address or enabled switch alone.
 - Before any hosted multi-user deployment, add organization authentication, role-based access, encrypted server-side storage, audit logs, backups, retention rules and approved OAuth integrations. Do not expose the unauthenticated development server directly to the public internet.
 - Keep GitHub visibility private unless the project owner explicitly approves a change.
 
@@ -468,9 +464,9 @@ The build is acceptable only when:
 3. Current leadership shows Vince and Cat only.
 4. Task assignments lets Cat and Vince create server-backed assignments for Cat, Vince or Richard through Add record, updates connected lists in real time and supports Assigned → In progress → Completed status changes.
 5. The selected person sees their open, high-priority, due-soon and completed counts, while the navigation badge shows the total open queue.
-6. A created task persists before notification delivery; configured Slack/email routes return truthful per-channel results and failure never removes the task.
-7. Cat, Vince and Richard can explicitly enable browser push on their own devices; the task remains visible when browser, Slack or email delivery is unavailable.
-8. No API response, source file, snapshot export or client bundle contains a Slack token, email webhook credential, VAPID private key or push-subscription secret.
+6. A created task persists before email notification delivery; the dispatcher returns truthful state and failure never removes the task.
+7. Slack and browser-push alert controls are absent; Cat, Vince and Richard use their listed email recipients only.
+8. No API response, source file, snapshot export or client bundle contains a Gmail credential, email webhook credential or dispatcher ledger.
 9. Workplan reflects the Google Sheet snapshot and publishes the six-week task chart without misrepresenting shared tasks as Sheet rows.
 10. Equipment and production views retain source quantities, prices, constraints and uncertainty labels.
 11. Research & innovation displays four research programs, seven unmeasured waste streams, a six-stage voluntary employment pathway, four preservation experiment families and a twelve-assignment Research Pipeline.

@@ -41,7 +41,6 @@ const child = spawn(process.execPath, ["server.js"], {
     PORT: String(port),
     SHELLYS_DATA_DIR: dataDirectory,
     TASK_NOTIFICATIONS_ENABLED: "false",
-    SLACK_BOT_TOKEN: "",
     TASK_EMAIL_WEBHOOK_URL: "",
   },
   stdio: ["ignore", "pipe", "pipe"],
@@ -62,10 +61,8 @@ try {
   assert.equal(config.people.find((item) => item.person === "Cat").email, "catherine@aimadvisors.ca");
   assert.equal(config.people.find((item) => item.person === "Richard").email, "richardc@shellysbistro.com");
   assert.equal(config.people.find((item) => item.person === "Vince").email, "vince@shellysbistro.com");
-  assert.equal(config.slackWorkspace.domain, "aimadvisors.slack.com");
   assert.equal(config.emailDispatcher.active, false);
-  assert.equal(config.people.find((item) => item.person === "Richard").slackEmail, "richardc@aimadvisors.ca");
-  assert.ok(config.people.every((item) => item.slackMemberVerified));
+  assert.ok(config.people.every((item) => item.channels.length === 1 && item.channels[0] === "email"));
 
   const aliasResponse = await fetch(`${baseUrl}/api/notifications/status`);
   assert.equal(aliasResponse.status, 200);
@@ -89,8 +86,8 @@ try {
   assert.equal(created.notification.taskId, created.task.id);
   assert.equal(created.notification.recipient, "Cat");
   assert.equal(created.notification.delivered, 0);
-  assert.equal(created.notification.deliveries.find((item) => item.channel === "slack").state, "disabled");
   assert.equal(created.notification.deliveries.find((item) => item.channel === "email").state, "disabled");
+  assert.deepEqual(created.notification.deliveries.map((item) => item.channel), ["email"]);
   assert.ok(created.notification.deliveries.every((item) => item.attemptedAt));
 
   const patchResponse = await fetch(`${baseUrl}/api/tasks/${created.task.id}`, {
