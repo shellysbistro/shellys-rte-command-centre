@@ -2674,6 +2674,65 @@ a:focus-visible {
   text-align: right;
 }
 
+.notification-routing-panel {
+  overflow: hidden;
+}
+
+.notification-route-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 12px;
+}
+
+.notification-route-card {
+  min-width: 0;
+  padding: 16px;
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  background: linear-gradient(145deg, var(--paper), #fffaf0);
+}
+
+.notification-route-card > div:first-child {
+  display: grid;
+  gap: 5px;
+}
+
+.notification-route-card > div:first-child strong {
+  overflow-wrap: anywhere;
+  color: var(--ink);
+  font-size: 12px;
+}
+
+.notification-channel-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 13px;
+}
+
+.notification-channel {
+  padding: 5px 8px;
+  border-radius: 999px;
+  color: #7a201f;
+  background: #fbe1da;
+  font-size: 9px;
+  font-weight: 800;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+}
+
+.notification-channel[data-ready="true"] {
+  color: #31540b;
+  background: #e5efcf;
+}
+
+.notification-route-card > p {
+  margin: 11px 0 0;
+  color: var(--muted);
+  font-size: 10px;
+  line-height: 1.55;
+}
+
 .shared-task-grid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2836,6 +2895,10 @@ a:focus-visible {
   .task-setup-grid {
     grid-template-columns: 1fr;
   }
+
+  .notification-route-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 @media (max-width: 900px) {
@@ -2992,6 +3055,16 @@ a:focus-visible {
   .task-notification-hint {
     max-width: none;
     text-align: left;
+  }
+
+  .task-user-switch {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    width: 100%;
+  }
+
+  .task-user-button {
+    min-width: 0;
   }
 
   .split-donut {

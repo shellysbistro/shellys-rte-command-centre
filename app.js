@@ -4,11 +4,12 @@ const STORAGE_KEY = "shellys-rte-command-centre-v11";
 const SOURCE_DB = "shellys-rte-source-vault-v1";
 const TASK_USER_KEY = "shellys-rte-task-user-v1";
 const TASK_PUSH_PERSON_KEY = "shellys-rte-push-person-v1";
+const TASK_PEOPLE = ["Cat", "Richard", "Vince"];
 
 function savedTaskUser() {
   try {
     const saved = localStorage.getItem(TASK_USER_KEY);
-    return ["Cat", "Richard"].includes(saved) ? saved : "Cat";
+    return TASK_PEOPLE.includes(saved) ? saved : "Cat";
   } catch (_error) {
     return "Cat";
   }
@@ -17,7 +18,7 @@ function savedTaskUser() {
 function savedPushPerson() {
   try {
     const saved = localStorage.getItem(TASK_PUSH_PERSON_KEY);
-    return ["Cat", "Richard"].includes(saved) ? saved : "";
+    return TASK_PEOPLE.includes(saved) ? saved : "";
   } catch (_error) {
     return "";
   }
@@ -1541,6 +1542,7 @@ const taskHub = {
   pushBusy: false,
   stream: null,
   serviceWorker: null,
+  notificationConfig: null,
 };
 
 let state = loadState();
@@ -1620,6 +1622,23 @@ async function loadSharedTasks() {
   }
 }
 
+async function loadTaskNotificationConfig() {
+  try {
+    taskHub.notificationConfig = await taskApi("/api/notifications/config");
+  } catch (_error) {
+    taskHub.notificationConfig = {
+      outboundEnabled: false,
+      browserPushAvailable: false,
+      people: [
+        { person: "Cat", email: "catherine@aimadvisors.ca", channels: ["slack", "email"], slackConfigured: false, emailConfigured: false },
+        { person: "Richard", email: "richardc@shellybistro.com", channels: ["slack", "email"], slackConfigured: false, emailConfigured: false, note: "Task-alert address differs from the connected project mailbox." },
+        { person: "Vince", email: "vince@shellysbistro.com", channels: ["slack", "email"], slackConfigured: false, emailConfigured: false },
+      ],
+    };
+  }
+  if (ui.view === "tasks") render();
+}
+
 function connectTaskStream() {
   if (!("EventSource" in window) || taskHub.stream) return;
   taskHub.stream = new EventSource("/api/tasks/events");
@@ -1694,7 +1713,7 @@ async function enablePushForCurrentUser() {
 }
 
 function setTaskUser(person) {
-  if (!["Cat", "Richard"].includes(person)) return;
+  if (!TASK_PEOPLE.includes(person)) return;
   taskHub.currentUser = person;
   taskHub.pushSubscribed = taskHub.pushPerson === person && "Notification" in window && Notification.permission === "granted";
   localStorage.setItem(TASK_USER_KEY, person);
@@ -1706,7 +1725,7 @@ function openTaskDialog() {
   render();
   const form = document.querySelector("#recordForm");
   form.elements.createdBy.value = taskHub.currentUser;
-  form.elements.assignee.value = taskHub.currentUser === "Cat" ? "Richard" : "Cat";
+  form.elements.assignee.value = ["Cat", "Vince"].includes(taskHub.currentUser) ? "Richard" : "Vince";
   recordDialog.showModal();
   form.elements.title.focus();
 }
@@ -1727,7 +1746,7 @@ async function updateSharedTaskStatus(taskId, status) {
 
 async function initializeTaskCentre() {
   connectTaskStream();
-  await Promise.all([loadSharedTasks(), prepareTaskPush()]);
+  await Promise.all([loadSharedTasks(), prepareTaskPush(), loadTaskNotificationConfig()]);
 }
 
 function openSourceVault() {
@@ -1901,7 +1920,7 @@ function contractorRecords() {
 }
 
 function updateNavCounts() {
-  document.querySelector("#taskAssignmentCount").textContent = taskHub.tasks.filter((task) => task.assignee === "Richard" && task.status !== "Completed").length;
+  document.querySelector("#taskAssignmentCount").textContent = taskHub.tasks.filter((task) => task.status !== "Completed").length;
   document.querySelector("#workplanCount").textContent = projectAssignments().length;
   document.querySelector("#equipmentCount").textContent = state.equipmentData.categories;
   document.querySelector("#innovationCount").textContent = state.innovationData.programs.length;
@@ -1925,7 +1944,7 @@ function render() {
   document.querySelectorAll(".nav-item").forEach((item) => item.classList.toggle("is-active", item.dataset.view === ui.view));
   const views = {
     overview: { title: "Expansion overview", eyebrow: "Project controls", render: renderOverview },
-    tasks: { title: "Task assignments", eyebrow: "Cat → Richard shared queue", render: renderTaskAssignments },
+    tasks: { title: "Task assignments", eyebrow: "Cat · Vince · Richard shared queue", render: renderTaskAssignments },
     workplan: { title: "Google Sheet workplan", eyebrow: "Connected delivery plan", render: renderWorkplan },
     equipment: { title: "Equipment & prices", eyebrow: "64-machine procurement plan", render: renderEquipment },
     production: { title: "Production breakdown", eyebrow: "One-million-meal flow", render: renderProduction },
@@ -2145,6 +2164,9 @@ function sharedTaskMatchesSearch(task) {
 }
 
 function taskNotificationSummary() {
+  if (taskHub.notificationConfig && !taskHub.notificationConfig.browserPushAvailable) {
+    return { state: "Unavailable", detail: "The server needs the optional web-push package before browser alerts can be enabled." };
+  }
   if (!("Notification" in window) || !("serviceWorker" in navigator) || !("PushManager" in window)) {
     return { state: "Unavailable", detail: "This browser does not support web push." };
   }
@@ -2155,6 +2177,30 @@ function taskNotificationSummary() {
     return { state: "Enabled", detail: `${taskHub.currentUser} receives new-task alerts on this device.` };
   }
   return { state: "Not enabled", detail: `Enable alerts while this device is set to ${taskHub.currentUser}.` };
+}
+
+function renderTaskNotificationRoutes() {
+  const config = taskHub.notificationConfig;
+  if (!config) return '<section class="panel">Loading Slack and email routing…</section>';
+  return `
+    <section class="panel notification-routing-panel">
+      <div class="panel-heading">
+        <div><h3>Slack & email routing</h3><p>Server-side delivery uses deployment credentials; tokens and webhook URLs are never exposed here.</p></div>
+        ${statusBadge(config.outboundEnabled ? "Configured" : "Setup required")}
+      </div>
+      <div class="notification-route-grid">
+        ${config.people.map((contact) => `
+          <article class="notification-route-card">
+            <div><span class="eyebrow">${escapeHtml(contact.person)}</span><strong>${escapeHtml(contact.email)}</strong></div>
+            <div class="notification-channel-list">
+              <span class="notification-channel" data-ready="${contact.slackConfigured}">Slack · ${contact.slackConfigured ? "ready" : "not configured"}</span>
+              <span class="notification-channel" data-ready="${contact.emailConfigured}">Email · ${contact.emailConfigured ? "ready" : "not configured"}</span>
+            </div>
+            ${contact.note ? `<p>${escapeHtml(contact.note)}</p>` : ""}
+          </article>`).join("")}
+      </div>
+      ${config.outboundEnabled ? "" : '<div class="callout u-mt-12"><strong>Safe default</strong>Outbound Slack and email alerts remain off until the private deployment explicitly enables them. Shared tasks and live updates continue to work.</div>'}
+    </section>`;
 }
 
 function renderSharedTaskCard(task) {
@@ -2190,48 +2236,49 @@ function renderSharedTaskCard(task) {
 
 function renderTaskAssignments() {
   const tasks = taskHub.tasks.filter(sharedTaskMatchesSearch);
-  const richardTasks = taskHub.tasks.filter((task) => task.assignee === "Richard");
-  const openRichardTasks = richardTasks.filter((task) => task.status !== "Completed");
+  const currentTasks = taskHub.tasks.filter((task) => task.assignee === taskHub.currentUser);
+  const openCurrentTasks = currentTasks.filter((task) => task.status !== "Completed");
   const dueLimit = new Date();
   dueLimit.setDate(dueLimit.getDate() + 7);
   const dueLimitIso = localIsoDate(dueLimit);
-  const dueSoon = openRichardTasks.filter((task) => task.dueDate && task.dueDate <= dueLimitIso).length;
-  const highPriority = openRichardTasks.filter((task) => task.priority === "High").length;
-  const completed = richardTasks.filter((task) => task.status === "Completed").length;
+  const dueSoon = openCurrentTasks.filter((task) => task.dueDate && task.dueDate <= dueLimitIso).length;
+  const highPriority = openCurrentTasks.filter((task) => task.priority === "High").length;
+  const completed = currentTasks.filter((task) => task.status === "Completed").length;
   const notification = taskNotificationSummary();
 
   return `
     <div class="content-stack task-centre-view">
       <section class="task-centre-hero">
         <div>
-          <p class="eyebrow">Cat → Richard</p>
-          <h3>Assign the next move. Keep Richard’s list current.</h3>
-          <p>New tasks are saved to the shared task service, appear here in real time, and trigger a browser push after Richard enables notifications on his device.</p>
+          <p class="eyebrow">Cat · Vince · Richard</p>
+          <h3>Assign the next move. Keep the whole team current.</h3>
+          <p>New tasks are saved to the shared service, appear in real time, and route through configured Slack, email and optional browser notifications without blocking the assignment.</p>
         </div>
         <button class="button button--primary" type="button" data-open-task-dialog>Assign a task</button>
       </section>
 
       <section class="metrics-grid" aria-label="Shared task metrics">
-        ${metricCard("Richard open", String(openRichardTasks.length), "Assigned or in-progress tasks in the shared queue.", "Live")}
-        ${metricCard("High priority", String(highPriority), "Open Richard tasks marked high priority.", "Attention")}
+        ${metricCard(`${taskHub.currentUser} open`, String(openCurrentTasks.length), "Assigned or in-progress tasks for the selected person.", "Live")}
+        ${metricCard("High priority", String(highPriority), `Open ${taskHub.currentUser} tasks marked high priority.`, "Attention")}
         ${metricCard("Due within 7 days", String(dueSoon), "Includes overdue tasks that remain open.", "Due")}
-        ${metricCard("Completed", String(completed), "Richard assignments marked complete.", "Done", true)}
+        ${metricCard("Completed", String(completed), `${taskHub.currentUser} assignments marked complete.`, "Done", true)}
       </section>
 
       <section class="task-setup-grid">
         <article class="panel task-device-panel">
           <div class="panel-heading"><div><h3>Who is using this device?</h3><p>This controls whose alerts are registered here.</p></div></div>
           <div class="task-user-switch" role="group" aria-label="Current task user">
-            ${["Cat", "Richard"].map((person) => `<button class="task-user-button${taskHub.currentUser === person ? " is-active" : ""}" type="button" data-task-user="${person}">${person}</button>`).join("")}
+            ${TASK_PEOPLE.map((person) => `<button class="task-user-button${taskHub.currentUser === person ? " is-active" : ""}" type="button" data-task-user="${person}">${person}</button>`).join("")}
           </div>
-          <p class="task-device-note">Current device: <strong>${escapeHtml(taskHub.currentUser)}</strong>. Cat can assign through <strong>Add record</strong>; Richard can update task status here.</p>
+          <p class="task-device-note">Current device: <strong>${escapeHtml(taskHub.currentUser)}</strong>. Cat and Vince can assign through <strong>Add record</strong>; each assignee can update task status here.</p>
         </article>
         <article class="panel task-notification-panel">
           <div class="notification-state"><span class="notification-state__icon" aria-hidden="true">${taskHub.pushSubscribed ? "✓" : "!"}</span><div><strong>Push ${escapeHtml(notification.state.toLowerCase())}</strong><p>${escapeHtml(notification.detail)}</p></div></div>
-          ${taskHub.currentUser === "Richard" && !taskHub.pushSubscribed ? `<button class="button button--primary" type="button" data-enable-push ${taskHub.pushBusy ? "disabled" : ""}>${taskHub.pushBusy ? "Enabling…" : "Enable Richard notifications"}</button>` : ""}
-          ${taskHub.currentUser === "Cat" ? '<span class="task-notification-hint">Switch this device to Richard before enabling his alerts.</span>' : ""}
+          ${!taskHub.pushSubscribed && taskHub.notificationConfig?.browserPushAvailable ? `<button class="button button--primary" type="button" data-enable-push ${taskHub.pushBusy ? "disabled" : ""}>${taskHub.pushBusy ? "Enabling…" : `Enable ${escapeHtml(taskHub.currentUser)} browser alerts`}</button>` : ""}
         </article>
       </section>
+
+      ${renderTaskNotificationRoutes()}
 
       <div class="section-title">
         <div><h3>Shared task list</h3><p>${tasks.length} shown · ${taskHub.tasks.length} total. Status changes sync to every connected app.</p></div>
@@ -2241,7 +2288,7 @@ function renderTaskAssignments() {
       ${taskHub.loading ? '<section class="panel">Loading shared tasks…</section>' : ""}
       ${taskHub.error ? `<section class="callout callout--danger"><strong>Shared task service unavailable</strong>${escapeHtml(taskHub.error)}</section>` : ""}
       <section class="shared-task-grid" aria-label="Shared task list">
-        ${tasks.map(renderSharedTaskCard).join("") || (!taskHub.loading ? emptyState("No shared tasks yet", "Use Add record or Assign a task to send Richard the first assignment.") : "")}
+        ${tasks.map(renderSharedTaskCard).join("") || (!taskHub.loading ? emptyState("No shared tasks yet", "Use Add record or Assign a task to create the first team assignment.") : "")}
       </section>
     </div>`;
 }
@@ -3149,7 +3196,7 @@ document.querySelector("#recordForm").addEventListener("submit", async (event) =
     ui.view = "tasks";
     render();
     const delivery = payload.notification?.delivered || 0;
-    showToast(delivery ? "Task assigned and push notification delivered." : "Task assigned. Richard’s list is updated; enable push on his device for alerts.");
+    showToast(delivery ? `Task assigned; ${delivery} notification ${delivery === 1 ? "delivery" : "deliveries"} succeeded.` : "Task assigned and synchronized. Notification delivery is not configured or was unavailable.");
   } catch (error) {
     showToast(error.message);
   } finally {

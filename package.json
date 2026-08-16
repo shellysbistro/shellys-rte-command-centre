@@ -9,7 +9,7 @@
   "scripts": {
     "start": "node server.js",
     "check": "node --check app.js && node --check server.js && node --check service-worker.js",
-    "test": "node --check app.js && node --check server.js && node --check service-worker.js"
+    "test": "node --check app.js && node --check server.js && node --check service-worker.js && node scripts/test-server.mjs"
   },
   "dependencies": {
     "web-push": "^3.6.7"

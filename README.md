@@ -19,13 +19,38 @@ Then open [http://127.0.0.1:4173](http://127.0.0.1:4173). The server binds only 
 
 Windows teammates can also run `.\start-app.ps1` after cloning.
 
-## Shared task assignments and push
+## Shared task assignments and notifications
 
-The **Task assignments** tab adds a server-backed Cat → Richard queue. **Add record** is a shortcut to the assignment form. New tasks appear immediately in every connected app through a live event stream, and Richard can mark them in progress or complete.
+The **Task assignments** tab provides one server-backed queue for Cat, Vince and Richard. Cat and Vince can assign through **Add record**, all three people can be assignees, and each selected user can move work from Assigned to In progress to Completed. New tasks appear immediately in every connected app through a live event stream.
 
-For notifications, Richard opens the Task assignments tab on his device, selects **Richard**, and chooses **Enable Richard notifications**. Browser push works on localhost for testing and on HTTPS deployments. The server generates a local VAPID key pair and stores tasks, push subscriptions and keys under the ignored `.data/` directory. Production deployments can instead supply `VAPID_PUBLIC_KEY`, `VAPID_PRIVATE_KEY`, `VAPID_SUBJECT` and a durable `SHELLYS_DATA_DIR`.
+The server can route a new-task alert to Slack, email and optional browser push after the task is safely stored. Outbound Slack/email delivery is disabled by default. Browser push works on localhost for testing and on HTTPS deployments; each person must opt in on their own device. The server generates a local VAPID key pair when the optional `web-push` package is available and stores tasks, subscriptions and keys under the ignored `.data/` directory.
 
-The default server remains bound to `127.0.0.1`. Cat and Richard can only share the queue when both clients reach the same running server. A real cross-device deployment therefore needs HTTPS, durable storage and organization authentication before use; do not expose the unauthenticated server directly to the public internet.
+Notification contacts supplied by the project owner are:
+
+- Cat: `catherine@aimadvisors.ca`
+- Richard task alerts: `richardc@shellybistro.com`
+- Vince: `vince@shellysbistro.com`
+
+Richard’s task-alert address differs from the authenticated Gmail/Calendar address `richardc@shellysbistro.com`. The application preserves both identities and displays the discrepancy; confirm the task-alert domain before enabling production delivery.
+
+Configure private deployment variables without committing a `.env` file:
+
+```text
+TASK_NOTIFICATIONS_ENABLED=true
+TASK_APP_BASE_URL=https://private-project-host.example
+SLACK_BOT_TOKEN=xoxb-...
+TASK_EMAIL_WEBHOOK_URL=https://approved-private-email-gateway.example/task-alert
+CAT_TASK_EMAIL=catherine@aimadvisors.ca
+RICHARD_TASK_EMAIL=richardc@shellybistro.com
+VINCE_TASK_EMAIL=vince@shellysbistro.com
+TASK_NOTIFICATION_CHANNELS_CAT=slack,email
+TASK_NOTIFICATION_CHANNELS_RICHARD=slack,email
+TASK_NOTIFICATION_CHANNELS_VINCE=slack,email
+```
+
+The Slack app needs `users:read.email`, `im:write` and `chat:write`. The email webhook receives a least-data JSON task alert and must return an HTTP success response. Real tokens and webhook URLs belong only in deployment secrets.
+
+The default server remains bound to `127.0.0.1`. Team members can only share the queue when their clients reach the same running server. A real cross-device deployment therefore needs HTTPS, durable storage and organization authentication before use; do not expose the unauthenticated server directly to the public internet.
 
 ## Team workflow
 
@@ -46,7 +71,7 @@ Open a pull request on GitHub and have another teammate review it before merging
 ## What works
 
 - Branded floral interface built from the supplied Shelly’s Bistro logo, with responsive desktop and mobile layouts.
-- Shared Cat → Richard task assignments with live list updates, due dates, priorities, status controls and opt-in browser push notifications.
+- Shared Cat/Vince/Richard task assignments with live list updates, due dates, priorities, status controls, server-side Slack/email routing and opt-in browser push.
 - Connected Google Sheet workplan with 18 Shelly’s Bistro assignment rows, Richard’s three assigned items, and the complete six-week `Richard Workplan` tab.
 - Published task chart, global search, funding and budget views, a live list of available project-fit funding, meeting schedule, contact/outreach controls and an email follow-up queue.
 - Equipment & prices tab with the complete 22-category / 64-machine sourcing register, original USD FOB figures, supplemental Canadian landed-cost items, procurement waves and the CA$1.6–1.8M equipment-scope budget.
@@ -79,10 +104,10 @@ The user also supplied `41_Paquin_Contractor_Tracker.xlsx`. Its 11 unique contra
 
 The Research & innovation portfolio uses current official Canadian and Manitoba sources as precedents and regulatory anchors. It does not claim that a factory waste baseline, anaerobic digester, scholarship fund, referral partnership, employment placement, preservative system or shelf-life extension exists. Each program remains behind measurement, ethics, technical, regulatory and community-governance gates.
 
-Current project leadership is Vince Bignell and Cat only. Cat’s formal title and contact details were not supplied and are therefore left missing. Richard Chimebele remains identified only as the authenticated Gmail mailbox profile and in historical source notes—not as current leadership.
+Current project leadership is Vince Bignell and Cat only. Cat’s formal title was not supplied; her task-notification email is `catherine@aimadvisors.ca`. Richard Chimebele remains identified only as the authenticated Gmail mailbox profile, a task/workplan participant and a person in historical source notes—not as current leadership.
 
 The pasted prompt also ends after the first row of the requested twelve-activity budget table. The app includes the one supplied row and records an explicit conflict for the eleven missing activities; it does not invent them.
 
 ## Security boundary
 
-This is a private operational prototype. It includes restrictive browser/server headers, local-only binding by default and no password collection. Shared task notifications use the browser push service selected by the user’s browser. Before multi-user or hosted deployment, add organization authentication, role-based permissions, server-side encrypted storage, audit logging, backups, retention rules and approved OAuth integrations for Google Workspace/email. Do not expose this build directly to the public internet.
+This is a private operational prototype. It includes restrictive browser/server headers, local-only binding by default and no password collection. Slack/email task delivery requires explicit server enablement and private provider credentials; browser push remains opt-in. Before multi-user or hosted deployment, add organization authentication, role-based permissions, server-side encrypted storage, delivery audit logs, backups, retention rules and approved OAuth/provider integrations. Do not expose this build directly to the public internet.

@@ -4,7 +4,14 @@ const crypto = require("crypto");
 const fs = require("fs");
 const http = require("http");
 const path = require("path");
-const webPush = require("web-push");
+
+let webPush = null;
+try {
+  webPush = require("web-push");
+} catch (_error) {
+  // Browser push is optional. The task service and Slack/email routes still run
+  // when the package has not yet been installed.
+}
 
 const host = process.env.HOST || "127.0.0.1";
 const port = Number(process.env.PORT || 4173);
@@ -13,6 +20,26 @@ const dataDirectory = path.resolve(process.env.SHELLYS_DATA_DIR || path.join(roo
 const taskStorePath = path.join(dataDirectory, "task-centre.json");
 const vapidStorePath = path.join(dataDirectory, "push-vapid.json");
 const vapidSubject = process.env.VAPID_SUBJECT || "mailto:notifications@shellysbistro.com";
+const taskPeople = ["Cat", "Richard", "Vince"];
+const taskAppBaseUrl = cleanHttpUrl(process.env.TASK_APP_BASE_URL) || `http://${host}:${port}`;
+const outboundNotificationsEnabled = /^true$/i.test(process.env.TASK_NOTIFICATIONS_ENABLED || "");
+const slackBotToken = process.env.SLACK_BOT_TOKEN || "";
+const emailWebhookUrl = cleanHttpsUrl(process.env.TASK_EMAIL_WEBHOOK_URL);
+const notificationContacts = {
+  Cat: {
+    email: process.env.CAT_TASK_EMAIL || "catherine@aimadvisors.ca",
+    channels: notificationChannels("Cat"),
+  },
+  Richard: {
+    email: process.env.RICHARD_TASK_EMAIL || "richardc@shellybistro.com",
+    channels: notificationChannels("Richard"),
+    note: "Task-alert address supplied August 15, 2026; it differs from the connected project mailbox and must not replace that source identity.",
+  },
+  Vince: {
+    email: process.env.VINCE_TASK_EMAIL || "vince@shellysbistro.com",
+    channels: notificationChannels("Vince"),
+  },
+};
 const sseClients = new Set();
 
 const mimeTypes = {
@@ -27,6 +54,32 @@ const mimeTypes = {
 };
 
 fs.mkdirSync(dataDirectory, { recursive: true });
+
+function cleanHttpUrl(value) {
+  try {
+    const parsed = new URL(String(value || ""));
+    return ["http:", "https:"].includes(parsed.protocol) ? parsed.toString().replace(/\/$/, "") : "";
+  } catch (_error) {
+    return "";
+  }
+}
+
+function cleanHttpsUrl(value) {
+  try {
+    const parsed = new URL(String(value || ""));
+    return parsed.protocol === "https:" ? parsed.toString() : "";
+  } catch (_error) {
+    return "";
+  }
+}
+
+function notificationChannels(person) {
+  const key = `TASK_NOTIFICATION_CHANNELS_${person.toUpperCase()}`;
+  return String(process.env[key] || "slack,email")
+    .split(",")
+    .map((item) => item.trim().toLowerCase())
+    .filter((item, index, values) => ["slack", "email", "browser"].includes(item) && values.indexOf(item) === index);
+}
 
 function loadJson(filePath, fallback) {
   try {
@@ -51,6 +104,7 @@ function loadSharedState() {
 }
 
 function loadVapidKeys() {
+  if (!webPush) return null;
   if (process.env.VAPID_PUBLIC_KEY && process.env.VAPID_PRIVATE_KEY) {
     return { publicKey: process.env.VAPID_PUBLIC_KEY, privateKey: process.env.VAPID_PRIVATE_KEY };
   }
@@ -63,7 +117,7 @@ function loadVapidKeys() {
 
 let sharedState = loadSharedState();
 const vapidKeys = loadVapidKeys();
-webPush.setVapidDetails(vapidSubject, vapidKeys.publicKey, vapidKeys.privateKey);
+if (webPush && vapidKeys) webPush.setVapidDetails(vapidSubject, vapidKeys.publicKey, vapidKeys.privateKey);
 
 function saveSharedState() {
   writeJson(taskStorePath, sharedState);
@@ -122,7 +176,7 @@ function cleanText(value, maximumLength) {
 }
 
 function cleanPerson(value, fallback = "Richard") {
-  return ["Cat", "Richard"].includes(value) ? value : fallback;
+  return taskPeople.includes(value) ? value : fallback;
 }
 
 function cleanDate(value) {
@@ -150,7 +204,17 @@ function broadcast(type, task) {
   for (const client of sseClients) client.write(message);
 }
 
-async function notifyAssignee(task) {
+function taskNotificationText(task) {
+  const due = task.dueDate ? ` Due ${task.dueDate}.` : "";
+  return `New task from ${task.createdBy}: ${task.title}. ${task.priority} priority.${due} Open ${taskAppBaseUrl}/?view=tasks&task=${encodeURIComponent(task.id)}`;
+}
+
+function channelResult(channel, state, attempted = 0, delivered = 0, detail = "") {
+  return { channel, state, attempted, delivered, detail, attemptedAt: new Date().toISOString() };
+}
+
+async function notifyBrowserPush(task) {
+  if (!webPush || !vapidKeys) return channelResult("browser", "unavailable", 0, 0, "Install web-push to enable browser delivery.");
   const matching = sharedState.subscriptions.filter((item) => item.person === task.assignee);
   let delivered = 0;
   let removed = false;
@@ -175,7 +239,108 @@ async function notifyAssignee(task) {
     }
   }
   if (removed) saveSharedState();
-  return { attempted: matching.length, delivered };
+  return channelResult("browser", matching.length ? "attempted" : "not-subscribed", matching.length, delivered);
+}
+
+async function slackApi(method, body) {
+  const response = await fetch(`https://slack.com/api/${method}`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${slackBotToken}`,
+      "Content-Type": "application/json; charset=utf-8",
+    },
+    body: JSON.stringify(body),
+  });
+  if (!response.ok) throw new Error(`Slack ${method} returned HTTP ${response.status}.`);
+  const payload = await response.json();
+  if (!payload.ok) throw new Error(`Slack ${method} failed: ${payload.error || "unknown_error"}.`);
+  return payload;
+}
+
+async function notifySlack(task, contact) {
+  if (!contact.channels.includes("slack")) return channelResult("slack", "not-selected");
+  if (!outboundNotificationsEnabled) return channelResult("slack", "disabled", 0, 0, "Set TASK_NOTIFICATIONS_ENABLED=true after deployment approval.");
+  if (!slackBotToken) return channelResult("slack", "not-configured", 0, 0, "SLACK_BOT_TOKEN is missing.");
+  try {
+    const lookup = await slackApi("users.lookupByEmail", { email: contact.email });
+    const conversation = await slackApi("conversations.open", { users: lookup.user.id });
+    await slackApi("chat.postMessage", {
+      channel: conversation.channel.id,
+      text: taskNotificationText(task),
+      unfurl_links: false,
+      unfurl_media: false,
+    });
+    return channelResult("slack", "delivered", 1, 1);
+  } catch (error) {
+    console.warn(`Slack task alert failed for ${task.assignee}: ${error.message}`);
+    return channelResult("slack", "failed", 1, 0, error.message);
+  }
+}
+
+async function notifyEmail(task, contact) {
+  if (!contact.channels.includes("email")) return channelResult("email", "not-selected");
+  if (!outboundNotificationsEnabled) return channelResult("email", "disabled", 0, 0, "Set TASK_NOTIFICATIONS_ENABLED=true after deployment approval.");
+  if (!emailWebhookUrl) return channelResult("email", "not-configured", 0, 0, "TASK_EMAIL_WEBHOOK_URL must be an HTTPS endpoint.");
+  try {
+    const response = await fetch(emailWebhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json; charset=utf-8" },
+      body: JSON.stringify({
+        event: "task.assigned",
+        to: contact.email,
+        subject: `New Shelly’s Bistro task from ${task.createdBy}`,
+        text: taskNotificationText(task),
+        task: {
+          id: task.id,
+          title: task.title,
+          assignee: task.assignee,
+          assignedBy: task.createdBy,
+          priority: task.priority,
+          dueDate: task.dueDate,
+          url: `${taskAppBaseUrl}/?view=tasks&task=${encodeURIComponent(task.id)}`,
+        },
+      }),
+    });
+    if (!response.ok) throw new Error(`Email webhook returned HTTP ${response.status}.`);
+    return channelResult("email", "delivered", 1, 1);
+  } catch (error) {
+    console.warn(`Email task alert failed for ${task.assignee}: ${error.message}`);
+    return channelResult("email", "failed", 1, 0, error.message);
+  }
+}
+
+async function notifyAssignee(task) {
+  const contact = notificationContacts[task.assignee];
+  const deliveries = await Promise.all([
+    notifyBrowserPush(task),
+    notifySlack(task, contact),
+    notifyEmail(task, contact),
+  ]);
+  return {
+    taskId: task.id,
+    recipient: task.assignee,
+    attempted: deliveries.reduce((total, item) => total + item.attempted, 0),
+    delivered: deliveries.reduce((total, item) => total + item.delivered, 0),
+    deliveries,
+  };
+}
+
+function publicNotificationConfig() {
+  return {
+    outboundEnabled: outboundNotificationsEnabled,
+    browserPushAvailable: Boolean(webPush && vapidKeys),
+    people: taskPeople.map((person) => {
+      const contact = notificationContacts[person];
+      return {
+        person,
+        email: contact.email,
+        channels: contact.channels,
+        slackConfigured: outboundNotificationsEnabled && contact.channels.includes("slack") && Boolean(slackBotToken),
+        emailConfigured: outboundNotificationsEnabled && contact.channels.includes("email") && Boolean(emailWebhookUrl),
+        note: contact.note || "",
+      };
+    }),
+  };
 }
 
 function handleTaskEvents(request, response) {
@@ -190,7 +355,17 @@ function handleTaskEvents(request, response) {
 
 async function handleApi(request, response, url) {
   if (request.method === "GET" && url.pathname === "/api/health") {
-    sendJson(response, 200, { ok: true, taskCount: sharedState.tasks.length, pushEnabled: true });
+    sendJson(response, 200, {
+      ok: true,
+      taskCount: sharedState.tasks.length,
+      pushEnabled: Boolean(webPush && vapidKeys),
+      outboundNotificationsEnabled,
+    });
+    return true;
+  }
+
+  if (request.method === "GET" && url.pathname === "/api/notifications/config") {
+    sendJson(response, 200, publicNotificationConfig());
     return true;
   }
 
@@ -211,13 +386,19 @@ async function handleApi(request, response, url) {
       sendError(response, 400, "Task title is required.");
       return true;
     }
+    const assignee = cleanPerson(body.assignee, "");
+    const createdBy = cleanPerson(body.createdBy, "");
+    if (!assignee || !createdBy) {
+      sendError(response, 400, "Assignee and assigner must be Cat, Richard or Vince.");
+      return true;
+    }
     const now = new Date().toISOString();
     const task = {
       id: crypto.randomUUID(),
       title,
       details: cleanText(body.details, 2000),
-      assignee: cleanPerson(body.assignee),
-      createdBy: cleanPerson(body.createdBy, "Cat"),
+      assignee,
+      createdBy,
       priority: ["High", "Normal", "Low"].includes(body.priority) ? body.priority : "Normal",
       dueDate: cleanDate(body.dueDate),
       status: "Assigned",
@@ -253,11 +434,19 @@ async function handleApi(request, response, url) {
   }
 
   if (request.method === "GET" && url.pathname === "/api/push/config") {
+    if (!webPush || !vapidKeys) {
+      sendError(response, 503, "Browser push is unavailable until the web-push dependency is installed.");
+      return true;
+    }
     sendJson(response, 200, { publicKey: vapidKeys.publicKey });
     return true;
   }
 
   if (request.method === "POST" && url.pathname === "/api/push/subscribe") {
+    if (!webPush || !vapidKeys) {
+      sendError(response, 503, "Browser push is unavailable until the web-push dependency is installed.");
+      return true;
+    }
     const body = await readJsonBody(request);
     const person = cleanPerson(body.person, "");
     const subscription = body.subscription;
@@ -342,6 +531,7 @@ heartbeat.unref();
 
 server.listen(port, host, () => {
   console.log(`Shelly’s RTE Command Centre: http://${host}:${port}`);
-  console.log("Shared task updates and browser push are enabled.");
+  console.log(`Shared task updates are enabled. Browser push: ${webPush && vapidKeys ? "available" : "unavailable"}.`);
+  console.log(`Slack/email task delivery: ${outboundNotificationsEnabled ? "enabled by configuration" : "disabled by default"}.`);
   console.log("Press Ctrl+C to stop the server.");
 });

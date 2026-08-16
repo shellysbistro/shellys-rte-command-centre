@@ -143,7 +143,7 @@
           <button class="icon-button" type="button" data-close-dialog="recordDialog" aria-label="Close">Close</button>
         </div>
 
-        <p class="form-note">The task is added to the shared task list immediately. Richard receives a push notification after notifications are enabled on his device.</p>
+        <p class="form-note">The task is added to the shared list immediately. The server attempts the assignee’s configured Slack, email and optional browser notification routes without blocking the assignment.</p>
 
         <div class="form-grid">
           <label class="field field--wide">
@@ -155,6 +155,7 @@
             <select name="assignee" required>
               <option value="Richard">Richard</option>
               <option value="Cat">Cat</option>
+              <option value="Vince">Vince</option>
             </select>
           </label>
           <label class="field">
@@ -162,6 +163,7 @@
             <select name="createdBy" required>
               <option value="Cat">Cat</option>
               <option value="Richard">Richard</option>
+              <option value="Vince">Vince</option>
             </select>
           </label>
           <label class="field">
@@ -178,7 +180,7 @@
           </label>
           <label class="field field--wide">
             <span>Details</span>
-            <textarea name="details" rows="5" maxlength="2000" placeholder="Add the outcome, links, context, or next step Richard needs."></textarea>
+            <textarea name="details" rows="5" maxlength="2000" placeholder="Add the outcome, links, context, or next step the assignee needs."></textarea>
           </label>
         </div>
 
