@@ -1640,7 +1640,7 @@ async function loadTaskNotificationConfig() {
       slackWorkspace: { name: "Aimadvisors", domain: "aimadvisors.slack.com", membershipVerifiedAt: "2026-08-15", automationConfigured: false },
       people: [
         { person: "Cat", email: "catherine@aimadvisors.ca", slackEmail: "catherine@aimadvisors.ca", slackMemberVerified: true, channels: ["slack", "email"], slackConfigured: false, emailConfigured: false },
-        { person: "Richard", email: "richardc@shellybistro.com", slackEmail: "richardc@aimadvisors.ca", slackMemberVerified: true, channels: ["slack", "email"], slackConfigured: false, emailConfigured: false, note: "Slack and email use separate verified addresses." },
+        { person: "Richard", email: "richardc@shellysbistro.com", slackEmail: "richardc@aimadvisors.ca", slackMemberVerified: true, channels: ["slack", "email"], slackConfigured: false, emailConfigured: false, note: "Email alerts use the connected Gmail address; Slack uses the separate verified Aimadvisors identity." },
         { person: "Vince", email: "vince@shellysbistro.com", slackEmail: "vince@shellysbistro.com", slackMemberVerified: true, channels: ["slack", "email"], slackConfigured: false, emailConfigured: false },
       ],
     };

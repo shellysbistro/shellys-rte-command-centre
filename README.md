@@ -28,12 +28,12 @@ The server can route a new-task alert to Slack, email and optional browser push 
 Notification contacts supplied by the project owner are:
 
 - Cat: `catherine@aimadvisors.ca`
-- Richard task alerts: `richardc@shellybistro.com`
+- Richard task alerts: `richardc@shellysbistro.com`
 - Vince: `vince@shellysbistro.com`
 
 The connected Slack workspace is **Aimadvisors** (`aimadvisors.slack.com`). Its member directory was verified on August 15, 2026: Cat maps to `catherine@aimadvisors.ca`, Richard maps to `richardc@aimadvisors.ca`, and Vince maps to `vince@shellysbistro.com`. These Slack lookup addresses are distinct from email-alert recipients where noted; membership verification does not by itself configure automated delivery.
 
-Richard’s task-alert address differs from the authenticated Gmail/Calendar address `richardc@shellysbistro.com`. The application preserves both identities and displays the discrepancy; confirm the task-alert domain before enabling production delivery.
+On August 15, 2026, the project owner corrected Richard’s task-alert recipient to the authenticated Gmail/Calendar address `richardc@shellysbistro.com`. Richard’s separate Slack lookup identity remains `richardc@aimadvisors.ca`. Two previously missed task notifications were sent manually from Cat Lee at `catherine@aimadvisors.ca` to the corrected Richard address; automated email delivery still requires the approved webhook.
 
 Configure private deployment variables without committing a `.env` file:
 
@@ -44,7 +44,7 @@ SLACK_BOT_TOKEN=xoxb-...
 SLACK_WORKSPACE_DOMAIN=aimadvisors.slack.com
 TASK_EMAIL_WEBHOOK_URL=https://approved-private-email-gateway.example/task-alert
 CAT_TASK_EMAIL=catherine@aimadvisors.ca
-RICHARD_TASK_EMAIL=richardc@shellybistro.com
+RICHARD_TASK_EMAIL=richardc@shellysbistro.com
 VINCE_TASK_EMAIL=vince@shellysbistro.com
 CAT_SLACK_EMAIL=catherine@aimadvisors.ca
 RICHARD_SLACK_EMAIL=richardc@aimadvisors.ca

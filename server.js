@@ -39,11 +39,11 @@ const notificationContacts = {
     channels: notificationChannels("Cat"),
   },
   Richard: {
-    email: process.env.RICHARD_TASK_EMAIL || "richardc@shellybistro.com",
+    email: process.env.RICHARD_TASK_EMAIL || "richardc@shellysbistro.com",
     slackEmail: process.env.RICHARD_SLACK_EMAIL || "richardc@aimadvisors.ca",
     slackMemberVerified: true,
     channels: notificationChannels("Richard"),
-    note: "Slack uses richardc@aimadvisors.ca. The separate task-alert email supplied August 15, 2026 remains richardc@shellybistro.com and does not replace the connected project mailbox.",
+    note: "Email alerts use the connected Gmail address richardc@shellysbistro.com. Slack uses the separate verified Aimadvisors identity richardc@aimadvisors.ca.",
   },
   Vince: {
     email: process.env.VINCE_TASK_EMAIL || "vince@shellysbistro.com",

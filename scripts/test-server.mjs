@@ -60,7 +60,7 @@ try {
   const config = await configResponse.json();
   assert.deepEqual(config.people.map((item) => item.person), ["Cat", "Richard", "Vince"]);
   assert.equal(config.people.find((item) => item.person === "Cat").email, "catherine@aimadvisors.ca");
-  assert.equal(config.people.find((item) => item.person === "Richard").email, "richardc@shellybistro.com");
+  assert.equal(config.people.find((item) => item.person === "Richard").email, "richardc@shellysbistro.com");
   assert.equal(config.people.find((item) => item.person === "Vince").email, "vince@shellysbistro.com");
   assert.equal(config.slackWorkspace.domain, "aimadvisors.slack.com");
   assert.equal(config.people.find((item) => item.person === "Richard").slackEmail, "richardc@aimadvisors.ca");

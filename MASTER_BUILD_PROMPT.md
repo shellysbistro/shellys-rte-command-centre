@@ -32,9 +32,10 @@ These direct project-owner instructions override older figures or roles in the o
 9. Do not show dedicated Sources, Conflicts or Pending Source Review tabs in the main navigation. Keep provenance and conflict controls in the data model and on relevant records.
 10. Do not show pending source-review clutter on the user’s operational tabs.
 11. Keep one shared **Task assignments** tab for Cat, Vince and Richard. Cat and Vince can assign work; **Add record** is a shortcut to this task form. Every connected list updates in real time.
-12. Route new-task alerts through server-side Slack and/or email delivery, with optional browser push as a fallback. Current notification contacts are Cat at `catherine@aimadvisors.ca`, Vince at `vince@shellysbistro.com` and Richard at the user-supplied task-alert address `richardc@shellybistro.com`.
-13. Richard’s task-alert address differs from the connected Gmail/Calendar identity `richardc@shellysbistro.com`. Preserve both exactly, label their different purposes and require deployment-owner verification before production outbound delivery; do not silently rewrite either address.
+12. Route new-task alerts through server-side Slack and/or email delivery, with optional browser push as a fallback. Current email-alert contacts are Cat at `catherine@aimadvisors.ca`, Vince at `vince@shellysbistro.com` and Richard at the owner-confirmed address `richardc@shellysbistro.com`.
+13. Richard’s email-alert recipient now matches the connected Gmail/Calendar identity `richardc@shellysbistro.com`. His distinct Slack lookup identity is `richardc@aimadvisors.ca`; keep channel identities separate and labeled.
 14. The connected Slack workspace is Aimadvisors (`aimadvisors.slack.com`). Directory membership verified August 15, 2026 maps Cat to `catherine@aimadvisors.ca`, Richard to `richardc@aimadvisors.ca` and Vince to `vince@shellysbistro.com`. Keep these Slack lookup identities separate from email-alert recipients.
+15. On August 15, 2026, two missed Richard task notifications were manually sent from Cat Lee at `catherine@aimadvisors.ca` to the corrected recipient `richardc@shellysbistro.com`. Record this as a manual recovery action, not proof that the automated email webhook is configured.
 
 ## Non-negotiable truth rules
 
@@ -161,9 +162,9 @@ Do not add Sources, Conflicts or Pending Review to the main navigation.
 - Support per-person Slack and email channel selection. Slack must identify the user by approved email, open/resume a direct-message conversation and send an accessible plain-text task alert. Email must use an explicitly configured HTTPS delivery webhook or an approved provider adapter.
 - Slack delivery requires a private bot token with only the needed scopes: `users:read.email`, `im:write` and `chat:write`. Keep the token in deployment secrets, never in the repository or client bundle.
 - Keep the local/private deployment routing switch on with `TASK_NOTIFICATIONS_ENABLED=true`, as directed by the project owner. Still require a private Slack token and/or approved email webhook before sending confidential task data externally, and show “credentials needed” until a provider route is actually ready.
-- Use these notification-contact defaults, each overrideable by server environment variables: Cat `catherine@aimadvisors.ca`; Richard `richardc@shellybistro.com`; Vince `vince@shellysbistro.com`.
+- Use these email notification-contact defaults, each overrideable by server environment variables: Cat `catherine@aimadvisors.ca`; Richard `richardc@shellysbistro.com`; Vince `vince@shellysbistro.com`.
 - Use separate Slack lookup defaults: Cat `catherine@aimadvisors.ca`; Richard `richardc@aimadvisors.ca`; Vince `vince@shellysbistro.com`. Slack membership verification is not the same as configuring the automation token.
-- Treat Richard’s notification address as a direct user instruction for task alerts only. It does not replace the different authenticated Gmail and Calendar identity recorded under Connected sources. Surface the discrepancy in the operational setup view.
+- Treat Richard’s corrected email notification address as the same authenticated Gmail and Calendar identity recorded under Connected sources. Preserve his different Aimadvisors Slack identity as a channel-specific lookup value.
 - Retain Service Worker, Push API and VAPID browser push as an optional device route for all three people. Never request notification permission automatically on page load.
 - Keep task data, delivery results, browser subscriptions and server configuration private. Do not expose tokens, webhook URLs, VAPID private keys or task-store files through static routes or Git.
 - A notification click should open the Task assignments tab and identify the related task.
