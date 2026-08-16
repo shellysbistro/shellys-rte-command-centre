@@ -159,7 +159,7 @@ Do not add Sources, Conflicts or Pending Review to the main navigation.
 - Send task notifications from the server after the task is durably saved. A notification failure must never roll back or hide the task.
 - Support per-person Slack and email channel selection. Slack must identify the user by approved email, open/resume a direct-message conversation and send an accessible plain-text task alert. Email must use an explicitly configured HTTPS delivery webhook or an approved provider adapter.
 - Slack delivery requires a private bot token with only the needed scopes: `users:read.email`, `im:write` and `chat:write`. Keep the token in deployment secrets, never in the repository or client bundle.
-- Keep outbound delivery disabled by default. Require explicit `TASK_NOTIFICATIONS_ENABLED=true` plus the Slack token and/or email webhook configuration before sending confidential task data externally.
+- Keep the local/private deployment routing switch on with `TASK_NOTIFICATIONS_ENABLED=true`, as directed by the project owner. Still require a private Slack token and/or approved email webhook before sending confidential task data externally, and show “credentials needed” until a provider route is actually ready.
 - Use these notification-contact defaults, each overrideable by server environment variables: Cat `catherine@aimadvisors.ca`; Richard `richardc@shellybistro.com`; Vince `vince@shellysbistro.com`.
 - Treat Richard’s notification address as a direct user instruction for task alerts only. It does not replace the different authenticated Gmail and Calendar identity recorded under Connected sources. Surface the discrepancy in the operational setup view.
 - Retain Service Worker, Push API and VAPID browser push as an optional device route for all three people. Never request notification permission automatically on page load.
@@ -441,7 +441,7 @@ Store task data, browser-push subscriptions and locally generated VAPID keys und
 - Do not collect passwords.
 - Block the private task-data directory, VAPID keys and push subscriptions from static HTTP access and Git tracking.
 - Browser push may run on localhost for testing. Cross-device browser delivery requires one shared HTTPS deployment, durable task and subscription storage, stable VAPID keys and each recipient’s explicit notification permission.
-- Slack/email delivery requires explicit outbound enablement, verified recipient mappings, approved provider credentials and egress to those providers. Do not claim Slack or email delivery from an address alone.
+- Slack/email delivery has explicit outbound enablement for this local/private build, but still requires verified recipient mappings, approved provider credentials and egress to those providers. Do not claim Slack or email delivery from an address or enabled switch alone.
 - Before any hosted multi-user deployment, add organization authentication, role-based access, encrypted server-side storage, audit logs, backups, retention rules and approved OAuth integrations. Do not expose the unauthenticated development server directly to the public internet.
 - Keep GitHub visibility private unless the project owner explicitly approves a change.
 

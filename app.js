@@ -2182,11 +2182,22 @@ function taskNotificationSummary() {
 function renderTaskNotificationRoutes() {
   const config = taskHub.notificationConfig;
   if (!config) return '<section class="panel">Loading Slack and email routing…</section>';
+  const hasReadyRoute = config.people.some((contact) => contact.slackConfigured || contact.emailConfigured);
+  const routingStatus = !config.outboundEnabled
+    ? "Off"
+    : hasReadyRoute
+      ? "Ready"
+      : "On · credentials needed";
+  const routingMessage = !config.outboundEnabled
+    ? '<div class="callout u-mt-12"><strong>Outbound routing is off</strong>Shared tasks and live updates continue to work. Enable the private deployment switch before adding provider credentials.</div>'
+    : hasReadyRoute
+      ? '<div class="callout u-mt-12"><strong>Outbound routing is ready</strong>New assignments will attempt the configured private Slack and email routes after each task is saved.</div>'
+      : '<div class="callout u-mt-12"><strong>Outbound routing is on</strong>Add the private Slack bot token and/or approved email webhook to deliver real alerts. No Slack or email alert is sent while both routes show “not configured.”</div>';
   return `
     <section class="panel notification-routing-panel">
       <div class="panel-heading">
         <div><h3>Slack & email routing</h3><p>Server-side delivery uses deployment credentials; tokens and webhook URLs are never exposed here.</p></div>
-        ${statusBadge(config.outboundEnabled ? "Configured" : "Setup required")}
+        ${statusBadge(routingStatus)}
       </div>
       <div class="notification-route-grid">
         ${config.people.map((contact) => `
@@ -2199,7 +2210,7 @@ function renderTaskNotificationRoutes() {
             ${contact.note ? `<p>${escapeHtml(contact.note)}</p>` : ""}
           </article>`).join("")}
       </div>
-      ${config.outboundEnabled ? "" : '<div class="callout u-mt-12"><strong>Safe default</strong>Outbound Slack and email alerts remain off until the private deployment explicitly enables them. Shared tasks and live updates continue to work.</div>'}
+      ${routingMessage}
     </section>`;
 }
 

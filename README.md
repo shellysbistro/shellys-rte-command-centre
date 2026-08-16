@@ -23,7 +23,7 @@ Windows teammates can also run `.\start-app.ps1` after cloning.
 
 The **Task assignments** tab provides one server-backed queue for Cat, Vince and Richard. Cat and Vince can assign through **Add record**, all three people can be assignees, and each selected user can move work from Assigned to In progress to Completed. New tasks appear immediately in every connected app through a live event stream.
 
-The server can route a new-task alert to Slack, email and optional browser push after the task is safely stored. Outbound Slack/email delivery is disabled by default. Browser push works on localhost for testing and on HTTPS deployments; each person must opt in on their own device. The server generates a local VAPID key pair when the optional `web-push` package is available and stores tasks, subscriptions and keys under the ignored `.data/` directory.
+The server can route a new-task alert to Slack, email and optional browser push after the task is safely stored. At the project owner’s direction, the Windows local launcher and private-deployment example turn the outbound routing switch on. Actual Slack/email delivery remains unavailable until private provider credentials are configured, and the interface reports that state honestly. Browser push works on localhost for testing and on HTTPS deployments; each person must opt in on their own device. The server generates a local VAPID key pair when the optional `web-push` package is available and stores tasks, subscriptions and keys under the ignored `.data/` directory.
 
 Notification contacts supplied by the project owner are:
 
@@ -110,4 +110,4 @@ The pasted prompt also ends after the first row of the requested twelve-activity
 
 ## Security boundary
 
-This is a private operational prototype. It includes restrictive browser/server headers, local-only binding by default and no password collection. Slack/email task delivery requires explicit server enablement and private provider credentials; browser push remains opt-in. Before multi-user or hosted deployment, add organization authentication, role-based permissions, server-side encrypted storage, delivery audit logs, backups, retention rules and approved OAuth/provider integrations. Do not expose this build directly to the public internet.
+This is a private operational prototype. It includes restrictive browser/server headers, local-only binding by default and no password collection. Slack/email task delivery has its server switch enabled in the local launcher, but it still requires private provider credentials; browser push remains opt-in. Before multi-user or hosted deployment, add organization authentication, role-based permissions, server-side encrypted storage, delivery audit logs, backups, retention rules and approved OAuth/provider integrations. Do not expose this build directly to the public internet.
