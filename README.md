@@ -15,7 +15,7 @@ npm install
 npm start
 ```
 
-Then open [http://127.0.0.1:4173](http://127.0.0.1:4173). The server binds only to the local computer.
+Then open [http://127.0.0.1:4317](http://127.0.0.1:4317). The dedicated port avoids a collision with another local dashboard on port 4173. The server binds only to the local computer.
 
 Windows teammates can also run `.\start-app.ps1` after cloning.
 
@@ -31,6 +31,8 @@ Notification contacts supplied by the project owner are:
 - Richard task alerts: `richardc@shellybistro.com`
 - Vince: `vince@shellysbistro.com`
 
+The connected Slack workspace is **Aimadvisors** (`aimadvisors.slack.com`). Its member directory was verified on August 15, 2026: Cat maps to `catherine@aimadvisors.ca`, Richard maps to `richardc@aimadvisors.ca`, and Vince maps to `vince@shellysbistro.com`. These Slack lookup addresses are distinct from email-alert recipients where noted; membership verification does not by itself configure automated delivery.
+
 Richard’s task-alert address differs from the authenticated Gmail/Calendar address `richardc@shellysbistro.com`. The application preserves both identities and displays the discrepancy; confirm the task-alert domain before enabling production delivery.
 
 Configure private deployment variables without committing a `.env` file:
@@ -39,10 +41,14 @@ Configure private deployment variables without committing a `.env` file:
 TASK_NOTIFICATIONS_ENABLED=true
 TASK_APP_BASE_URL=https://private-project-host.example
 SLACK_BOT_TOKEN=xoxb-...
+SLACK_WORKSPACE_DOMAIN=aimadvisors.slack.com
 TASK_EMAIL_WEBHOOK_URL=https://approved-private-email-gateway.example/task-alert
 CAT_TASK_EMAIL=catherine@aimadvisors.ca
 RICHARD_TASK_EMAIL=richardc@shellybistro.com
 VINCE_TASK_EMAIL=vince@shellysbistro.com
+CAT_SLACK_EMAIL=catherine@aimadvisors.ca
+RICHARD_SLACK_EMAIL=richardc@aimadvisors.ca
+VINCE_SLACK_EMAIL=vince@shellysbistro.com
 TASK_NOTIFICATION_CHANNELS_CAT=slack,email
 TASK_NOTIFICATION_CHANNELS_RICHARD=slack,email
 TASK_NOTIFICATION_CHANNELS_VINCE=slack,email

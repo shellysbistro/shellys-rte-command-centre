@@ -14,8 +14,9 @@ if (-not $nodeExecutable) {
 }
 
 Write-Host "Starting Shelly’s Bistro — RTE Project Command Centre"
-Write-Host 'Open http://127.0.0.1:4173 in your browser.'
+Write-Host 'Open http://127.0.0.1:4317 in your browser.'
+$env:PORT = '4317'
 $env:TASK_NOTIFICATIONS_ENABLED = 'true'
-$env:TASK_APP_BASE_URL = 'http://127.0.0.1:4173'
+$env:TASK_APP_BASE_URL = 'http://127.0.0.1:4317'
 Write-Host 'Outbound task routing is on. Slack and email delivery still require private deployment credentials.'
 & $nodeExecutable (Join-Path $appDirectory 'server.js')

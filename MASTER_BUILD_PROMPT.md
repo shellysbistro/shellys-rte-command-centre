@@ -34,6 +34,7 @@ These direct project-owner instructions override older figures or roles in the o
 11. Keep one shared **Task assignments** tab for Cat, Vince and Richard. Cat and Vince can assign work; **Add record** is a shortcut to this task form. Every connected list updates in real time.
 12. Route new-task alerts through server-side Slack and/or email delivery, with optional browser push as a fallback. Current notification contacts are Cat at `catherine@aimadvisors.ca`, Vince at `vince@shellysbistro.com` and Richard at the user-supplied task-alert address `richardc@shellybistro.com`.
 13. Richard’s task-alert address differs from the connected Gmail/Calendar identity `richardc@shellysbistro.com`. Preserve both exactly, label their different purposes and require deployment-owner verification before production outbound delivery; do not silently rewrite either address.
+14. The connected Slack workspace is Aimadvisors (`aimadvisors.slack.com`). Directory membership verified August 15, 2026 maps Cat to `catherine@aimadvisors.ca`, Richard to `richardc@aimadvisors.ca` and Vince to `vince@shellysbistro.com`. Keep these Slack lookup identities separate from email-alert recipients.
 
 ## Non-negotiable truth rules
 
@@ -161,6 +162,7 @@ Do not add Sources, Conflicts or Pending Review to the main navigation.
 - Slack delivery requires a private bot token with only the needed scopes: `users:read.email`, `im:write` and `chat:write`. Keep the token in deployment secrets, never in the repository or client bundle.
 - Keep the local/private deployment routing switch on with `TASK_NOTIFICATIONS_ENABLED=true`, as directed by the project owner. Still require a private Slack token and/or approved email webhook before sending confidential task data externally, and show “credentials needed” until a provider route is actually ready.
 - Use these notification-contact defaults, each overrideable by server environment variables: Cat `catherine@aimadvisors.ca`; Richard `richardc@shellybistro.com`; Vince `vince@shellysbistro.com`.
+- Use separate Slack lookup defaults: Cat `catherine@aimadvisors.ca`; Richard `richardc@aimadvisors.ca`; Vince `vince@shellysbistro.com`. Slack membership verification is not the same as configuring the automation token.
 - Treat Richard’s notification address as a direct user instruction for task alerts only. It does not replace the different authenticated Gmail and Calendar identity recorded under Connected sources. Surface the discrepancy in the operational setup view.
 - Retain Service Worker, Push API and VAPID browser push as an optional device route for all three people. Never request notification permission automatically on page load.
 - Keep task data, delivery results, browser subscriptions and server configuration private. Do not expose tokens, webhook URLs, VAPID private keys or task-store files through static routes or Git.

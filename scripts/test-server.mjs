@@ -62,6 +62,12 @@ try {
   assert.equal(config.people.find((item) => item.person === "Cat").email, "catherine@aimadvisors.ca");
   assert.equal(config.people.find((item) => item.person === "Richard").email, "richardc@shellybistro.com");
   assert.equal(config.people.find((item) => item.person === "Vince").email, "vince@shellysbistro.com");
+  assert.equal(config.slackWorkspace.domain, "aimadvisors.slack.com");
+  assert.equal(config.people.find((item) => item.person === "Richard").slackEmail, "richardc@aimadvisors.ca");
+  assert.ok(config.people.every((item) => item.slackMemberVerified));
+
+  const aliasResponse = await fetch(`${baseUrl}/api/notifications/status`);
+  assert.equal(aliasResponse.status, 200);
 
   const createResponse = await fetch(`${baseUrl}/api/tasks`, {
     method: "POST",

@@ -1579,11 +1579,19 @@ function saveState() {
 }
 
 async function taskApi(path, options = {}) {
-  const response = await fetch(path, {
-    ...options,
-    headers: { "Content-Type": "application/json", ...(options.headers || {}) },
-  });
+  let response;
+  try {
+    response = await fetch(path, {
+      ...options,
+      headers: { "Content-Type": "application/json", ...(options.headers || {}) },
+    });
+  } catch (_error) {
+    throw new Error("The Shelly task service is not reachable. Open http://127.0.0.1:4317 or run start-app.ps1.");
+  }
   const payload = await response.json().catch(() => ({}));
+  if (response.status === 404 && /endpoint|route/i.test(payload.error || "")) {
+    throw new Error("This address belongs to a different local app. Open the Shelly hub at http://127.0.0.1:4317.");
+  }
   if (!response.ok) throw new Error(payload.error || "The shared task service could not complete the request.");
   return payload;
 }
@@ -1629,10 +1637,11 @@ async function loadTaskNotificationConfig() {
     taskHub.notificationConfig = {
       outboundEnabled: false,
       browserPushAvailable: false,
+      slackWorkspace: { name: "Aimadvisors", domain: "aimadvisors.slack.com", membershipVerifiedAt: "2026-08-15", automationConfigured: false },
       people: [
-        { person: "Cat", email: "catherine@aimadvisors.ca", channels: ["slack", "email"], slackConfigured: false, emailConfigured: false },
-        { person: "Richard", email: "richardc@shellybistro.com", channels: ["slack", "email"], slackConfigured: false, emailConfigured: false, note: "Task-alert address differs from the connected project mailbox." },
-        { person: "Vince", email: "vince@shellysbistro.com", channels: ["slack", "email"], slackConfigured: false, emailConfigured: false },
+        { person: "Cat", email: "catherine@aimadvisors.ca", slackEmail: "catherine@aimadvisors.ca", slackMemberVerified: true, channels: ["slack", "email"], slackConfigured: false, emailConfigured: false },
+        { person: "Richard", email: "richardc@shellybistro.com", slackEmail: "richardc@aimadvisors.ca", slackMemberVerified: true, channels: ["slack", "email"], slackConfigured: false, emailConfigured: false, note: "Slack and email use separate verified addresses." },
+        { person: "Vince", email: "vince@shellysbistro.com", slackEmail: "vince@shellysbistro.com", slackMemberVerified: true, channels: ["slack", "email"], slackConfigured: false, emailConfigured: false },
       ],
     };
   }
@@ -2182,6 +2191,7 @@ function taskNotificationSummary() {
 function renderTaskNotificationRoutes() {
   const config = taskHub.notificationConfig;
   if (!config) return '<section class="panel">Loading Slack and email routing…</section>';
+  const workspace = config.slackWorkspace || {};
   const hasReadyRoute = config.people.some((contact) => contact.slackConfigured || contact.emailConfigured);
   const routingStatus = !config.outboundEnabled
     ? "Off"
@@ -2196,13 +2206,13 @@ function renderTaskNotificationRoutes() {
   return `
     <section class="panel notification-routing-panel">
       <div class="panel-heading">
-        <div><h3>Slack & email routing</h3><p>Server-side delivery uses deployment credentials; tokens and webhook URLs are never exposed here.</p></div>
+        <div><h3>Slack & email routing</h3><p><a href="https://${escapeHtml(workspace.domain || "aimadvisors.slack.com")}" target="_blank" rel="noopener">${escapeHtml(workspace.name || "Aimadvisors")} Slack</a> membership was verified ${escapeHtml(workspace.membershipVerifiedAt || "2026-08-15")}. Automated delivery still uses private deployment credentials.</p></div>
         ${statusBadge(routingStatus)}
       </div>
       <div class="notification-route-grid">
         ${config.people.map((contact) => `
           <article class="notification-route-card">
-            <div><span class="eyebrow">${escapeHtml(contact.person)}</span><strong>${escapeHtml(contact.email)}</strong></div>
+            <div><span class="eyebrow">${escapeHtml(contact.person)}</span><strong>Email alert · ${escapeHtml(contact.email)}</strong><p>Slack member · ${escapeHtml(contact.slackEmail || contact.email)}${contact.slackMemberVerified ? " · verified" : ""}</p></div>
             <div class="notification-channel-list">
               <span class="notification-channel" data-ready="${contact.slackConfigured}">Slack · ${contact.slackConfigured ? "ready" : "not configured"}</span>
               <span class="notification-channel" data-ready="${contact.emailConfigured}">Email · ${contact.emailConfigured ? "ready" : "not configured"}</span>

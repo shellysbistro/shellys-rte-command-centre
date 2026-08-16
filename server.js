@@ -14,7 +14,7 @@ try {
 }
 
 const host = process.env.HOST || "127.0.0.1";
-const port = Number(process.env.PORT || 4173);
+const port = Number(process.env.PORT || 4317);
 const root = __dirname;
 const dataDirectory = path.resolve(process.env.SHELLYS_DATA_DIR || path.join(root, ".data"));
 const taskStorePath = path.join(dataDirectory, "task-centre.json");
@@ -25,18 +25,30 @@ const taskAppBaseUrl = cleanHttpUrl(process.env.TASK_APP_BASE_URL) || `http://${
 const outboundNotificationsEnabled = /^true$/i.test(process.env.TASK_NOTIFICATIONS_ENABLED || "");
 const slackBotToken = process.env.SLACK_BOT_TOKEN || "";
 const emailWebhookUrl = cleanHttpsUrl(process.env.TASK_EMAIL_WEBHOOK_URL);
+const slackWorkspace = {
+  id: process.env.SLACK_WORKSPACE_ID || "T0BQ8BVE4Q4",
+  name: process.env.SLACK_WORKSPACE_NAME || "Aimadvisors",
+  domain: process.env.SLACK_WORKSPACE_DOMAIN || "aimadvisors.slack.com",
+  membershipVerifiedAt: "2026-08-15",
+};
 const notificationContacts = {
   Cat: {
     email: process.env.CAT_TASK_EMAIL || "catherine@aimadvisors.ca",
+    slackEmail: process.env.CAT_SLACK_EMAIL || "catherine@aimadvisors.ca",
+    slackMemberVerified: true,
     channels: notificationChannels("Cat"),
   },
   Richard: {
     email: process.env.RICHARD_TASK_EMAIL || "richardc@shellybistro.com",
+    slackEmail: process.env.RICHARD_SLACK_EMAIL || "richardc@aimadvisors.ca",
+    slackMemberVerified: true,
     channels: notificationChannels("Richard"),
-    note: "Task-alert address supplied August 15, 2026; it differs from the connected project mailbox and must not replace that source identity.",
+    note: "Slack uses richardc@aimadvisors.ca. The separate task-alert email supplied August 15, 2026 remains richardc@shellybistro.com and does not replace the connected project mailbox.",
   },
   Vince: {
     email: process.env.VINCE_TASK_EMAIL || "vince@shellysbistro.com",
+    slackEmail: process.env.VINCE_SLACK_EMAIL || "vince@shellysbistro.com",
+    slackMemberVerified: true,
     channels: notificationChannels("Vince"),
   },
 };
@@ -262,7 +274,7 @@ async function notifySlack(task, contact) {
   if (!outboundNotificationsEnabled) return channelResult("slack", "disabled", 0, 0, "Set TASK_NOTIFICATIONS_ENABLED=true after deployment approval.");
   if (!slackBotToken) return channelResult("slack", "not-configured", 0, 0, "SLACK_BOT_TOKEN is missing.");
   try {
-    const lookup = await slackApi("users.lookupByEmail", { email: contact.email });
+    const lookup = await slackApi("users.lookupByEmail", { email: contact.slackEmail });
     const conversation = await slackApi("conversations.open", { users: lookup.user.id });
     await slackApi("chat.postMessage", {
       channel: conversation.channel.id,
@@ -329,11 +341,19 @@ function publicNotificationConfig() {
   return {
     outboundEnabled: outboundNotificationsEnabled,
     browserPushAvailable: Boolean(webPush && vapidKeys),
+    slackWorkspace: {
+      name: slackWorkspace.name,
+      domain: slackWorkspace.domain,
+      membershipVerifiedAt: slackWorkspace.membershipVerifiedAt,
+      automationConfigured: outboundNotificationsEnabled && Boolean(slackBotToken),
+    },
     people: taskPeople.map((person) => {
       const contact = notificationContacts[person];
       return {
         person,
         email: contact.email,
+        slackEmail: contact.slackEmail,
+        slackMemberVerified: contact.slackMemberVerified,
         channels: contact.channels,
         slackConfigured: outboundNotificationsEnabled && contact.channels.includes("slack") && Boolean(slackBotToken),
         emailConfigured: outboundNotificationsEnabled && contact.channels.includes("email") && Boolean(emailWebhookUrl),
@@ -354,6 +374,15 @@ function handleTaskEvents(request, response) {
 }
 
 async function handleApi(request, response, url) {
+  if (request.method === "GET" && url.pathname === "/api") {
+    sendJson(response, 200, {
+      service: "Shelly’s RTE Command Centre",
+      status: "ok",
+      endpoints: ["/api/health", "/api/tasks", "/api/tasks/events", "/api/notifications/config"],
+    });
+    return true;
+  }
+
   if (request.method === "GET" && url.pathname === "/api/health") {
     sendJson(response, 200, {
       ok: true,
@@ -364,7 +393,7 @@ async function handleApi(request, response, url) {
     return true;
   }
 
-  if (request.method === "GET" && url.pathname === "/api/notifications/config") {
+  if (request.method === "GET" && ["/api/notifications", "/api/notifications/config", "/api/notifications/status"].includes(url.pathname)) {
     sendJson(response, 200, publicNotificationConfig());
     return true;
   }
