@@ -35,7 +35,8 @@ These direct project-owner instructions override older figures or roles in the o
 12. Route new-task alerts through server-side Slack and/or email delivery, with optional browser push as a fallback. Current email-alert contacts are Cat at `catherine@aimadvisors.ca`, Vince at `vince@shellysbistro.com` and Richard at the owner-confirmed address `richardc@shellysbistro.com`.
 13. Richard’s email-alert recipient now matches the connected Gmail/Calendar identity `richardc@shellysbistro.com`. His distinct Slack lookup identity is `richardc@aimadvisors.ca`; keep channel identities separate and labeled.
 14. The connected Slack workspace is Aimadvisors (`aimadvisors.slack.com`). Directory membership verified August 15, 2026 maps Cat to `catherine@aimadvisors.ca`, Richard to `richardc@aimadvisors.ca` and Vince to `vince@shellysbistro.com`. Keep these Slack lookup identities separate from email-alert recipients.
-15. On August 15, 2026, two missed Richard task notifications were manually sent from Cat Lee at `catherine@aimadvisors.ca` to the corrected recipient `richardc@shellysbistro.com`. Record this as a manual recovery action, not proof that the automated email webhook is configured.
+15. On August 15, 2026, three missed Richard task notifications were manually sent from Cat Lee at `catherine@aimadvisors.ca` to the corrected recipient `richardc@shellysbistro.com`. Record this as a manual recovery action, not proof that the direct email webhook is configured.
+16. A local thread heartbeat named **Shelly task email dispatcher** checks for new task IDs every five minutes, sends each ID once through connected Gmail and records deduplication only after Gmail confirms SENT. Treat this as connector-based recovery, not instant server-side delivery.
 
 ## Non-negotiable truth rules
 
@@ -169,6 +170,7 @@ Do not add Sources, Conflicts or Pending Review to the main navigation.
 - Keep task data, delivery results, browser subscriptions and server configuration private. Do not expose tokens, webhook URLs, VAPID private keys or task-store files through static routes or Git.
 - A notification click should open the Task assignments tab and identify the related task.
 - Keep shared assignments distinct from verified Google Sheet workplan facts unless an approved integration explicitly writes them back.
+- Keep the connector email dispatcher idempotent: never resend a recorded task ID, do not mark failures sent and keep its private state under the ignored `.data/` directory.
 
 #### Notification architecture decision
 

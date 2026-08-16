@@ -23,7 +23,7 @@ Windows teammates can also run `.\start-app.ps1` after cloning.
 
 The **Task assignments** tab provides one server-backed queue for Cat, Vince and Richard. Cat and Vince can assign through **Add record**, all three people can be assignees, and each selected user can move work from Assigned to In progress to Completed. New tasks appear immediately in every connected app through a live event stream.
 
-The server can route a new-task alert to Slack, email and optional browser push after the task is safely stored. At the project owner’s direction, the Windows local launcher and private-deployment example turn the outbound routing switch on. Actual Slack/email delivery remains unavailable until private provider credentials are configured, and the interface reports that state honestly. Browser push works on localhost for testing and on HTTPS deployments; each person must opt in on their own device. The server generates a local VAPID key pair when the optional `web-push` package is available and stores tasks, subscriptions and keys under the ignored `.data/` directory.
+The server can route a new-task alert to Slack, email and optional browser push after the task is safely stored. At the project owner’s direction, the Windows local launcher and private-deployment example turn the outbound routing switch on. A thread heartbeat named **Shelly task email dispatcher** checks the local task store every five minutes and sends each previously unseen task ID once through connected Gmail. Its deduplication state remains under the ignored `.data/` directory. Direct webhook email and Slack delivery remain unavailable until their private provider credentials are configured. Browser push works on localhost for testing and on HTTPS deployments; each person must opt in on their own device.
 
 Notification contacts supplied by the project owner are:
 
@@ -33,7 +33,7 @@ Notification contacts supplied by the project owner are:
 
 The connected Slack workspace is **Aimadvisors** (`aimadvisors.slack.com`). Its member directory was verified on August 15, 2026: Cat maps to `catherine@aimadvisors.ca`, Richard maps to `richardc@aimadvisors.ca`, and Vince maps to `vince@shellysbistro.com`. These Slack lookup addresses are distinct from email-alert recipients where noted; membership verification does not by itself configure automated delivery.
 
-On August 15, 2026, the project owner corrected Richard’s task-alert recipient to the authenticated Gmail/Calendar address `richardc@shellysbistro.com`. Richard’s separate Slack lookup identity remains `richardc@aimadvisors.ca`. Two previously missed task notifications were sent manually from Cat Lee at `catherine@aimadvisors.ca` to the corrected Richard address; automated email delivery still requires the approved webhook.
+On August 15, 2026, the project owner corrected Richard’s task-alert recipient to the authenticated Gmail/Calendar address `richardc@shellysbistro.com`. Richard’s separate Slack lookup identity remains `richardc@aimadvisors.ca`. Three previously missed task notifications were sent manually from Cat Lee at `catherine@aimadvisors.ca` to the corrected Richard address. The five-minute connector dispatcher now supplies local automatic email recovery; instant server-side email delivery still requires the approved webhook.
 
 Configure private deployment variables without committing a `.env` file:
 

@@ -19,6 +19,7 @@ const root = __dirname;
 const dataDirectory = path.resolve(process.env.SHELLYS_DATA_DIR || path.join(root, ".data"));
 const taskStorePath = path.join(dataDirectory, "task-centre.json");
 const vapidStorePath = path.join(dataDirectory, "push-vapid.json");
+const emailDispatcherPath = path.join(dataDirectory, "codex-email-dispatcher.json");
 const vapidSubject = process.env.VAPID_SUBJECT || "mailto:notifications@shellysbistro.com";
 const taskPeople = ["Cat", "Richard", "Vince"];
 const taskAppBaseUrl = cleanHttpUrl(process.env.TASK_APP_BASE_URL) || `http://${host}:${port}`;
@@ -338,9 +339,19 @@ async function notifyAssignee(task) {
 }
 
 function publicNotificationConfig() {
+  const dispatcher = loadJson(emailDispatcherPath, null);
+  const emailDispatcher = dispatcher?.active === true
+    ? {
+        active: true,
+        name: cleanText(dispatcher.name, 100) || "Task email dispatcher",
+        cadenceMinutes: Number(dispatcher.cadenceMinutes) || 5,
+        provider: cleanText(dispatcher.provider, 100) || "Connected Gmail",
+      }
+    : { active: false };
   return {
     outboundEnabled: outboundNotificationsEnabled,
     browserPushAvailable: Boolean(webPush && vapidKeys),
+    emailDispatcher,
     slackWorkspace: {
       name: slackWorkspace.name,
       domain: slackWorkspace.domain,

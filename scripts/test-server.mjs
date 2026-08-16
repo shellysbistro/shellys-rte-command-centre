@@ -63,6 +63,7 @@ try {
   assert.equal(config.people.find((item) => item.person === "Richard").email, "richardc@shellysbistro.com");
   assert.equal(config.people.find((item) => item.person === "Vince").email, "vince@shellysbistro.com");
   assert.equal(config.slackWorkspace.domain, "aimadvisors.slack.com");
+  assert.equal(config.emailDispatcher.active, false);
   assert.equal(config.people.find((item) => item.person === "Richard").slackEmail, "richardc@aimadvisors.ca");
   assert.ok(config.people.every((item) => item.slackMemberVerified));
 

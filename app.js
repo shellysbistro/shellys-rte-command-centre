@@ -1637,6 +1637,7 @@ async function loadTaskNotificationConfig() {
     taskHub.notificationConfig = {
       outboundEnabled: false,
       browserPushAvailable: false,
+      emailDispatcher: { active: false },
       slackWorkspace: { name: "Aimadvisors", domain: "aimadvisors.slack.com", membershipVerifiedAt: "2026-08-15", automationConfigured: false },
       people: [
         { person: "Cat", email: "catherine@aimadvisors.ca", slackEmail: "catherine@aimadvisors.ca", slackMemberVerified: true, channels: ["slack", "email"], slackConfigured: false, emailConfigured: false },
@@ -2192,7 +2193,9 @@ function renderTaskNotificationRoutes() {
   const config = taskHub.notificationConfig;
   if (!config) return '<section class="panel">Loading Slack and email routing…</section>';
   const workspace = config.slackWorkspace || {};
-  const hasReadyRoute = config.people.some((contact) => contact.slackConfigured || contact.emailConfigured);
+  const dispatcher = config.emailDispatcher || { active: false };
+  const hasProviderRoute = config.people.some((contact) => contact.slackConfigured || contact.emailConfigured);
+  const hasReadyRoute = hasProviderRoute || dispatcher.active;
   const routingStatus = !config.outboundEnabled
     ? "Off"
     : hasReadyRoute
@@ -2200,7 +2203,9 @@ function renderTaskNotificationRoutes() {
       : "On · credentials needed";
   const routingMessage = !config.outboundEnabled
     ? '<div class="callout u-mt-12"><strong>Outbound routing is off</strong>Shared tasks and live updates continue to work. Enable the private deployment switch before adding provider credentials.</div>'
-    : hasReadyRoute
+    : dispatcher.active && !hasProviderRoute
+      ? `<div class="callout u-mt-12"><strong>Email dispatcher active</strong>New task IDs are checked every ${escapeHtml(dispatcher.cadenceMinutes)} minutes through ${escapeHtml(dispatcher.provider)} and sent once. Slack and the direct email webhook remain unconfigured.</div>`
+      : hasReadyRoute
       ? '<div class="callout u-mt-12"><strong>Outbound routing is ready</strong>New assignments will attempt the configured private Slack and email routes after each task is saved.</div>'
       : '<div class="callout u-mt-12"><strong>Outbound routing is on</strong>Add the private Slack bot token and/or approved email webhook to deliver real alerts. No Slack or email alert is sent while both routes show “not configured.”</div>';
   return `
@@ -2215,7 +2220,7 @@ function renderTaskNotificationRoutes() {
             <div><span class="eyebrow">${escapeHtml(contact.person)}</span><strong>Email alert · ${escapeHtml(contact.email)}</strong><p>Slack member · ${escapeHtml(contact.slackEmail || contact.email)}${contact.slackMemberVerified ? " · verified" : ""}</p></div>
             <div class="notification-channel-list">
               <span class="notification-channel" data-ready="${contact.slackConfigured}">Slack · ${contact.slackConfigured ? "ready" : "not configured"}</span>
-              <span class="notification-channel" data-ready="${contact.emailConfigured}">Email · ${contact.emailConfigured ? "ready" : "not configured"}</span>
+              <span class="notification-channel" data-ready="${contact.emailConfigured || dispatcher.active}">Email · ${contact.emailConfigured ? "direct webhook ready" : dispatcher.active ? `dispatcher active · up to ${escapeHtml(dispatcher.cadenceMinutes)} min` : "not configured"}</span>
             </div>
             ${contact.note ? `<p>${escapeHtml(contact.note)}</p>` : ""}
           </article>`).join("")}
